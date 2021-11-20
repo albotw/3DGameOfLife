@@ -1,11 +1,15 @@
-import static CONFIG.ENV_SIZE;
+import core.Cell;
+import core.Environment;
+import graphics.LWJGLTest;
+
+import static CONFIG.CONFIG.ENV_SIZE;
 
 public class App {
     public static Environment env;
     public static void main(String[] args)
     {
-        System.out.println("mode: " + args[0]);
-        System.out.println("threads: " + args[1]);
+        //System.out.println("mode: " + args[0]);
+        //System.out.println("threads: " + args[1]);
         System.out.println("Hello, World !");
 
         env = new Environment();
@@ -13,6 +17,7 @@ public class App {
         init();
         loop();
 
+        new LWJGLTest().run();
     }
 
     public static void init()

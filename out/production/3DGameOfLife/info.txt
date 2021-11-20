@@ -1,0 +1,5 @@
+pour chaque cellule:
+    - établir le nombre de voisins vivants de la cellule
+    - n == 3 ? CellState.Active
+    - n == 2 ? pas de changement
+    - n < 2 || n > 3 ? CellState.Dead
