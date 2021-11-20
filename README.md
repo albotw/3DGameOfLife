@@ -1,5 +1,6 @@
 # 3DGameOfLife
 Langage retenu: Java
+
 Jalons clés: 
 * 2D - 1 thread
 * 2D - N threads
