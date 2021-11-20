@@ -1,5 +1,5 @@
+import static CONFIG.*;
 public class Environment {
-    public static final int ENV_SIZE = 3;
 
     private Cell[][] env;
     private Cell[][] future_env;

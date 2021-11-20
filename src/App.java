@@ -1,3 +1,5 @@
+import static CONFIG.ENV_SIZE;
+
 public class App {
     public static Environment env;
     public static void main(String[] args)
@@ -45,9 +47,9 @@ public class App {
         for (int cycle = 0; cycle < 3; cycle++)
         {
             //pour chaque cellule
-            for (int i = 0; i < Environment.ENV_SIZE; i++)
+            for (int i = 0; i < ENV_SIZE; i++)
             {
-                for (int j = 0; j < Environment.ENV_SIZE; j++)
+                for (int j = 0; j < ENV_SIZE; j++)
                 {
                     int aliveNeighbours = getAliveNeighbours(i, j);
                     if (aliveNeighbours == 3) {
