@@ -1,5 +1,6 @@
 package graphics;
 
+
 public class MeshGenerator {
     public static void generate(Renderer r) {
         float[] positions = new float[]{
@@ -17,7 +18,8 @@ public class MeshGenerator {
         int[] indices = new int[]{
                 0, 1, 3, 3, 1, 2,
         };
-        Mesh m = new Mesh(positions, colours, indices);
+
+        Mesh m = new Mesh(positions, colours, indices, true);
         r.renderMesh(m);
     }
 }

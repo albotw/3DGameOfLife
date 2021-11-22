@@ -13,29 +13,31 @@ public class Mesh {
     private final int idx_vboID;
 
     private final int vertexCount;
+    private final boolean wireframe;
 
-    public Mesh(float[] positions, float[] colours, int[] indices)
+    public Mesh(float[] positions, float[] colours, int[] indices, boolean wireframe)
     {
+        this.wireframe = wireframe;
         FloatBuffer posBuffer = null;
         FloatBuffer colourBuffer = null;
         IntBuffer indicesBuffer = null;
         try {
-            vertexCount = indices.length;
+            this.vertexCount = indices.length;
 
-            vaoID = glGenVertexArrays();
-            glBindVertexArray(vaoID);
+            this.vaoID = glGenVertexArrays();
+            glBindVertexArray(this.vaoID);
 
             // Position VBO
-            pos_vboID = glGenBuffers();
+            this.pos_vboID = glGenBuffers();
             posBuffer = MemoryUtil.memAllocFloat(positions.length);
             posBuffer.put(positions).flip();
-            glBindBuffer(GL_ARRAY_BUFFER, pos_vboID);
+            glBindBuffer(GL_ARRAY_BUFFER, this.pos_vboID);
             glBufferData(GL_ARRAY_BUFFER, posBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(0);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
             // Colour VBO
-            color_vboID = glGenBuffers();
+            this.color_vboID = glGenBuffers();
             colourBuffer = MemoryUtil.memAllocFloat(colours.length);
             colourBuffer.put(colours).flip();
             glBindBuffer(GL_ARRAY_BUFFER, color_vboID);
@@ -44,10 +46,10 @@ public class Mesh {
             glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
 
             // Index VBO
-            idx_vboID = glGenBuffers();
+            this.idx_vboID = glGenBuffers();
             indicesBuffer = MemoryUtil.memAllocInt(indices.length);
             indicesBuffer.put(indices).flip();
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idx_vboID);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.idx_vboID);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -72,6 +74,10 @@ public class Mesh {
         glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
+    }
+
+    public boolean isWireframe() {
+        return this.wireframe;
     }
 
     public int getVaoID()
