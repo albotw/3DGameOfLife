@@ -80,8 +80,8 @@ public class LWJGLTest {
         glfwSwapInterval(1);
 
         // Make the window visible
+        GL.createCapabilities();
         glfwShowWindow(window);
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glDisable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
