@@ -1,6 +1,7 @@
 import core.Cell;
 import core.Environment;
-import graphics.LWJGLTest;
+import graphics.Mesh;
+import graphics.Renderer;
 
 import static CONFIG.CONFIG.ENV_SIZE;
 
@@ -17,7 +18,8 @@ public class App {
         init();
         loop();
 
-        new LWJGLTest().run();
+        Renderer r = new Renderer();
+        r.start();
     }
 
     public static void init()
