@@ -1,6 +1,7 @@
 package graphics;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
 
 import java.util.HashMap;
@@ -14,8 +15,6 @@ public class Shader {
     private int vertexShaderID;
     private int fragmentShaderID;
 
-    private final Map<String, Integer> uniforms;
-
     public Shader() throws Exception
     {
         programID  = glCreateProgram();
@@ -24,8 +23,6 @@ public class Shader {
         {
             throw new Exception("impossible de créer le shader");
         }
-
-        uniforms = new HashMap<>();
     }
 
     public void createVertexShader(String shaderCode) throws Exception
@@ -38,24 +35,24 @@ public class Shader {
         fragmentShaderID = createShader(shaderCode, GL_FRAGMENT_SHADER);
     }
 
-
-    public void createUniform(String uniformName) throws Exception
-    {
-        int uniformLocation = glGetUniformLocation(programID, uniformName);
-
-        if (uniformLocation < 0)
-        {
-            throw new Exception("uniform introuvable: " + uniformName);
+    public void setUniform(String uniformName, Matrix4f value) throws Exception {
+        int uniformPos = glGetUniformLocation(this.programID, uniformName);
+        if (uniformPos < 0) {
+            throw new Exception("Uniform " + uniformName + " introuvable");
         }
-
-        uniforms.put(uniformName, uniformLocation);
+        try(MemoryStack stack = MemoryStack.stackPush()) {
+            glUniformMatrix4fv(uniformPos, false, value.get(stack.mallocFloat(16)));
+        }catch(Exception e) {e.printStackTrace();}
     }
 
-    public void setUniform(String uniformName, Matrix4f value)
-    {
-        try(MemoryStack stack = MemoryStack.stackPush()) {
-            glUniformMatrix4fv(uniforms.get(uniformName), false, value.get(stack.mallocFloat(16)));
+    public void setUniform(String uniformName, Vector3f value) throws Exception {
+        int uniformPos = glGetUniformLocation(this.programID, uniformName);
+        if (uniformPos < 0) {
+            throw new Exception("Uniform " + uniformName + " introuvable");
         }
+        try(MemoryStack stack = MemoryStack.stackPush()) {
+            glUniform3fv(uniformPos, value.get(stack.mallocFloat(3)));
+        }catch(Exception e) {e.printStackTrace();}
     }
 
     protected int createShader(String shaderCode, int shaderType) throws Exception
