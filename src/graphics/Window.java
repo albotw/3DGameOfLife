@@ -96,7 +96,7 @@ public class Window {
         glfwShowWindow(glfwWindow);
 
         GL.createCapabilities();
-
+        glEnable(GL_DEPTH_TEST);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     }
