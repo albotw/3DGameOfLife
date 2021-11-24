@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GLXNVDelayBeforeSwap;
 import java.util.ArrayList;
 
 import static CONFIG.CONFIG.*;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -68,6 +69,7 @@ public class Renderer extends Thread{
         //translations[99] = new Vector3f(-1.0f, -1.0f, -1.0f);
         while(running && !window.windowShouldClose()) {
             //input
+            glfwPollEvents();
             //update
 
             // ! RENDER --------------------------------------------------------
@@ -91,7 +93,7 @@ public class Renderer extends Thread{
                 angle += Math.sin((float)System.currentTimeMillis()) / 1000;
                 Vector3f axis = new Vector3f(1.0f, 1.0f, 1.0f).normalize();
                 Matrix4f model = new Matrix4f();
-                model = model.rotate(angle, axis);
+                //model = model.rotate(angle, axis);
                 this.shader.setUniform("model", model);
                 if (m.isWireframe()){
                     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

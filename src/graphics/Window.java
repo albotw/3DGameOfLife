@@ -1,5 +1,7 @@
 package graphics;
 
+import input.Keyboard;
+import input.Mouse;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -68,14 +70,8 @@ public class Window {
             this.setResized(true);
         });
 
-        //ferme la fenêtre en appuyant sur échap
-        glfwSetKeyCallback(glfwWindow, (window, key, scancode, action, mods) ->
-        {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-            {
-                glfwSetWindowShouldClose(window, true);
-            }
-        });
+        Keyboard.init(this.glfwWindow);
+        Mouse.init(this.glfwWindow);
 
         //centrage de la fenêtre
         GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
