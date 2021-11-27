@@ -1,5 +1,6 @@
 package graphics;
 
+import input.Mouse;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -18,10 +19,12 @@ public class Renderer extends Thread{
     private Window window;
     private Shader shader;
     private ArrayList<Mesh> geometry;
+    private Camera camera;
 
     public Renderer() {
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
         this.geometry = new ArrayList<>();
+        this.camera = new Camera(new Vector3f(0.0f, 0.0f, 20.0f), 20.0f);
     }
 
     public void run() {
@@ -56,8 +59,8 @@ public class Renderer extends Thread{
         for (int y = -100; y < 100; y += 20) {
             for (int x = -100; x < 100; x += 20) {
                 Vector3f vec = new Vector3f();
-                vec.x = (float)x / 10.0f + offset;
-                vec.y = (float)y / 10.0f + offset;
+                vec.x = (float)x / 5.0f + offset;
+                vec.y = (float)y / 5.0f + offset;
                 translations[index] = vec;
                 index++;
             }
@@ -76,10 +79,10 @@ public class Renderer extends Thread{
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             this.shader.bind();
 
-            Matrix4f view = new Matrix4f();
+            camera.rotate(Mouse.lastX, Mouse.lastY);
+            Matrix4f view = camera.getViewMatrix();
             Matrix4f proj = new Matrix4f();
-            proj = proj.perspective(45.0f, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
-            view = view.translation(0.0f, 0.0f, -10.0f);
+            proj = proj.perspective(90.0f, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
             this.shader.setUniform("proj", proj);
             this.shader.setUniform("view", view);
 

@@ -1,24 +1,32 @@
 package input;
 
+import static CONFIG.CONFIG.MOUSE_SENSITIVITY;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Mouse {
+    public static double Xoffset;
+    public static double Yoffset;
+
+    public static double lastX = 400;
+    public static double lastY = 300;
+
     public static void init(long window) {
-        glfwSetCursorPosCallback(window, (w, xpos, ypos) -> {
-            Mouse.processMousePosition(w, xpos, ypos);
-        });
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPosCallback(window, Mouse::processMousePosition);
 
-        glfwSetMouseButtonCallback(window, (w, button, action, mods) -> {
-            Mouse.processMouseInput(w, button, action, mods);
-        });
+        glfwSetMouseButtonCallback(window, Mouse::processMouseInput);
 
-        glfwSetScrollCallback(window, (w, xoffset, yoffset) -> {
-            Mouse.processMouseScroll(w, xoffset, yoffset);
-        });
+        glfwSetScrollCallback(window, Mouse::processMouseScroll);
+
+        System.out.println("done init mouse");
     }
 
     public static void processMousePosition(long window, double xpos, double ypos) {
+        Mouse.Xoffset = (xpos - Mouse.lastX) * MOUSE_SENSITIVITY;
+        Mouse.Yoffset = (Mouse.lastY - ypos) * MOUSE_SENSITIVITY;
 
+        Mouse.lastX = xpos;
+        Mouse.lastY = ypos;
     }
 
     public static void processMouseInput(long window, int button, int action, int mods) {
