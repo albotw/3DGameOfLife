@@ -9,11 +9,12 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
-uniform vec3 offsets[100];
+// uniform vec3 offsets[100];
 
 void main()
 {
-    vec3 offset = offsets[gl_InstanceID];
-    gl_Position =  proj *  view *  model * vec4(position + offset, 1.0);
+    //vec3 offset = offsets[gl_InstanceID];
+    //gl_Position =  proj *  view *  model * vec4(position + offset, 1.0);
+    gl_Position = proj * view * model * vec4(position, 1.0);
     exColour = inColour;
 }

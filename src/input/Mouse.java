@@ -22,7 +22,7 @@ public class Mouse {
     }
 
     public static void processMousePosition(long window, double xpos, double ypos) {
-        Mouse.Xoffset = (xpos - Mouse.lastX) * MOUSE_SENSITIVITY;
+        Mouse.Xoffset = (Mouse.lastX - xpos) * MOUSE_SENSITIVITY;
         Mouse.Yoffset = (Mouse.lastY - ypos) * MOUSE_SENSITIVITY;
 
         Mouse.lastX = xpos;

@@ -24,7 +24,7 @@ public class Renderer extends Thread{
     public Renderer() {
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
         this.geometry = new ArrayList<>();
-        this.camera = new Camera(new Vector3f(0.0f, 0.0f, 20.0f), 20.0f);
+        this.camera = new Camera(new Vector3f(0.0f, 0.0f, 5.0f), 5.0f);
     }
 
     public void run() {
@@ -79,7 +79,7 @@ public class Renderer extends Thread{
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             this.shader.bind();
 
-            camera.rotate(Mouse.lastX, Mouse.lastY);
+            camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
             Matrix4f view = camera.getViewMatrix();
             Matrix4f proj = new Matrix4f();
             proj = proj.perspective(90.0f, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
@@ -87,14 +87,12 @@ public class Renderer extends Thread{
             this.shader.setUniform("view", view);
 
             Mesh m = geometry.get(0);
-            for(int i = 0; i < 100; i++) {
-                this.shader.setUniform("offsets[" + i + "]", translations[i]);
+            //for(int i = 0; i < 100; i++) {
+                //this.shader.setUniform("offsets[" + i + "]", translations[i]);
                 glBindVertexArray(m.getVaoID());
                 glEnableVertexAttribArray(0);
                 glEnableVertexAttribArray(1);
 
-                angle += Math.sin((float)System.currentTimeMillis()) / 1000;
-                Vector3f axis = new Vector3f(1.0f, 1.0f, 1.0f).normalize();
                 Matrix4f model = new Matrix4f();
                 //model = model.rotate(angle, axis);
                 this.shader.setUniform("model", model);
@@ -102,14 +100,15 @@ public class Renderer extends Thread{
                     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 }
 
-                glDrawElementsInstanced(GL_TRIANGLES, m.getVertexCount(), GL_UNSIGNED_INT, 0, 100);
+                //glDrawElementsInstanced(GL_TRIANGLES, m.getVertexCount(), GL_UNSIGNED_INT, 0, 100);
+                glDrawElements(GL_TRIANGLES, m.getVertexCount(), GL_UNSIGNED_INT, 0);
 
                 if (m.isWireframe()) {
                     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                 }
 
                 glBindVertexArray(0);
-            }
+            //}
             shader.unbind();
 
             // ! DISPLAY -------------------------------------------------------

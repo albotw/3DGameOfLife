@@ -70,7 +70,7 @@ public class Mesh {
     public void render()
     {
         glBindVertexArray(getVaoID());
-
+        glEnableVertexAttribArray(0);
         glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
