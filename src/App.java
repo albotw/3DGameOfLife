@@ -66,7 +66,7 @@ public class App {
                     {
                         env.setCellState(i, j, env.getCellState(i, j));
                     }
-                    else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+                    else {
                         env.setCellState(i, j, Cell.Empty);
                     }
                 }

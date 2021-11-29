@@ -17,21 +17,20 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
 
 public class Renderer extends Thread{
-    private Window window;
+    private final Window window;
     private Shader shader;
-    private ArrayList<Mesh> geometry;
-    private Camera camera;
+    private final ArrayList<Sprite> geometry;
+    private final Camera camera;
 
     public Renderer() {
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
-        this.geometry = new ArrayList<>();
+        this.geometry = new ArrayList<Sprite>();
         this.camera = new Camera(new Vector3f(0.0f, 0.0f, 5.0f), 5.0f);
     }
 
     public void run() {
         try {
             init();
-            MeshGenerator.generate(this);
             render();
         }catch(Exception e) {e.printStackTrace();}
     }
@@ -43,16 +42,14 @@ public class Renderer extends Thread{
         this.shader.createFragmentShader(Util.loadResource("shaders/fragment.glsl"));
         this.shader.createVertexShader(Util.loadResource("shaders/vertex.glsl"));
         this.shader.link();
-        System.out.println("finished render init");
     }
 
-    public void renderMesh(Mesh m) {
-        this.geometry.add(m);
+    public void renderSprite(Sprite s) {
+        this.geometry.add(s);
     }
 
     public void render() throws Exception {
         boolean running = true;
-        System.out.println("started rendering");
 
         //translations[99] = new Vector3f(-1.0f, -1.0f, -1.0f);
         float angleX = 0.0f;
@@ -65,49 +62,38 @@ public class Renderer extends Thread{
             if (Keyboard.LEFT_press) {angleY = -0.1f;}
             if (Keyboard.RIGHT_press) {angleY = 0.1f;}
             if (Keyboard.ZERO_press) {angleX = 0.0f; angleY = 0.0f;}
-            System.out.println(angleX + " | " + angleY);
-            /**
-             * if (Mouse.LMBPress) {
-             *                 camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
-             *             }
-             */
+
+            if (Mouse.LMBPress) {
+              camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
+            }
             camera.rotate(angleX,angleY);
             //update
 
             // ! RENDER --------------------------------------------------------
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             this.shader.bind();
-
-
             Matrix4f view = camera.getViewMatrix();
             Matrix4f proj = new Matrix4f();
             proj = proj.perspective(90.0f, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
             this.shader.setUniform("proj", proj);
             this.shader.setUniform("view", view);
 
-            Mesh m = geometry.get(0);
-            //for(int i = 0; i < 100; i++) {
-                //this.shader.setUniform("offsets[" + i + "]", translations[i]);
-                glBindVertexArray(m.getVaoID());
+            for (int i = 0; i < this.geometry.size(); i++) {
+                Sprite s = this.geometry.get(i);
+
+                glBindVertexArray(s.mesh.getVaoID());
                 glEnableVertexAttribArray(0);
                 glEnableVertexAttribArray(1);
+                Matrix4f model = s.getModelMatrix();
 
-                Matrix4f model = new Matrix4f();
-                //model = model.rotate(angle, axis);
                 this.shader.setUniform("model", model);
-                if (m.isWireframe()){
-                    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                }
 
-                //glDrawElementsInstanced(GL_TRIANGLES, m.getVertexCount(), GL_UNSIGNED_INT, 0, 100);
-                glDrawElements(GL_TRIANGLES, m.getVertexCount(), GL_UNSIGNED_INT, 0);
+                if (s.mesh.isWireframe()) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-                if (m.isWireframe()) {
-                    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                }
-
+                glDrawElementsInstanced(GL_TRIANGLES, s.mesh.getVertexCount(), GL_UNSIGNED_INT, 0, this.geometry.size());
                 glBindVertexArray(0);
-            //}
+            }
             shader.unbind();
 
             // ! DISPLAY -------------------------------------------------------

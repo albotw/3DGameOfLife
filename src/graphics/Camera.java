@@ -8,17 +8,17 @@ import static CONFIG.CONFIG.WINDOW_HEIGHT;
 import static CONFIG.CONFIG.WINDOW_WIDTH;
 
 public class Camera {
-    private Vector3f position;
-    private Vector3f target;
-    private Vector3f up;
-
-    private double theta;
-    private double phi;
+    private final Vector3f position;
+    private final Vector3f target;
+    private final Vector3f up;
 
     private double azimuth;
     private double polar;
 
-    private double rotationRadius;
+    private double theta = 0.0f;
+    private double phi = 0.0f;
+
+    private final double rotationRadius;
 
     public Camera(Vector3f position, double rotationRadius)
     {
@@ -26,8 +26,6 @@ public class Camera {
         this.target = new Vector3f(0.0f, 0.0f, 0.0f);
         this.up = new Vector3f(0.0f, 1.0f, 0.0f);
         this.rotationRadius = rotationRadius;
-        this.theta = 0.0f;
-        this.phi = 0.0f;
         this.azimuth = 0.0f;
         this.polar = 0.0f;
     }
@@ -52,7 +50,7 @@ public class Camera {
         if (this.polar < -cap) {this.polar = -cap;}
     }
 
-    public void _rotate(double angleX, double angleY) {
+    public void rotate(double angleX, double angleY) {
         rotateAzimuth(angleX);
         rotatePolar(angleY);
 
@@ -61,7 +59,7 @@ public class Camera {
         this.position.z = (float) (this.rotationRadius * Math.cos(this.polar) * Math.sin(this.azimuth));
     }
 
-    public void rotate(double angleX, double angleY)
+    public void _rotate(double angleX, double angleY)
     {
             System.out.println("X: " + angleX + " | y: " + angleY);
 
@@ -80,14 +78,18 @@ public class Camera {
             this.position.z = theta_z;
             this.position.y = this.position.y;
 
+            this.up.x = theta_x;
+            this.up.z = theta_z;
+            this.up.y = this.position.y;
+
             float phi_y = (float) (Math.cos(phi) * this.position.y + Math.sin(phi) * this.position.z);
             float phi_z = (float) (-Math.sin(phi) * this.position.y + Math.cos(phi) * this.position.z);
             this.position.x = theta_x;
             this.position.z = phi_z;
             this.position.y = phi_y;
 
-            float temp = this.position.y;
+            this.up.x = this.up.x;
+            this.up.z = -this.position.y;
             this.up.y = this.position.z;
-            this.up.z = -temp;
     }
 }
