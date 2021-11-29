@@ -10,8 +10,10 @@ public class Mouse {
     public static double lastX = 400;
     public static double lastY = 300;
 
+    public static boolean LMBPress;
+    public static boolean RMBPress;
     public static void init(long window) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwSetCursorPosCallback(window, Mouse::processMousePosition);
 
         glfwSetMouseButtonCallback(window, Mouse::processMouseInput);
@@ -30,7 +32,14 @@ public class Mouse {
     }
 
     public static void processMouseInput(long window, int button, int action, int mods) {
-
+        switch(button) {
+            case GLFW_MOUSE_BUTTON_RIGHT:
+                Mouse.RMBPress = (action == GLFW_PRESS);
+                break;
+            case GLFW_MOUSE_BUTTON_LEFT:
+                Mouse.LMBPress = (action == GLFW_PRESS);
+                break;
+        }
     }
 
     public static void processMouseScroll(long window, double xoffset, double yoffset) {

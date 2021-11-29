@@ -1,5 +1,6 @@
 package graphics;
 
+import input.Keyboard;
 import input.Mouse;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -52,34 +53,32 @@ public class Renderer extends Thread{
     public void render() throws Exception {
         boolean running = true;
         System.out.println("started rendering");
-        float angle = 0;
-        Vector3f[] translations = new Vector3f[100];
-        float offset = 0.1f;
-        int index = 0;
-        for (int y = -100; y < 100; y += 20) {
-            for (int x = -100; x < 100; x += 20) {
-                Vector3f vec = new Vector3f();
-                vec.x = (float)x / 5.0f + offset;
-                vec.y = (float)y / 5.0f + offset;
-                translations[index] = vec;
-                index++;
-            }
-        }
 
-        for(int i = 0; i < 100; i++) {
-            if (translations[i] == null) {throw new Exception("translation vide: " + i);}
-        }
         //translations[99] = new Vector3f(-1.0f, -1.0f, -1.0f);
+        float angleX = 0.0f;
+        float angleY = 0.0f;
         while(running && !window.windowShouldClose()) {
             //input
             glfwPollEvents();
+            if (Keyboard.UP_press) {angleX = 0.1f;}
+            if (Keyboard.DOWN_press) {angleX = -0.1f;}
+            if (Keyboard.LEFT_press) {angleY = -0.1f;}
+            if (Keyboard.RIGHT_press) {angleY = 0.1f;}
+            if (Keyboard.ZERO_press) {angleX = 0.0f; angleY = 0.0f;}
+            System.out.println(angleX + " | " + angleY);
+            /**
+             * if (Mouse.LMBPress) {
+             *                 camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
+             *             }
+             */
+            camera.rotate(angleX,angleY);
             //update
 
             // ! RENDER --------------------------------------------------------
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             this.shader.bind();
 
-            camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
+
             Matrix4f view = camera.getViewMatrix();
             Matrix4f proj = new Matrix4f();
             proj = proj.perspective(90.0f, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
