@@ -8,6 +8,8 @@ import org.joml.Vector3f;
 import org.lwjgl.opengl.GLXNVDelayBeforeSwap;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.concurrent.Flow.*;
 
 import static CONFIG.CONFIG.*;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
@@ -16,7 +18,9 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
 
-public class Renderer extends Thread{
+public class Renderer extends Thread {
+    private boolean subscribed; //thread principal en écoute uniquement.
+
     private final Window window;
     private Shader shader;
     private final ArrayList<Sprite> geometry;

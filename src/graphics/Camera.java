@@ -15,9 +15,6 @@ public class Camera {
     private double azimuth;
     private double polar;
 
-    private double theta = 0.0f;
-    private double phi = 0.0f;
-
     private final double rotationRadius;
 
     public Camera(Vector3f position, double rotationRadius)
@@ -57,39 +54,5 @@ public class Camera {
         this.position.x = (float) (this.rotationRadius * Math.cos(this.polar) * Math.cos(this.azimuth));
         this.position.y = (float) (this.rotationRadius * Math.sin(this.polar));
         this.position.z = (float) (this.rotationRadius * Math.cos(this.polar) * Math.sin(this.azimuth));
-    }
-
-    public void _rotate(double angleX, double angleY)
-    {
-            System.out.println("X: " + angleX + " | y: " + angleY);
-
-            //double deltaX = Math.PI) / WINDOW_WIDTH;
-            //double deltaY = (2 * Math.PI) / WINDOW_HEIGHT
-
-            this.theta = angleX / Math.PI;
-            this.phi = angleY / (2 * Math.PI);
-
-            System.out.println("theta: " + theta + " | phi: " + phi);
-
-            float theta_x = (float) (Math.cos(theta) * this.position.x + Math.sin(theta) * this.position.z);
-            float theta_z = (float) ((float) -Math.sin(theta) * this.position.x + Math.cos(theta) * this.position.z);
-
-            this.position.x = theta_x;
-            this.position.z = theta_z;
-            this.position.y = this.position.y;
-
-            this.up.x = theta_x;
-            this.up.z = theta_z;
-            this.up.y = this.position.y;
-
-            float phi_y = (float) (Math.cos(phi) * this.position.y + Math.sin(phi) * this.position.z);
-            float phi_z = (float) (-Math.sin(phi) * this.position.y + Math.cos(phi) * this.position.z);
-            this.position.x = theta_x;
-            this.position.z = phi_z;
-            this.position.y = phi_y;
-
-            this.up.x = this.up.x;
-            this.up.z = -this.position.y;
-            this.up.y = this.position.z;
     }
 }

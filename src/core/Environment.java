@@ -1,48 +1,58 @@
 package core;
-
-
-import CONFIG.CONFIG;
+import static CONFIG.CONFIG.SUB_ENV_SIZE;
+import static CONFIG.CONFIG.ENV_SIZE;
 
 public class Environment {
 
-    private Cell[][] env;
-    private Cell[][] future_env;
+    private final Cell[][] current_env;
+    private final Cell[][] future_env;
 
     public Environment() {
-        env = new Cell[CONFIG.ENV_SIZE][CONFIG.ENV_SIZE];
-        future_env = new Cell[CONFIG.ENV_SIZE][CONFIG.ENV_SIZE];
+        current_env = new Cell[ENV_SIZE][ENV_SIZE];
+        future_env = new Cell[ENV_SIZE][ENV_SIZE];
 
-        clean(env);
+        clean(current_env);
         clean(future_env);
     }
 
     public void initValues(int[] positions)
     {
         for (int i = 0; i < positions.length; i += 2) {
-            env[positions[i]][positions[i+1]] = Cell.Alive;
+            current_env[positions[i]][positions[i+1]] = Cell.Alive;
         }
     }
 
     private void clean(Cell[][] env) {
-        for (int i = 0; i < CONFIG.ENV_SIZE; i++)
+        for (int i = 0; i < ENV_SIZE; i++)
         {
-            for (int j = 0; j < CONFIG.ENV_SIZE; j++)
+            for (int j = 0; j < ENV_SIZE; j++)
             {
                 env[i][j] = Cell.Empty;
             }
         }
     }
 
+    public Cell[][] getSubEnv(int x, int y) {
+        Cell[][] sub_env = new Cell[SUB_ENV_SIZE][SUB_ENV_SIZE];
+        for (int i = 0; i < SUB_ENV_SIZE; i++) {
+            for (int j = 0; j < SUB_ENV_SIZE; j++) {
+                sub_env[i][j] = getCellState(i, j);
+            }
+        }
+
+        return sub_env;
+    }
+
     public Cell getCellState(int x, int y) {
-        if (x >= 0 && x < CONFIG.ENV_SIZE && y >= 0 && y < CONFIG.ENV_SIZE)
+        if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE)
         {
-            return this.env[x][y];
+            return this.current_env[x][y];
         }
         else return Cell.Empty;
     }
 
     public void setCellState(int x, int y, Cell state) {
-        if (x >= 0 && x < CONFIG.ENV_SIZE && y >= 0 && y < CONFIG.ENV_SIZE)
+        if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE)
         {
             this.future_env[x][y] = state;
         }
@@ -50,19 +60,17 @@ public class Environment {
 
     public void nextGeneration()
     {
-        for (int i = 0; i < CONFIG.ENV_SIZE; i++) {
-            for (int j = 0; j < CONFIG.ENV_SIZE; j++) {
-                this.env[i][j] = this.future_env[i][j];
-            }
+        for (int i = 0; i < ENV_SIZE; i++) {
+            System.arraycopy(this.future_env[i], 0, this.current_env[i], 0, ENV_SIZE);
         }
         clean(this.future_env);
     }
 
     public void print() {
-        for (int i = 0; i < CONFIG.ENV_SIZE; i++) {
-            for (int j = 0; j < CONFIG.ENV_SIZE; j++) {
-                if (this.env[i][j] == Cell.Alive) System.out.print("X ");
-                if (this.env[i][j] == Cell.Empty) System.out.print("O ");
+        for (int i = 0; i < ENV_SIZE; i++) {
+            for (int j = 0; j < ENV_SIZE; j++) {
+                if (this.current_env[i][j] == Cell.Alive) System.out.print("X ");
+                if (this.current_env[i][j] == Cell.Empty) System.out.print("O ");
             }
 
             System.out.println();

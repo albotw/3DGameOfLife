@@ -1,16 +1,14 @@
-package net;
-
-import core.Cell;
+package core;
 
 import java.io.Serializable;
 
-public class Task implements ITask, Serializable {
+public class GOLProcess implements IGOLProcess, Serializable {
     private Cell[][] local_env;
     public final int x;
     public final int y;
     private Cell result;
 
-    public Task(int x, int y, Cell[][] local_env) {
+    public GOLProcess(int x, int y, Cell[][] local_env) {
         this.x = x;
         this.y = y;
         this.local_env = local_env;

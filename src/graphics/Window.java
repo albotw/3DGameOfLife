@@ -21,14 +21,6 @@ public class Window {
     private boolean resized;
     private boolean vSync;
 
-    public static final float FOV = (float) Math.toRadians(60.0f);
-
-    public static final float Z_NEAR = 0.01f;
-
-    public static final float Z_FAR = 1000.0f;
-
-    private Matrix4f projectionMatrix;
-
     public Window(int width, int height, String title, boolean vSync)
     {
         this.width = width;
@@ -75,6 +67,7 @@ public class Window {
 
         //centrage de la fenêtre
         GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        assert vidMode != null;
         glfwSetWindowPos(
                 glfwWindow,
                 (vidMode.width() - width) / 2,
@@ -100,28 +93,6 @@ public class Window {
     public boolean windowShouldClose()
     {
         return glfwWindowShouldClose(glfwWindow);
-    }
-
-    public void setClearColor(float r, float g, float b, float alpha)
-    {
-        glClearColor(r, g, b, alpha);
-    }
-
-    public boolean isKeyPressed(int keyCode)
-    {
-        return glfwGetKey(glfwWindow, keyCode) == GLFW_PRESS;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public boolean isResized()

@@ -10,7 +10,6 @@ public class Util {
 
     public static String loadResource(String fileName) throws Exception
     {
-
         String result = "";
         try
         {

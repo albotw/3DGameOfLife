@@ -1,5 +1,7 @@
 package net;
 
+import core.IGOLProcess;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -13,7 +15,7 @@ public class Client {
             this.srv = (IServer) Naming.lookup("GOL_SERVER");
 
             //TODO éxécution réaliste
-            ITask t = srv.getTask();
+            IGOLProcess t = srv.getTask();
             t.run();
             srv.sendResult(t);
         } catch (NotBoundException e) {
