@@ -1,17 +1,14 @@
 import core.Environment;
 import events.*;
-import graphics.Mesh;
 import graphics.Renderer;
-import graphics.Sprite;
 
-public class App extends Thread{
+public class App extends Thread {
     public static Environment env;
     public static Renderer renderer;
 
     private EventQueue eventQueue;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         App app = new App();
         app.start();
     }
@@ -26,14 +23,16 @@ public class App extends Thread{
     public void run() {
         boolean running = true;
         while (running) {
-            if (!this.eventQueue.isEmpty()){
-                System.out.println("got event");
+            if (!this.eventQueue.isEmpty()) {
                 Event e = this.eventQueue.get();
                 if (e instanceof RenderInitDone) {
-                    Sprite s = new Sprite(Mesh.Cube(false));
-                    App.renderer.renderSprite(s);
-                    System.out.println("add sprite");
                 }
+            }
+
+            try {
+                sleep(16);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }

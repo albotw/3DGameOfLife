@@ -2,16 +2,17 @@ package graphics;
 
 import input.Keyboard;
 import input.Mouse;
-import org.joml.Matrix4f;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
-
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11C.glViewport;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
 
 public class Window {
     private long glfwWindow;
@@ -21,8 +22,7 @@ public class Window {
     private boolean resized;
     private boolean vSync;
 
-    public Window(int width, int height, String title, boolean vSync)
-    {
+    public Window(int width, int height, String title, boolean vSync) {
         this.width = width;
         this.height = height;
         this.title = title;
@@ -30,13 +30,11 @@ public class Window {
         this.resized = false;
     }
 
-    public void init()
-    {
+    public void init() {
         //retour d'erreur de glfw dans la console.
         GLFWErrorCallback.createPrint(System.err).set();
 
-        if (!glfwInit())
-        {
+        if (!glfwInit()) {
             throw new IllegalStateException("impossible d'initialiser GLFW");
         }
 
@@ -48,9 +46,10 @@ public class Window {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+        glfwWindowHint(GLFW_SAMPLES, 4);
+
         glfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
-        if (glfwWindow == NULL)
-        {
+        if (glfwWindow == NULL) {
             throw new RuntimeException("impossible de créer la fenêtre GLFW");
         }
 
@@ -77,26 +76,22 @@ public class Window {
         //activer openGL
         glfwMakeContextCurrent(glfwWindow);
 
-        if (isvSync())
-        {
+        if (isvSync()) {
             glfwSwapInterval(1);
         }
 
         glfwShowWindow(glfwWindow);
-
+        GLFW.glfwMakeContextCurrent(glfwWindow);
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
+        glEnable(GL_MULTISAMPLE);
     }
 
-    public boolean windowShouldClose()
-    {
+    public boolean windowShouldClose() {
         return glfwWindowShouldClose(glfwWindow);
     }
 
-    public boolean isResized()
-    {
+    public boolean isResized() {
         return resized;
     }
 
@@ -104,20 +99,16 @@ public class Window {
         return vSync;
     }
 
-    public void setResized(boolean resized)
-    {
+    public void setResized(boolean resized) {
         this.resized = resized;
     }
 
-    public void setvSync(boolean vSync)
-    {
+    public void setvSync(boolean vSync) {
         this.vSync = vSync;
     }
 
-    public void update()
-    {
-        if (isResized())
-        {
+    public void update() {
+        if (isResized()) {
             glViewport(0, 0, width, height);
             setResized(false);
         }

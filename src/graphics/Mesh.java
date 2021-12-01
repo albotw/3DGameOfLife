@@ -2,7 +2,8 @@ package graphics;
 
 import org.lwjgl.system.MemoryUtil;
 
-import java.nio.*;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL30.*;
 
@@ -13,17 +14,13 @@ public class Mesh {
     private final int idx_vboID;
 
     private final int vertexCount;
-    private final boolean wireframe;
 
-    public Mesh(float[] positions, float[] colours, int[] indices, boolean wireframe)
-    {
-        this.wireframe = wireframe;
+    public Mesh(float[] positions, float[] colours, int[] indices) {
         FloatBuffer posBuffer = null;
         FloatBuffer colourBuffer = null;
         IntBuffer indicesBuffer = null;
         try {
             this.vertexCount = indices.length;
-
             this.vaoID = glGenVertexArrays();
             glBindVertexArray(this.vaoID);
 
@@ -67,22 +64,15 @@ public class Mesh {
         }
     }
 
-    public boolean isWireframe() {
-        return this.wireframe;
-    }
-
-    public int getVaoID()
-    {
+    public int getVaoID() {
         return vaoID;
     }
 
-    public int getVertexCount()
-    {
+    public int getVertexCount() {
         return vertexCount;
     }
 
-    public void flush()
-    {
+    public void flush() {
         glDisableVertexAttribArray(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -94,37 +84,37 @@ public class Mesh {
         glDeleteVertexArrays(vaoID);
     }
 
-    public static Mesh Cube(boolean wireframe) {
+    public static Mesh Cube() {
         float[] positions = new float[]{
                 -0.5f, -0.5f, -0.5f,
                 0.5f, -0.5f, -0.5f,
-                0.5f,  0.5f, -0.5f,
-                -0.5f,  0.5f, -0.5f,
+                0.5f, 0.5f, -0.5f,
+                -0.5f, 0.5f, -0.5f,
 
-                -0.5f, -0.5f,  0.5f,
-                0.5f, -0.5f,  0.5f,
-                0.5f,  0.5f,  0.5f,
-                -0.5f,  0.5f,  0.5f,
+                -0.5f, -0.5f, 0.5f,
+                0.5f, -0.5f, 0.5f,
+                0.5f, 0.5f, 0.5f,
+                -0.5f, 0.5f, 0.5f,
 
-                -0.5f,  0.5f,  0.5f,
-                -0.5f,  0.5f, -0.5f,
+                -0.5f, 0.5f, 0.5f,
+                -0.5f, 0.5f, -0.5f,
                 -0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f,  0.5f,
+                -0.5f, -0.5f, 0.5f,
 
-                0.5f,  0.5f,  0.5f,
-                0.5f,  0.5f, -0.5f,
+                0.5f, 0.5f, 0.5f,
+                0.5f, 0.5f, -0.5f,
                 0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f,  0.5f,
+                0.5f, -0.5f, 0.5f,
 
                 -0.5f, -0.5f, -0.5f,
                 0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f,  0.5f,
-                -0.5f, -0.5f,  0.5f,
+                0.5f, -0.5f, 0.5f,
+                -0.5f, -0.5f, 0.5f,
 
-                -0.5f,  0.5f, -0.5f,
-                0.5f,  0.5f, -0.5f,
-                0.5f,  0.5f,  0.5f,
-                -0.5f,  0.5f,  0.5f,
+                -0.5f, 0.5f, -0.5f,
+                0.5f, 0.5f, -0.5f,
+                0.5f, 0.5f, 0.5f,
+                -0.5f, 0.5f, 0.5f,
         };
         float[] colours = new float[]{
                 1.0f, 1.0f, 1.0f,
@@ -166,6 +156,6 @@ public class Mesh {
                 20, 21, 23, 23, 21, 22
         };
 
-        return new Mesh(positions, colours, indices, wireframe);
+        return new Mesh(positions, colours, indices);
     }
 }

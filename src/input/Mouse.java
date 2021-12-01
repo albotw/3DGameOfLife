@@ -12,8 +12,10 @@ public class Mouse {
 
     public static boolean LMBPress;
     public static boolean RMBPress;
+
     public static void init(long window) {
         //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
         glfwSetCursorPosCallback(window, Mouse::processMousePosition);
 
         glfwSetMouseButtonCallback(window, Mouse::processMouseInput);
@@ -30,7 +32,7 @@ public class Mouse {
     }
 
     public static void processMouseInput(long window, int button, int action, int mods) {
-        switch(button) {
+        switch (button) {
             case GLFW_MOUSE_BUTTON_RIGHT:
                 Mouse.RMBPress = (action == GLFW_PRESS);
                 break;

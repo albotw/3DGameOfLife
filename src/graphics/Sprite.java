@@ -8,9 +8,11 @@ public class Sprite {
     public Vector3f position;
     public float scale;
     public final Vector3f rotation;
+    public final boolean wireframe;
 
-    public Sprite (Mesh mesh) {
+    public Sprite(Mesh mesh, boolean wireframe) {
         this.mesh = mesh;
+        this.wireframe = wireframe;
         this.position = new Vector3f();
         this.rotation = new Vector3f();
         this.scale = 1;
@@ -19,12 +21,18 @@ public class Sprite {
     public Matrix4f getModelMatrix() {
         Matrix4f model = new Matrix4f();
         model.rotateX(this.rotation.x).rotateY(this.rotation.y).rotateZ(this.rotation.z);
-        model.scale(this.scale);
         model.translate(this.position);
+        model.scale(this.scale);
         return model;
     }
 
+    public void moveTo(float x, float y, float z) {
+        this.position.x = x;
+        this.position.y = y;
+        this.position.z = z;
+    }
+
     public static Sprite fromCell(int x, int y, int z) {
-        return new Sprite(null);
+        return new Sprite(null, false);
     }
 }

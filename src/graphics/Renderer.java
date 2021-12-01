@@ -1,18 +1,13 @@
 package graphics;
 
 import events.EventQueue;
-import events.RenderInitDone;
 import events.ThreadID;
 import input.Keyboard;
 import input.Mouse;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GLXNVDelayBeforeSwap;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.concurrent.Flow.*;
 
 import static CONFIG.CONFIG.*;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
@@ -26,13 +21,13 @@ public class Renderer extends Thread {
 
     private final Window window;
     private Shader shader;
-    private final ArrayList<Sprite> geometry;
     private final Camera camera;
+    private SpriteManager spriteManager;
 
     public Renderer() {
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
-        this.geometry = new ArrayList<Sprite>();
-        this.camera = new Camera(new Vector3f(0.0f, 0.0f, 5.0f), 5.0f);
+        this.spriteManager = SpriteManager.createSpriteManager();
+        this.camera = new Camera(new Vector3f(0.0f, 0.0f, 8.0f), 10.0f);
         this.eventQueue = new EventQueue(ThreadID.Render);
     }
 
@@ -40,7 +35,9 @@ public class Renderer extends Thread {
         try {
             init();
             render();
-        }catch(Exception e) {e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void init() throws Exception {
@@ -51,11 +48,7 @@ public class Renderer extends Thread {
         this.shader.createVertexShader(Util.loadResource("shaders/vertex.glsl"));
         this.shader.link();
 
-        this.eventQueue.send(new RenderInitDone(), ThreadID.App);
-    }
-
-    public void renderSprite(Sprite s) {
-        this.geometry.add(s);
+        this.spriteManager.init();
     }
 
     public void render() throws Exception {
@@ -64,19 +57,30 @@ public class Renderer extends Thread {
         //translations[99] = new Vector3f(-1.0f, -1.0f, -1.0f);
         float angleX = 0.0f;
         float angleY = 0.0f;
-        while(running && !window.windowShouldClose()) {
+        while (running && !window.windowShouldClose()) {
             //input
             glfwPollEvents();
-            if (Keyboard.UP_press) {angleX = 0.1f;}
-            if (Keyboard.DOWN_press) {angleX = -0.1f;}
-            if (Keyboard.LEFT_press) {angleY = -0.1f;}
-            if (Keyboard.RIGHT_press) {angleY = 0.1f;}
-            if (Keyboard.ZERO_press) {angleX = 0.0f; angleY = 0.0f;}
+            if (Keyboard.UP_press) {
+                angleX = 0.1f;
+            }
+            if (Keyboard.DOWN_press) {
+                angleX = -0.1f;
+            }
+            if (Keyboard.LEFT_press) {
+                angleY = -0.1f;
+            }
+            if (Keyboard.RIGHT_press) {
+                angleY = 0.1f;
+            }
+            if (Keyboard.ZERO_press) {
+                angleX = 0.0f;
+                angleY = 0.0f;
+            }
 
             if (Mouse.LMBPress) {
-              camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
+                camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
             }
-            camera.rotate(angleX,angleY);
+            camera.rotate(angleX, angleY);
             //update
 
             // ! RENDER --------------------------------------------------------
@@ -88,20 +92,21 @@ public class Renderer extends Thread {
             this.shader.setUniform("proj", proj);
             this.shader.setUniform("view", view);
 
-            for (int i = 0; i < this.geometry.size(); i++) {
-                Sprite s = this.geometry.get(i);
+            ArrayList<Sprite> geometry = this.spriteManager.getGeometry();
+            for (int i = 0; i < geometry.size(); i++) {
+                Sprite s = geometry.get(i);
 
                 glBindVertexArray(s.mesh.getVaoID());
                 glEnableVertexAttribArray(0);
                 glEnableVertexAttribArray(1);
-                Matrix4f model = s.getModelMatrix();
 
+                Matrix4f model = s.getModelMatrix();
                 this.shader.setUniform("model", model);
 
-                if (s.mesh.isWireframe()) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                if (s.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-                glDrawElementsInstanced(GL_TRIANGLES, s.mesh.getVertexCount(), GL_UNSIGNED_INT, 0, this.geometry.size());
+                glDrawElementsInstanced(GL_TRIANGLES, s.mesh.getVertexCount(), GL_UNSIGNED_INT, 0, geometry.size());
                 glBindVertexArray(0);
             }
             shader.unbind();
