@@ -19,8 +19,6 @@ public class Mouse {
         glfwSetMouseButtonCallback(window, Mouse::processMouseInput);
 
         glfwSetScrollCallback(window, Mouse::processMouseScroll);
-
-        System.out.println("done init mouse");
     }
 
     public static void processMousePosition(long window, double xpos, double ypos) {

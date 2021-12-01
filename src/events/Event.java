@@ -1,7 +1,7 @@
 package events;
 
-public class Event {
-    private ThreadID sender;
+public abstract class Event {
+    protected ThreadID sender;
 
     public Event(){sender = null;}
     public Event(ThreadID sender)

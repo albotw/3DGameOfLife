@@ -4,14 +4,12 @@ import java.util.HashMap;
 
 public class EventDispatcher {
     private HashMap<ThreadID, EventQueue> channel;
-    public static EventDispatcher instance;
+    public static EventDispatcher instance = null;
 
-    public static EventDispatcher createEventDispatcher() {
+    public static void createEventDispatcher() {
         if (instance == null) {
             instance = new EventDispatcher();
         }
-
-        return instance;
     }
 
     private EventDispatcher() {

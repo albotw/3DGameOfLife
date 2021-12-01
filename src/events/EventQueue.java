@@ -33,4 +33,6 @@ public class EventQueue {
     public Event get() {
         return this.queue.poll();
     }
+
+    public int size() {return this.queue.size();}
 }

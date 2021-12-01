@@ -1,5 +1,8 @@
 package graphics;
 
+import events.EventQueue;
+import events.RenderInitDone;
+import events.ThreadID;
 import input.Keyboard;
 import input.Mouse;
 import org.joml.Matrix4f;
@@ -19,7 +22,7 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
 
 public class Renderer extends Thread {
-    private boolean subscribed; //thread principal en écoute uniquement.
+    private EventQueue eventQueue;
 
     private final Window window;
     private Shader shader;
@@ -30,6 +33,7 @@ public class Renderer extends Thread {
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
         this.geometry = new ArrayList<Sprite>();
         this.camera = new Camera(new Vector3f(0.0f, 0.0f, 5.0f), 5.0f);
+        this.eventQueue = new EventQueue(ThreadID.Render);
     }
 
     public void run() {
@@ -46,6 +50,8 @@ public class Renderer extends Thread {
         this.shader.createFragmentShader(Util.loadResource("shaders/fragment.glsl"));
         this.shader.createVertexShader(Util.loadResource("shaders/vertex.glsl"));
         this.shader.link();
+
+        this.eventQueue.send(new RenderInitDone(), ThreadID.App);
     }
 
     public void renderSprite(Sprite s) {
