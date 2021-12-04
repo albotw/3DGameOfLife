@@ -4,7 +4,7 @@
 #  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffae3db7d70, pid=16476, tid=16652
 #
 # JRE version: Java(TM) SE Runtime Environment (13.0.2+8) (build 13.0.2+8)
-# Java VM: Java HotSpot(TM) 64-Bit Server VM (13.0.2+8, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
+# Java VM: Java HotSpot(TM) 64-Bit network.Server VM (13.0.2+8, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
 # Problematic frame:
 # C  [opengl32.dll+0x27d70]
 #
@@ -722,7 +722,7 @@ Log output configuration:
  #1: stderr all=off uptime,level,tags
 
 Environment Variables:
-PATH=C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;E:\Program Files (x86)\ARM\ADSv1_2\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;E:\Program Files\Microsoft VS Code\bin;E:\Python\3.7\Scripts\;E:\Python\3.7\;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;C:\Users\Yann\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk-13.0.2\bin;C:\Users\Yann\AppData\Local\GitHubDesktop\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Yann\.dotnet\tools;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\Users\Yann\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\Yann\AppData\Local\Programs\Python\Python310\;C:\Users\Yann\.cargo\bin;E:\Python\3.7\Scripts\;E:\Python\3.7\;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;E:\Program Files\Microsoft VS Code\bin;C:\Users\Yann\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Program Files\Java\jdk-13.0.2\bin;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;C:\Users\Yann\AppData\Local\GitHubDesktop\bin;C:\Users\Yann\.dotnet\tools;C:\Users\Yann\AppData\Roaming\npm;C:\Program Files\heroku\bin
+PATH=C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;E:\Program Files (x86)\ARM\ADSv1_2\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;E:\Program Files\Microsoft VS Code\bin;E:\Python\3.7\Scripts\;E:\Python\3.7\;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;C:\Users\Yann\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Program Files\Microsoft SQL network.Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk-13.0.2\bin;C:\Users\Yann\AppData\Local\GitHubDesktop\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Yann\.dotnet\tools;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\Users\Yann\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\Yann\AppData\Local\Programs\Python\Python310\;C:\Users\Yann\.cargo\bin;E:\Python\3.7\Scripts\;E:\Python\3.7\;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;E:\Program Files\Microsoft VS Code\bin;C:\Users\Yann\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Program Files\Java\jdk-13.0.2\bin;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;C:\Users\Yann\AppData\Local\GitHubDesktop\bin;C:\Users\Yann\.dotnet\tools;C:\Users\Yann\AppData\Roaming\npm;C:\Program Files\heroku\bin
 USERNAME=Yann
 OS=Windows_NT
 PROCESSOR_IDENTIFIER=AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
@@ -740,6 +740,6 @@ TotalPageFile size 37547M (AvailPageFile size 27154M)
 current process WorkingSet (physical memory assigned to process): 96M, peak: 98M
 current process commit charge ("private bytes"): 709M, peak: 711M
 
-vm_info: Java HotSpot(TM) 64-Bit Server VM (13.0.2+8) for windows-amd64 JRE (13.0.2+8), built on Dec 11 2019 09:20:33 by "mach5one" with unknown MS VC++:1916
+vm_info: Java HotSpot(TM) 64-Bit network.Server VM (13.0.2+8) for windows-amd64 JRE (13.0.2+8), built on Dec 11 2019 09:20:33 by "mach5one" with unknown MS VC++:1916
 
 END.

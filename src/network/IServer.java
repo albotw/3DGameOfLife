@@ -1,4 +1,4 @@
-package net;
+package network;
 
 import core.IGOLProcess;
 
@@ -7,5 +7,8 @@ import java.rmi.RemoteException;
 
 public interface IServer extends Remote {
     IGOLProcess getTask() throws RemoteException;
+
+    Status getStatus() throws RemoteException;
+
     void sendResult(IGOLProcess t) throws RemoteException;
 }

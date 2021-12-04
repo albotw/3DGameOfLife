@@ -1,6 +1,6 @@
 package graphics;
 
-import core.Environment;
+import core.IGOLProcess;
 
 import java.util.ArrayList;
 
@@ -40,7 +40,7 @@ public class SpriteManager {
         }
     }
 
-    public void update(Environment env) {
+    public void update(IGOLProcess task) {
 
     }
 
