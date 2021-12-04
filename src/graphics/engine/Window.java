@@ -1,4 +1,4 @@
-package graphics;
+package graphics.engine;
 
 import input.Keyboard;
 import input.Mouse;

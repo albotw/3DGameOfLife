@@ -1,5 +1,7 @@
 package graphics;
 
+import core.Environment;
+
 import java.util.ArrayList;
 
 public class SpriteManager {
@@ -36,6 +38,10 @@ public class SpriteManager {
                 }
             }
         }
+    }
+
+    public void update(Environment env) {
+
     }
 
     public ArrayList<Sprite> getGeometry() {

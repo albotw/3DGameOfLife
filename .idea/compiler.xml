@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RmicSettings">
+    <option name="DEBUGGING_INFO" value="false" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Djava.rmi.server.useCodebaseOnly=true" />
+  </component>
+</project>

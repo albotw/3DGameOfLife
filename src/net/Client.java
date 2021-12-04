@@ -8,22 +8,15 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class Client {
-    private IServer srv = null;
+    private static IServer srv = null;
 
-    public Client() {
-        try {
-            this.srv = (IServer) Naming.lookup("GOL_SERVER");
+    public static void init() throws Exception{
+        Client.srv = (IServer) Naming.lookup(("GOL_SERVER"));
+    }
 
-            //TODO éxécution réaliste
-            IGOLProcess t = srv.getTask();
-            t.run();
-            srv.sendResult(t);
-        } catch (NotBoundException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+    public static void run() throws Exception{
+        IGOLProcess task = Client.srv.getTask();
+        task.run();
+        Client.srv.sendResult(task);
     }
 }

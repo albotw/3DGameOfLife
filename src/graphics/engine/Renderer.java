@@ -1,7 +1,8 @@
-package graphics;
+package graphics.engine;
 
 import events.EventQueue;
 import events.ThreadID;
+import graphics.*;
 import input.Keyboard;
 import input.Mouse;
 import org.joml.Matrix4f;

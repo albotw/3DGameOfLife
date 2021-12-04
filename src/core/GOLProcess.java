@@ -3,7 +3,7 @@ package core;
 import java.io.Serializable;
 
 public class GOLProcess implements IGOLProcess, Serializable {
-    private Cell[][] local_env;
+    private final Cell[][] local_env;
     public final int x;
     public final int y;
     private Cell result;
@@ -36,7 +36,7 @@ public class GOLProcess implements IGOLProcess, Serializable {
         int counter = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (i != 1 && j != 1) { //évite de prendre la valeur courant de la cellule en compte
+                if (i != 1 && j != 1) { //évite de prendre la valeur courante de la cellule en compte
                     if (this.local_env[i][j] == Cell.Alive){
                         counter++;
                     }

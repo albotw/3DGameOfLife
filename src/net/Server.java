@@ -10,9 +10,8 @@ import java.rmi.server.UnicastRemoteObject;
 public class Server extends UnicastRemoteObject implements IServer {
     //TODO: voir structure de l'application.
 
-    protected Server() throws RemoteException {
+    public Server() throws RemoteException {
         super();
-
         try {
             Naming.rebind("GOL_SERVER", this);
             System.out.println("--- server registered ---");
@@ -32,16 +31,5 @@ public class Server extends UnicastRemoteObject implements IServer {
     public synchronized void sendResult(IGOLProcess t) throws RemoteException {
         System.out.println("[SERVER] got result");
         //TODO: enregistrement résultat
-    }
-
-    @Override
-    public int getSize() throws RemoteException {
-        //TODO: voire utilité
-        return 0;
-    }
-
-    @Override
-    public void affichage() throws RemoteException {
-        //TODO voire utilité.
     }
 }
