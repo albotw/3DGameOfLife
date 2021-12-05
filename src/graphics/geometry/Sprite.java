@@ -1,4 +1,4 @@
-package graphics;
+package graphics.geometry;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -9,6 +9,7 @@ public class Sprite {
     public float scale;
     public final Vector3f rotation;
     public final boolean wireframe;
+    public boolean hidden;
 
     public Sprite(Mesh mesh, boolean wireframe) {
         this.mesh = mesh;
@@ -16,6 +17,7 @@ public class Sprite {
         this.position = new Vector3f();
         this.rotation = new Vector3f();
         this.scale = 1;
+        this.hidden = false;
     }
 
     public Matrix4f getModelMatrix() {
@@ -30,9 +32,5 @@ public class Sprite {
         this.position.x = x;
         this.position.y = y;
         this.position.z = z;
-    }
-
-    public static Sprite fromCell(int x, int y, int z) {
-        return new Sprite(null, false);
     }
 }

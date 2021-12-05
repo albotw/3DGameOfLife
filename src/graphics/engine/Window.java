@@ -2,11 +2,13 @@ package graphics.engine;
 
 import input.Keyboard;
 import input.Mouse;
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import static CONFIG.CONFIG.FOV;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11C.glViewport;
@@ -18,9 +20,11 @@ public class Window {
     private long glfwWindow;
     private int width;
     private int height;
-    private String title;
+    private final String title;
     private boolean resized;
     private boolean vSync;
+
+    private Matrix4f projectionMatrix;
 
     public Window(int width, int height, String title, boolean vSync) {
         this.width = width;
@@ -85,6 +89,9 @@ public class Window {
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_MULTISAMPLE);
+
+        this.projectionMatrix = new Matrix4f();
+        this.projectionMatrix.perspective(FOV, this.width / this.height, 0.01f, 100.0f);
     }
 
     public boolean windowShouldClose() {
@@ -105,6 +112,10 @@ public class Window {
 
     public void setvSync(boolean vSync) {
         this.vSync = vSync;
+    }
+
+    public Matrix4f getProjectionMatrix() {
+        return this.projectionMatrix;
     }
 
     public void update() {

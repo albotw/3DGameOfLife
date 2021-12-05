@@ -11,4 +11,5 @@ public class CONFIG {
     public final static int SUB_ENV_SIZE = 3;
     public final static boolean VSYNC = true;
     public final static float MOUSE_SENSITIVITY = 0.01f;
+    public final static float FOV = 90.0f;
 }

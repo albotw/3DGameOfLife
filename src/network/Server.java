@@ -6,6 +6,7 @@ import core.IGOLProcess;
 import events.EventDispatcher;
 import events.EventQueue;
 import events.ThreadID;
+import graphics.SpriteManager;
 import graphics.engine.Renderer;
 
 import java.net.MalformedURLException;
@@ -63,6 +64,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         System.out.println("[SERVER] got result");
         this.gameOfLife.sendResult(t);
         this.gameOfLife.checkCompletion();
+        SpriteManager.instance.displayEnv(this.environment);
     }
 
     @Override

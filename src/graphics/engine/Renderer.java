@@ -2,8 +2,8 @@ package graphics.engine;
 
 import events.EventQueue;
 import events.ThreadID;
-import graphics.*;
-import input.Keyboard;
+import graphics.SpriteManager;
+import graphics.geometry.Sprite;
 import input.Mouse;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -59,55 +59,38 @@ public class Renderer extends Thread {
         float angleX = 0.0f;
         float angleY = 0.0f;
         while (running && !window.windowShouldClose()) {
-            //input
+            // ! INPUT ---------------------------------------------------------
             glfwPollEvents();
-            if (Keyboard.UP_press) {
-                angleX = 0.1f;
-            }
-            if (Keyboard.DOWN_press) {
-                angleX = -0.1f;
-            }
-            if (Keyboard.LEFT_press) {
-                angleY = -0.1f;
-            }
-            if (Keyboard.RIGHT_press) {
-                angleY = 0.1f;
-            }
-            if (Keyboard.ZERO_press) {
-                angleX = 0.0f;
-                angleY = 0.0f;
-            }
-
             if (Mouse.LMBPress) {
                 camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
             }
             camera.rotate(angleX, angleY);
-            //update
+
+            // ! UPDATE --------------------------------------------------------
 
             // ! RENDER --------------------------------------------------------
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             this.shader.bind();
-            Matrix4f view = camera.getViewMatrix();
-            Matrix4f proj = new Matrix4f();
-            proj = proj.perspective(90.0f, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
-            this.shader.setUniform("proj", proj);
-            this.shader.setUniform("view", view);
+            this.shader.setUniform("proj", this.window.getProjectionMatrix());
+            this.shader.setUniform("view", this.camera.getViewMatrix());
 
             ArrayList<Sprite> geometry = this.spriteManager.getGeometry();
             for (int i = 0; i < geometry.size(); i++) {
-                Sprite s = geometry.get(i);
+                Sprite sprite = geometry.get(i);
 
-                glBindVertexArray(s.mesh.getVaoID());
+                glBindVertexArray(sprite.mesh.getVaoID());
                 glEnableVertexAttribArray(0);
-                glEnableVertexAttribArray(1);
 
-                Matrix4f model = s.getModelMatrix();
+                this.shader.setUniform("inColour", sprite.mesh.getColor());
+
+
+                Matrix4f model = sprite.getModelMatrix();
                 this.shader.setUniform("model", model);
 
-                if (s.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                if (sprite.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-                glDrawElementsInstanced(GL_TRIANGLES, s.mesh.getVertexCount(), GL_UNSIGNED_INT, 0, geometry.size());
+                glDrawElementsInstanced(GL_TRIANGLES, sprite.mesh.getVertexCount(), GL_UNSIGNED_INT, 0, geometry.size());
                 glBindVertexArray(0);
             }
             shader.unbind();

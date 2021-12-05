@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/DOC" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/lwjgl-release-3.3.0-custom" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/shaders" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
