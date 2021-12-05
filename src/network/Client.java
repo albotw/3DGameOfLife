@@ -2,18 +2,55 @@ package network;
 
 import core.IGOLProcess;
 
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
-public class Client {
-    private static IServer srv = null;
+import static CONFIG.CONFIG.SERVER_NAME;
 
-    public static void init() throws Exception {
-        Client.srv = (IServer) Naming.lookup(("GOL_SERVER"));
+public class Client extends Thread {
+    public static void main(String[] args) {
+        Client c = new Client();
+        c.start();
     }
 
-    public static void run() throws Exception {
-        IGOLProcess task = Client.srv.getTask();
-        task.run();
-        Client.srv.sendResult(task);
+    private IServer srv = null;
+
+    public Client() {
+        try {
+            this.srv = (IServer) Naming.lookup(SERVER_NAME);
+        } catch (NotBoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void run() {
+        while (true) {
+            try {
+                if (this.srv.getStatus() == Status.CONTINUE) {
+                    IGOLProcess task = this.srv.getTask();
+                    if (task != null) {
+                        task.run();
+                        System.out.println("Done task");
+                    }
+                    this.srv.sendResult(task);
+                } else {
+                    System.out.println("Awaiting server");
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                sleep(200);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

@@ -13,14 +13,14 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import static CONFIG.CONFIG.SERVER_NAME;
+
 public class Server extends UnicastRemoteObject implements IServer {
     //TODO: voir structure de l'application.
     private GameOfLife gameOfLife;
     private Renderer renderer;
     private EventQueue eventQueue;
     private Environment environment;
-
-    private Status status;
 
     public static Server instance;
 
@@ -34,7 +34,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     public Server() throws RemoteException {
         super();
-        this.status = Status.WAIT;
         Server.instance = this;
 
         EventDispatcher.createEventDispatcher();
@@ -45,9 +44,8 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.renderer.start();
         try {
             System.setProperty("java.rmi.server.hostname", "127.0.0.1");
-            Naming.rebind("GOL_SERVER", this);
+            Naming.rebind(SERVER_NAME, this);
             System.out.println("--- server registered ---");
-            this.status = Status.CONTINUE;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -56,10 +54,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized IGOLProcess getTask() throws RemoteException {
         System.out.println("[SERVER] dispatched task");
-        if (this.status == Status.WAIT) {
-            this.environment.nextGeneration();
-            this.status = Status.CONTINUE;
-        }
+        this.gameOfLife.checkCompletion();
         return this.gameOfLife.getNext();
     }
 
@@ -67,14 +62,11 @@ public class Server extends UnicastRemoteObject implements IServer {
     public synchronized void sendResult(IGOLProcess t) throws RemoteException {
         System.out.println("[SERVER] got result");
         this.gameOfLife.sendResult(t);
+        this.gameOfLife.checkCompletion();
     }
 
     @Override
     public Status getStatus() throws RemoteException {
-        return this.status;
-    }
-
-    public void setStatus(Status newStatus) {
-        this.status = newStatus;
+        return this.gameOfLife.getStatus();
     }
 }
