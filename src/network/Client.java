@@ -36,7 +36,6 @@ public class Client extends Thread {
                     IGOLProcess task = this.srv.getTask();
                     if (task != null) {
                         task.run();
-                        System.out.println("Done task");
                     }
                     this.srv.sendResult(task);
                 } else {
@@ -47,7 +46,7 @@ public class Client extends Thread {
             }
 
             try {
-                sleep(200);
+                sleep(16);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }

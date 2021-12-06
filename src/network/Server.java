@@ -8,6 +8,7 @@ import events.EventQueue;
 import events.ThreadID;
 import graphics.SpriteManager;
 import graphics.engine.Renderer;
+import graphics.geometry.Sprite;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -38,11 +39,23 @@ public class Server extends UnicastRemoteObject implements IServer {
         Server.instance = this;
 
         EventDispatcher.createEventDispatcher();
-        this.eventQueue = new EventQueue(ThreadID.Server);
-        this.environment = new Environment();
-        this.gameOfLife = new GameOfLife(this.environment);
+
         this.renderer = new Renderer();
         this.renderer.start();
+        this.eventQueue = new EventQueue(ThreadID.Server);
+        this.environment = new Environment();
+        //TODO: chargement des valeurs depuis GRID.txt
+
+        int[] initPositions = {
+                2, 0,
+                1, 2
+        };
+        this.environment.initValues(initPositions);
+
+        this.gameOfLife = new GameOfLife(this.environment);
+
+        SpriteManager.instance.setEnv(this.environment);
+
         try {
             System.setProperty("java.rmi.server.hostname", "127.0.0.1");
             Naming.rebind(SERVER_NAME, this);
@@ -54,17 +67,16 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     @Override
     public synchronized IGOLProcess getTask() throws RemoteException {
-        System.out.println("[SERVER] dispatched task");
+        //System.out.println("[SERVER] dispatched task");
         this.gameOfLife.checkCompletion();
         return this.gameOfLife.getNext();
     }
 
     @Override
     public synchronized void sendResult(IGOLProcess t) throws RemoteException {
-        System.out.println("[SERVER] got result");
+        //System.out.println("[SERVER] got result");
         this.gameOfLife.sendResult(t);
         this.gameOfLife.checkCompletion();
-        SpriteManager.instance.displayEnv(this.environment);
     }
 
     @Override

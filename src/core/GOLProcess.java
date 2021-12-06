@@ -20,16 +20,21 @@ public class GOLProcess implements IGOLProcess, Serializable {
 
     public void run() {
         int aliveNeighbours = getAliveNeighbours();
+        System.out.println(aliveNeighbours);
         if (aliveNeighbours == 3) { //naissance
             this.result = Cell.Alive;
+            System.out.println("alive");
         }
         else if (aliveNeighbours == 2) { //état courant
             this.result = local_env[1][1];
+            System.out.println("current");
         }
         else { //mort
             this.result = Cell.Empty;
+            System.out.println("dead");
         }
     }
+
 
     //TODO: optimisation ?
     private int getAliveNeighbours() {

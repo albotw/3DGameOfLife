@@ -13,6 +13,8 @@ import static CONFIG.CONFIG.ENV_SIZE;
 public class SpriteManager {
     public static SpriteManager instance;
 
+    private Environment env;
+
     private ArrayList<Sprite> geometry;
 
     // le return est important => permet le lien vers le contexte OGL
@@ -28,36 +30,43 @@ public class SpriteManager {
         this.geometry = new ArrayList<>();
     }
 
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
+
     public void init() {
         Sprite container = new Sprite(Mesh.Cube(new Vector3f(1.0f, 1.0f, 1.0f)), true);
         container.scale = ENV_SIZE;
         this.geometry.add(container);
 
+        Sprite test = new Sprite(Mesh.Cube(new Vector3f(1.0f, 0.0f, 0.0f)), false);
+        test.position.x = -2.0f;
+        this.geometry.add(test);
+
         //TODO: revoir création de la grille.
-        float offset = 2.0f;
+        float offset = (0.5f * (ENV_SIZE - 1));
         for (int x = 0; x < ENV_SIZE; x++) {
             for (int y = 0; y < ENV_SIZE; y++) {
                 //for (int k = 0; k < 5; k++) {
                 Sprite s = new Sprite(Mesh.Cube(new Vector3f(0.0f, 1.0f, 0.0f)), false);
                 s.moveTo(x - offset, y - offset, 0.0f);
                 s.scale = 0.8f;
+                s.hidden = true;
                 this.geometry.add(s);
                 //}
             }
         }
+
+        this.displayEnv();
     }
 
-    public void displayEnv(Environment env) {
+    public void displayEnv() {
         for (int x = 0; x < ENV_SIZE; x++) {
             for (int y = 0; y < ENV_SIZE; y++) {
-                setCellVisibility(x, y, env.getCellState(x, y) == Cell.Alive);
+                int index = 1 + (x * ENV_SIZE) + y;
+                this.geometry.get(index).hidden = (env.getCellState(x, y) == Cell.Empty);
             }
         }
-    }
-
-    public void setCellVisibility(int x, int y, boolean hidden) {
-        int index = x * ENV_SIZE + y;
-        this.geometry.get(index).hidden = hidden;
     }
 
     public ArrayList<Sprite> getGeometry() {

@@ -33,6 +33,7 @@ public class Environment {
     }
 
     public Cell[][] getSubEnv(int x, int y) {
+        //TODO: refaire correctement.
         Cell[][] sub_env = new Cell[SUB_ENV_SIZE][SUB_ENV_SIZE];
         for (int i = 0; i < SUB_ENV_SIZE; i++) {
             for (int j = 0; j < SUB_ENV_SIZE; j++) {
@@ -55,26 +56,17 @@ public class Environment {
         if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE)
         {
             this.future_env[x][y] = state;
+            System.out.println(state);
         }
     }
 
     public void nextGeneration()
     {
         for (int i = 0; i < ENV_SIZE; i++) {
-            System.arraycopy(this.future_env[i], 0, this.current_env[i], 0, ENV_SIZE);
+            for (int j = 0; j < ENV_SIZE; j++) {
+                this.current_env[i][j] = this.future_env[i][j];
+            }
         }
         clean(this.future_env);
-    }
-
-    public void print() {
-        for (int i = 0; i < ENV_SIZE; i++) {
-            for (int j = 0; j < ENV_SIZE; j++) {
-                if (this.current_env[i][j] == Cell.Alive) System.out.print("X ");
-                if (this.current_env[i][j] == Cell.Empty) System.out.print("O ");
-            }
-
-            System.out.println();
-        }
-        System.out.println();
     }
 }

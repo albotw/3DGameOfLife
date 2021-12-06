@@ -1,5 +1,6 @@
 package core;
 
+import graphics.SpriteManager;
 import network.Status;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,6 +21,7 @@ public class GameOfLife implements IGameOfLife {
     public void checkCompletion() {
         if (this.status == Status.WAIT) {
             this.env.nextGeneration();
+            SpriteManager.instance.displayEnv();
             this.currentTask.set(0);
             System.out.println("next generation");
             this.status = Status.CONTINUE;
@@ -33,7 +35,6 @@ public class GameOfLife implements IGameOfLife {
             int y = taskIndex / ENV_SIZE;
 
             Cell[][] local_env = env.getSubEnv(x, y);
-            System.out.println("TaskID: " + currentTask.get());
             return new GOLProcess(x, y, local_env);
         } else {
             this.status = Status.WAIT;
