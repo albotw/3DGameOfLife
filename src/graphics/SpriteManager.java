@@ -16,6 +16,7 @@ public class SpriteManager {
     private Environment env;
 
     private ArrayList<Sprite> geometry;
+    private Sprite container;
 
     // le return est important => permet le lien vers le contexte OGL
     public static SpriteManager createSpriteManager() {
@@ -35,13 +36,8 @@ public class SpriteManager {
     }
 
     public void init() {
-        Sprite container = new Sprite(Mesh.Cube(new Vector3f(1.0f, 1.0f, 1.0f)), true);
+        container = new Sprite(Mesh.Cube(new Vector3f(1.0f, 1.0f, 1.0f)), true);
         container.scale = ENV_SIZE;
-        this.geometry.add(container);
-
-        Sprite test = new Sprite(Mesh.Cube(new Vector3f(1.0f, 0.0f, 0.0f)), false);
-        test.position.x = -2.0f;
-        this.geometry.add(test);
 
         //TODO: revoir création de la grille.
         float offset = (0.5f * (ENV_SIZE - 1));
@@ -57,13 +53,15 @@ public class SpriteManager {
             }
         }
 
+        this.geometry.add(container);
+
         this.displayEnv();
     }
 
     public void displayEnv() {
         for (int x = 0; x < ENV_SIZE; x++) {
             for (int y = 0; y < ENV_SIZE; y++) {
-                int index = 1 + (x * ENV_SIZE) + y;
+                int index = (x * ENV_SIZE) + y;
                 this.geometry.get(index).hidden = (env.getCellState(x, y) == Cell.Empty);
             }
         }

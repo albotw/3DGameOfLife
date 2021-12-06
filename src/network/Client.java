@@ -46,7 +46,7 @@ public class Client extends Thread {
             }
 
             try {
-                sleep(16);
+                sleep(1000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }

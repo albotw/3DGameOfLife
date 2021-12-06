@@ -74,7 +74,6 @@ public class Renderer extends Thread {
                 e.printStackTrace();
             }
 
-
             ArrayList<Sprite> geometry = this.spriteManager.getGeometry();
             for (int i = 0; i < geometry.size(); i++) {
                 Sprite sprite = geometry.get(i);

@@ -1,5 +1,6 @@
 package network;
 
+import core.Cell;
 import core.Environment;
 import core.GameOfLife;
 import core.IGOLProcess;
@@ -47,14 +48,17 @@ public class Server extends UnicastRemoteObject implements IServer {
         //TODO: chargement des valeurs depuis GRID.txt
 
         int[] initPositions = {
-                2, 0,
-                1, 2
+                0, 1,
+                2, 1
         };
         this.environment.initValues(initPositions);
+        this.environment.print();
 
         this.gameOfLife = new GameOfLife(this.environment);
 
         SpriteManager.instance.setEnv(this.environment);
+
+        Cell[][] subenv = this.environment.getSubEnv(1, 1);
 
         try {
             System.setProperty("java.rmi.server.hostname", "127.0.0.1");
@@ -77,6 +81,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         //System.out.println("[SERVER] got result");
         this.gameOfLife.sendResult(t);
         this.gameOfLife.checkCompletion();
+        this.environment.print();
     }
 
     @Override

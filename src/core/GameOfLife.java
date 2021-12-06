@@ -9,12 +9,14 @@ import static CONFIG.CONFIG.ENV_SIZE;
 
 public class GameOfLife implements IGameOfLife {
     public Environment env;
-    public AtomicInteger currentTask;
+    private int x;
+    private int y;
     public Status status;
 
     public GameOfLife(Environment env) {
         this.env = env;
-        this.currentTask = new AtomicInteger(0);
+        this.x = 0;
+        this.y = 0;
         this.status = Status.CONTINUE;
     }
 
@@ -22,24 +24,26 @@ public class GameOfLife implements IGameOfLife {
         if (this.status == Status.WAIT) {
             this.env.nextGeneration();
             SpriteManager.instance.displayEnv();
-            this.currentTask.set(0);
+            this.x = 0;
+            this.y = 0;
             System.out.println("next generation");
             this.status = Status.CONTINUE;
         }
     }
 
     public IGOLProcess getNext() {
-        int taskIndex = currentTask.incrementAndGet();
-        if (taskIndex <= ENV_SIZE * ENV_SIZE) {
-            int x = taskIndex % ENV_SIZE;
-            int y = taskIndex / ENV_SIZE;
+        Cell[][] local_env = env.getSubEnv(x, y);
+        GOLProcess task =  new GOLProcess(x, y, local_env);
 
-            Cell[][] local_env = env.getSubEnv(x, y);
-            return new GOLProcess(x, y, local_env);
-        } else {
-            this.status = Status.WAIT;
-            return null;
+        if (++x >= ENV_SIZE) {
+            y = 0;
+            if (++x >= ENV_SIZE) {
+                this.status = Status.WAIT;
+            }
         }
+
+        System.out.println(x + " " + y);
+        return task;
     }
 
     public void sendResult(IGOLProcess t) {
