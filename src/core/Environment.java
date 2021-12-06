@@ -18,7 +18,7 @@ public class Environment {
     public void initValues(int[] positions)
     {
         for (int i = 0; i < positions.length; i += 2) {
-            current_env[positions[i]][positions[i+1]] = new Cell(CellState.Alive);
+            current_env[positions[i]][positions[i+1]] = Cell.Alive;
             System.out.println("added cell at " + positions[i] + " " + positions[i+1]);
         }
     }
@@ -28,7 +28,7 @@ public class Environment {
         {
             for (int j = 0; j < ENV_SIZE; j++)
             {
-                env[i][j] = new Cell(CellState.Empty);
+                env[i][j] = Cell.Empty;
             }
         }
     }
@@ -39,18 +39,28 @@ public class Environment {
         int offset = SUB_ENV_SIZE % 2;
         for (int i = 0; i < SUB_ENV_SIZE; i++) {
             for (int j = 0; j < SUB_ENV_SIZE; j++) {
-                sub_env[i][j] = getCellState(x - offset, y - offset);
+                sub_env[i][j] = getCellState((x - offset) + i, (y - offset) + j);
             }
         }
 
         return sub_env;
     }
 
-    public void print() {
+    public void printCurrent() {
         for (int i = 0; i < ENV_SIZE; i++) {
             for (int j = 0; j < ENV_SIZE; j++) {
-                if (this.current_env[i][j].state == CellState.Alive) System.out.print("X ");
-                if (this.current_env[i][j].state == CellState.Empty) System.out.print("O ");
+                if (this.current_env[i][j] == Cell.Alive) System.out.print("X ");
+                if (this.current_env[i][j] == Cell.Empty) System.out.print("O ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void printFuture() {
+        for (int i = 0; i < ENV_SIZE; i++) {
+            for (int j = 0; j < ENV_SIZE; j++) {
+                if (this.future_env[i][j] == Cell.Alive) System.out.print("X ");
+                if (this.future_env[i][j] == Cell.Empty) System.out.print("O ");
             }
             System.out.println();
         }
@@ -59,21 +69,16 @@ public class Environment {
     public Cell getCellState(int x, int y) {
         if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE)
         {
-            if (this.current_env[x][y] == null) {
-                return new Cell(CellState.Empty);
-            }
-            else {
-                return this.current_env[x][y];
-            }
+            return this.current_env[x][y];
         }
-        else return new Cell(CellState.Empty);
+        else return Cell.Empty;
     }
 
     public void setCellState(int x, int y, Cell cell) {
         if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE)
         {
-            this.future_env[x][y].state = cell.state;
-            System.out.println(cell.state);
+            this.future_env[x][y] = cell;
+            System.out.println(cell);
         }
     }
 

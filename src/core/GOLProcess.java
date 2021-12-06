@@ -22,15 +22,15 @@ public class GOLProcess implements IGOLProcess, Serializable {
         int aliveNeighbours = getAliveNeighbours();
         System.out.println(aliveNeighbours);
         if (aliveNeighbours == 3) { //naissance
-            this.result = new Cell(CellState.Alive);
+            this.result = Cell.Alive;
             System.out.println("alive");
         }
         else if (aliveNeighbours == 2) { //état courant
-            this.result = new Cell(local_env[1][1].state);
-            System.out.println("current");
+            this.result = local_env[1][1];
+            System.out.println("current: " + this.result);
         }
         else { //mort
-            this.result = new Cell(CellState.Empty);
+            this.result = Cell.Empty;
             System.out.println("dead");
         }
     }
@@ -41,8 +41,7 @@ public class GOLProcess implements IGOLProcess, Serializable {
         int counter = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                System.out.println(local_env[i][j]);
-                if (this.local_env[i][j].state == CellState.Alive){
+                if (this.local_env[i][j] == Cell.Alive){
                     counter++;
                 }
             }

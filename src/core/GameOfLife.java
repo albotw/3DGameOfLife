@@ -35,7 +35,7 @@ public class GameOfLife implements IGameOfLife {
         Cell[][] local_env = env.getSubEnv(x, y);
         GOLProcess task =  new GOLProcess(x, y, local_env);
 
-        if (++x >= ENV_SIZE) {
+        if (++y >= ENV_SIZE) {
             y = 0;
             if (++x >= ENV_SIZE) {
                 this.status = Status.WAIT;

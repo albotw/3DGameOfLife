@@ -1,8 +1,11 @@
 package core;
 
-public class Cell {
-    public CellState state;
-    public Cell(CellState state) {
-        this.state = state;
+public enum Cell {
+    Alive (1),
+    Empty (0);
+
+    int value;
+    Cell(int value) {
+        this.value = value;
     }
 }
