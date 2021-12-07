@@ -6,6 +6,7 @@ import network.Status;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static CONFIG.CONFIG.ENV_SIZE;
+import static CONFIG.CONFIG.RENDER_TICK;
 
 public class GameOfLife implements IGameOfLife {
     public Environment env;
@@ -24,13 +25,22 @@ public class GameOfLife implements IGameOfLife {
         if (this.status == Status.WAIT) {
             this.env.nextGeneration();
             SpriteManager.instance.displayEnv();
+
+            /*
+            try {
+                Thread.currentThread().sleep(RENDER_TICK);
+            }catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+             */
+
             this.x = 0;
             this.y = 0;
             this.status = Status.CONTINUE;
         }
     }
 
-    public IGOLProcess getNext() {
+    public synchronized IGOLProcess getNext() {
         Cell[][] local_env = env.getSubEnv(x, y);
         GOLProcess task =  new GOLProcess(x, y, local_env);
 
@@ -45,7 +55,7 @@ public class GameOfLife implements IGameOfLife {
         return task;
     }
 
-    public void sendResult(IGOLProcess t) {
+    public synchronized void sendResult(IGOLProcess t) {
         if (t != null) {
             GOLProcess task = (GOLProcess) t;
             env.setCellState(task.x, task.y, task.updatedState());
