@@ -60,7 +60,7 @@ public class Renderer extends Thread {
         while (running && !window.windowShouldClose()) {
             // ! INPUT ---------------------------------------------------------
             glfwPollEvents();
-            if (Mouse.LMBPress) {
+            if (Mouse.LMBPress && !UI.instance.isMouseOnUI()) {
                 camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
             }
             if (Keyboard.UP_press || Keyboard.Z_press) {

@@ -235,6 +235,10 @@ public class UI {
         nk_style_set_font(context, default_font);
     }
 
+    public boolean isMouseOnUI() {
+        return nk_window_is_any_hovered(context);
+    }
+
     public void processScroll(long window, double xoffset, double yoffset) {
         try (MemoryStack stack = stackPush()) {
             NkVec2 scroll = NkVec2.malloc(stack)
