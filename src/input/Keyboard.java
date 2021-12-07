@@ -7,6 +7,8 @@ public class Keyboard {
     public static boolean DOWN_press;
     public static boolean LEFT_press;
     public static boolean RIGHT_press;
+    public static boolean Z_press;
+    public static boolean S_press;
 
     public static boolean ZERO_press;
 
@@ -35,6 +37,12 @@ public class Keyboard {
                 break;
             case GLFW_KEY_0:
                 ZERO_press = (action == GLFW_PRESS);
+                break;
+            case GLFW_KEY_Z:
+                Z_press = (action == GLFW_PRESS);
+                break;
+            case GLFW_KEY_S:
+                S_press = (action == GLFW_PRESS);
                 break;
         }
     }

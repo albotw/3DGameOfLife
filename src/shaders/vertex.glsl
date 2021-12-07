@@ -2,7 +2,7 @@
 
 layout (location =0) in vec3 position;
 
-uniform vec3 inColour;
+uniform vec3 color;
 
 out vec3 exColour;
 
@@ -17,5 +17,5 @@ void main()
     //vec3 offset = offsets[gl_InstanceID];
     //gl_Position =  proj *  view *  model * vec4(position + offset, 1.0);
     gl_Position = proj * view * model * vec4(position, 1.0);
-    exColour = inColour;
+    exColour = color;
 }

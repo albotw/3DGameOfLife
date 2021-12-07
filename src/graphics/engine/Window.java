@@ -91,7 +91,7 @@ public class Window {
         glEnable(GL_MULTISAMPLE);
 
         this.projectionMatrix = new Matrix4f();
-        this.projectionMatrix.perspective(FOV, this.width / this.height, 0.01f, 100.0f);
+        this.projectionMatrix.perspective(FOV, this.width / this.height, 0.01f, 50.0f);
     }
 
     public boolean windowShouldClose() {

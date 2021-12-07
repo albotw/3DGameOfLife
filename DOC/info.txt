@@ -1,11 +1,24 @@
+calcul de base GOL
 pour chaque cellule:
     - établir le nombre de voisins vivants de la cellule
     - n == 3 ? CellState.Active
     - n == 2 ? pas de changement
     - n < 2 || n > 3 ? CellState.Dead
 
-RAPPEL:
+2D -> 1D
 i = x + width * y;
 
+1D -> 2D
 x = i % width;
 y = i / width;
+
+FIXME:
+- rendu cassé lors de traitements multiclients.
+- valeurs de boucle en dur -> passer en configurable.
+- ajouter générateur de config de départ aléatoire
+
+TODO:
+- optimisation rendu: passer en mode instancé avec matrice de modèle calculée dans le shader.
+- panneau de controle pour reset / regénérer un envirronement
+- ajouter chargeur de configurations
+- afficher plus d'informations: statut des clients, tâches restantes, etc..

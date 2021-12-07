@@ -4,6 +4,7 @@ import events.EventQueue;
 import events.ThreadID;
 import graphics.SpriteManager;
 import graphics.geometry.Sprite;
+import input.Keyboard;
 import input.Mouse;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -29,7 +30,7 @@ public class Renderer extends Thread {
     public Renderer() {
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
         this.spriteManager = SpriteManager.createSpriteManager();
-        this.camera = new Camera(new Vector3f(0.0f, 0.0f, 10.0f), 10.0f);
+        this.camera = new Camera(new Vector3f(0.0f, 0.0f, 6.0f), 6.0f);
         this.eventQueue = new EventQueue(ThreadID.Render);
     }
 
@@ -52,15 +53,18 @@ public class Renderer extends Thread {
         boolean running = true;
 
         //translations[99] = new Vector3f(-1.0f, -1.0f, -1.0f);
-        float angleX = 0.0f;
-        float angleY = 0.0f;
         while (running && !window.windowShouldClose()) {
             // ! INPUT ---------------------------------------------------------
             glfwPollEvents();
             if (Mouse.LMBPress) {
                 camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
             }
-            camera.rotate(angleX, angleY);
+            if (Keyboard.UP_press || Keyboard.Z_press) {
+                camera.zoomIn();
+            }
+            if (Keyboard.DOWN_press || Keyboard.S_press) {
+                camera.zoomOut();
+            }
 
             // ! UPDATE --------------------------------------------------------
 
@@ -85,7 +89,7 @@ public class Renderer extends Thread {
                     Matrix4f model = sprite.getModelMatrix();
                     try {
                         this.shader.setUniform("model", model);
-                        this.shader.setUniform("inColour", sprite.mesh.getColor());
+                        this.shader.setUniform("color", sprite.mesh.getColor());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -11,7 +11,7 @@ public class Camera {
     private double azimuth;
     private double polar;
 
-    private final double rotationRadius;
+    private double rotationRadius;
 
     public Camera(Vector3f position, double rotationRadius) {
         this.position = position;
@@ -53,10 +53,23 @@ public class Camera {
 
             rotateAzimuth(angleX);
             rotatePolar(angleY);
-
-            this.position.x = (float) (this.rotationRadius * Math.cos(this.polar) * Math.cos(this.azimuth));
-            this.position.y = (float) (this.rotationRadius * Math.sin(this.polar));
-            this.position.z = (float) (this.rotationRadius * Math.cos(this.polar) * Math.sin(this.azimuth));
+            updatePosition();
         }
+    }
+
+    public void updatePosition() {
+        this.position.x = (float) (this.rotationRadius * Math.cos(this.polar) * Math.cos(this.azimuth));
+        this.position.y = (float) (this.rotationRadius * Math.sin(this.polar));
+        this.position.z = (float) (this.rotationRadius * Math.cos(this.polar) * Math.sin(this.azimuth));
+    }
+
+    public void zoomIn() {
+        this.rotationRadius -= 0.1f;
+        this.updatePosition();
+    }
+
+    public void zoomOut() {
+        this.rotationRadius += 0.1f;
+        this.updatePosition();
     }
 }
