@@ -46,26 +46,6 @@ public class Environment {
         return sub_env;
     }
 
-    public void printCurrent() {
-        for (int i = 0; i < ENV_SIZE; i++) {
-            for (int j = 0; j < ENV_SIZE; j++) {
-                if (this.current_env[i][j] == Cell.Alive) System.out.print("X ");
-                if (this.current_env[i][j] == Cell.Empty) System.out.print("O ");
-            }
-            System.out.println();
-        }
-    }
-
-    public void printFuture() {
-        for (int i = 0; i < ENV_SIZE; i++) {
-            for (int j = 0; j < ENV_SIZE; j++) {
-                if (this.future_env[i][j] == Cell.Alive) System.out.print("X ");
-                if (this.future_env[i][j] == Cell.Empty) System.out.print("O ");
-            }
-            System.out.println();
-        }
-    }
-
     public Cell getCellState(int x, int y) {
         if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE)
         {
@@ -78,7 +58,6 @@ public class Environment {
         if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE)
         {
             this.future_env[x][y] = cell;
-            System.out.println(cell);
         }
     }
 

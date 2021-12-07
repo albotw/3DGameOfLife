@@ -7,6 +7,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import static CONFIG.CONFIG.RENDER_TICK;
 import static CONFIG.CONFIG.SERVER_NAME;
 
 public class Client extends Thread {
@@ -45,8 +46,9 @@ public class Client extends Thread {
                 e.printStackTrace();
             }
 
+
             try {
-                sleep(1000);
+                sleep(RENDER_TICK);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }

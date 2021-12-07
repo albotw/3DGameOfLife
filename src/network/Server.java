@@ -17,7 +17,6 @@ import java.rmi.server.UnicastRemoteObject;
 import static CONFIG.CONFIG.SERVER_NAME;
 
 public class Server extends UnicastRemoteObject implements IServer {
-    //TODO: voir structure de l'application.
     private GameOfLife gameOfLife;
     private Renderer renderer;
     private EventQueue eventQueue;
@@ -43,19 +42,18 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.renderer.start();
         this.eventQueue = new EventQueue(ThreadID.Server);
         this.environment = new Environment();
-        //TODO: chargement des valeurs depuis GRID.txt
 
+        //TODO: chargement des valeurs depuis GRID.txt
         int[] initPositions = {
                 0, 1,
+                1, 1,
                 2, 1
         };
         this.environment.initValues(initPositions);
-        this.environment.printCurrent();
 
         this.gameOfLife = new GameOfLife(this.environment);
 
         SpriteManager.instance.setEnv(this.environment);
-
 
         try {
             System.setProperty("java.rmi.server.hostname", "127.0.0.1");
@@ -78,7 +76,6 @@ public class Server extends UnicastRemoteObject implements IServer {
         //System.out.println("[SERVER] got result");
         this.gameOfLife.sendResult(t);
         this.gameOfLife.checkCompletion();
-        this.environment.printFuture();
     }
 
     @Override

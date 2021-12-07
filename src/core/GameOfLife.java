@@ -26,7 +26,6 @@ public class GameOfLife implements IGameOfLife {
             SpriteManager.instance.displayEnv();
             this.x = 0;
             this.y = 0;
-            System.out.println("next generation");
             this.status = Status.CONTINUE;
         }
     }

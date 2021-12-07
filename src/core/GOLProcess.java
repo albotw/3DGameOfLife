@@ -20,7 +20,7 @@ public class GOLProcess implements IGOLProcess, Serializable {
 
     public void run() {
         int aliveNeighbours = getAliveNeighbours();
-        System.out.println(aliveNeighbours);
+        System.out.println(this.x + " " + this.y + " " + aliveNeighbours);
         if (aliveNeighbours == 3) { //naissance
             this.result = Cell.Alive;
             System.out.println("alive");
@@ -41,8 +41,10 @@ public class GOLProcess implements IGOLProcess, Serializable {
         int counter = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (this.local_env[i][j] == Cell.Alive){
-                    counter++;
+                if (!(i == 1 && j == 1)) {
+                    if (this.local_env[i][j] == Cell.Alive){
+                        counter++;
+                    }
                 }
             }
         }
