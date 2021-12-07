@@ -3,6 +3,8 @@ package graphics.engine;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import static CONFIG.CONFIG.EPSILON;
+
 public class Camera {
     private final Vector3f position;
     private final Vector3f target;
@@ -17,9 +19,11 @@ public class Camera {
         this.position = position;
         this.target = new Vector3f(0.0f, 0.0f, 0.0f);
         this.up = new Vector3f(0.0f, 1.0f, 0.0f);
+
         this.rotationRadius = rotationRadius;
         this.azimuth = 0.0f;
         this.polar = 0.0f;
+        this.updatePosition();
     }
 
     public Matrix4f getViewMatrix() {
@@ -47,7 +51,7 @@ public class Camera {
     }
 
     public void rotate(double angleX, double angleY) {
-        if (Math.abs(angleX) > 0.0001f && Math.abs(angleY) > 0.0001f) {
+        if (Math.abs(angleX) > EPSILON && Math.abs(angleY) > EPSILON) {
             angleX = -angleX;
             angleY = -angleY;
 

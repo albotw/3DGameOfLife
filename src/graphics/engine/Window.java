@@ -125,7 +125,6 @@ public class Window {
         }
 
         glfwSwapBuffers(glfwWindow);
-        glfwPollEvents();
     }
 
 }
