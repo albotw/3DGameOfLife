@@ -41,21 +41,6 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.renderer = new Renderer();
         this.renderer.start();
         this.eventQueue = new EventQueue(ThreadID.Server);
-        this.environment = new Environment();
-
-        //TODO: chargement des valeurs depuis GRID.txt
-        int[] initPositions = {
-                0, 1,
-                1, 1,
-                2, 1
-        };
-        //this.environment.initValues(initPositions);
-        this.environment.randomValues(20);
-
-
-        this.gameOfLife = new GameOfLife(this.environment);
-
-        SpriteManager.instance.setEnv(this.environment);
 
         try {
             System.setProperty("java.rmi.server.hostname", "127.0.0.1");
@@ -64,6 +49,15 @@ public class Server extends UnicastRemoteObject implements IServer {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        this.init();
+    }
+
+    public void init() {
+        this.environment = new Environment();
+        this.environment.randomValues(20);
+        this.gameOfLife = new GameOfLife(this.environment);
+        SpriteManager.instance.setEnv(this.environment);
     }
 
     @Override

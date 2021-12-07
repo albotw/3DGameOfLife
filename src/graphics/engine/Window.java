@@ -1,15 +1,20 @@
 package graphics.engine;
 
+import graphics.UI.UI;
 import input.Keyboard;
 import input.Mouse;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.*;
+import org.lwjgl.system.Callback;
+
+import java.nio.IntBuffer;
 
 import static CONFIG.CONFIG.FOV;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.ARBDebugOutput.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11C.glViewport;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
@@ -65,9 +70,6 @@ public class Window {
             this.setResized(true);
         });
 
-        Keyboard.init(this.glfwWindow);
-        Mouse.init(this.glfwWindow);
-
         //centrage de la fenêtre
         GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         assert vidMode != null;
@@ -86,7 +88,34 @@ public class Window {
 
         glfwShowWindow(glfwWindow);
         GLFW.glfwMakeContextCurrent(glfwWindow);
-        GL.createCapabilities();
+        GLCapabilities caps = GL.createCapabilities();
+
+
+        //fonction de débug pour openGL
+        Callback debugProc = GLUtil.setupDebugMessageCallback();
+        if (caps.OpenGL43) {
+            GL43.glDebugMessageControl(GL43.GL_DEBUG_SOURCE_API, GL43.GL_DEBUG_TYPE_OTHER, GL43.GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
+        } else if (caps.GL_KHR_debug) {
+            KHRDebug.glDebugMessageControl(
+                    KHRDebug.GL_DEBUG_SOURCE_API,
+                    KHRDebug.GL_DEBUG_TYPE_OTHER,
+                    KHRDebug.GL_DEBUG_SEVERITY_NOTIFICATION,
+                    (IntBuffer) null,
+                    false
+            );
+        } else if (caps.GL_ARB_debug_output) {
+            glDebugMessageControlARB(GL_DEBUG_SOURCE_API_ARB, GL_DEBUG_TYPE_OTHER_ARB, GL_DEBUG_SEVERITY_LOW_ARB, (IntBuffer) null, false);
+        }
+
+        try {
+            UI.instance.init(glfwWindow);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Keyboard.init(this.glfwWindow);
+        Mouse.init(this.glfwWindow);
+
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_MULTISAMPLE);
 

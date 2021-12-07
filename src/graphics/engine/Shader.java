@@ -52,6 +52,19 @@ public class Shader {
         }
     }
 
+    public void setUniform(String uniformName, int value) throws Exception {
+        int uniformPos = glGetUniformLocation(this.programID, uniformName);
+        if (uniformPos < 0) {
+            throw new Exception("Uniform " + uniformName + " introuvable: (" + uniformPos + ")");
+        }
+        glUniform1i(uniformPos, value);
+
+    }
+
+    public int getProgramID() {
+        return this.programID;
+    }
+
     protected int createShader(String shaderCode, int shaderType) throws Exception {
         int shaderID = glCreateShader(shaderType);
         if (shaderID == 0) {
@@ -73,7 +86,7 @@ public class Shader {
     public void link() throws Exception {
         glLinkProgram(programID);
 
-        if (glGetProgrami(programID, GL_COMPILE_STATUS) == 1) {
+        if (glGetProgrami(programID, GL_LINK_STATUS) != GL_TRUE) {
             throw new Exception("Erreur lors de la liaison du shader: " + glGetProgramInfoLog(programID, 1024));
         }
 

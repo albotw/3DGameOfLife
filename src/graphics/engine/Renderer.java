@@ -3,6 +3,7 @@ package graphics.engine;
 import events.EventQueue;
 import events.ThreadID;
 import graphics.SpriteManager;
+import graphics.UI.UI;
 import graphics.geometry.Sprite;
 import input.Keyboard;
 import input.Mouse;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import static CONFIG.CONFIG.*;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.nuklear.Nuklear.NK_ANTI_ALIASING_ON;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -27,6 +29,7 @@ public class Renderer extends Thread {
     private SpriteManager spriteManager;
 
     public Renderer() {
+        UI.createUI();
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
         this.spriteManager = SpriteManager.createSpriteManager();
         this.camera = new Camera(new Vector3f(0.0f, 0.0f, ENV_SIZE), ENV_SIZE);
@@ -105,6 +108,7 @@ public class Renderer extends Thread {
             shader.unbind();
 
             // ! DISPLAY -------------------------------------------------------
+            UI.instance.render(NK_ANTI_ALIASING_ON, 512 * 1024, 128 * 1024);
             window.update();
         }
     }
