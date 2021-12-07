@@ -8,7 +8,6 @@ import input.Keyboard;
 import input.Mouse;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL;
 
 import java.util.ArrayList;
 
@@ -30,7 +29,7 @@ public class Renderer extends Thread {
     public Renderer() {
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
         this.spriteManager = SpriteManager.createSpriteManager();
-        this.camera = new Camera(new Vector3f(0.0f, 0.0f, 6.0f), 6.0f);
+        this.camera = new Camera(new Vector3f(0.0f, 0.0f, ENV_SIZE), ENV_SIZE);
         this.eventQueue = new EventQueue(ThreadID.Render);
     }
 
@@ -45,10 +44,12 @@ public class Renderer extends Thread {
         this.spriteManager.init();
     }
 
-    public void run(){
-        try{
+    public void run() {
+        try {
             this.init();
-        }catch(Exception e) {e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         boolean running = true;
 

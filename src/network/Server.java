@@ -49,7 +49,9 @@ public class Server extends UnicastRemoteObject implements IServer {
                 1, 1,
                 2, 1
         };
-        this.environment.initValues(initPositions);
+        //this.environment.initValues(initPositions);
+        this.environment.randomValues(20);
+
 
         this.gameOfLife = new GameOfLife(this.environment);
 

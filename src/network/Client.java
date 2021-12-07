@@ -7,7 +7,6 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-import static CONFIG.CONFIG.RENDER_TICK;
 import static CONFIG.CONFIG.SERVER_NAME;
 
 public class Client extends Thread {
@@ -37,6 +36,8 @@ public class Client extends Thread {
                     IGOLProcess task = this.srv.getTask();
                     if (task != null) {
                         task.run();
+                    } else {
+                        System.out.println("task is null !");
                     }
                     this.srv.sendResult(task);
                 } else {
@@ -46,12 +47,14 @@ public class Client extends Thread {
                 e.printStackTrace();
             }
 
-
+            /*
             try {
                 sleep(RENDER_TICK);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
+
+             */
         }
     }
 }

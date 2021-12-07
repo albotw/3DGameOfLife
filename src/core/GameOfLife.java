@@ -3,10 +3,7 @@ package core;
 import graphics.SpriteManager;
 import network.Status;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static CONFIG.CONFIG.ENV_SIZE;
-import static CONFIG.CONFIG.RENDER_TICK;
 
 public class GameOfLife implements IGameOfLife {
     public Environment env;
@@ -41,18 +38,19 @@ public class GameOfLife implements IGameOfLife {
     }
 
     public synchronized IGOLProcess getNext() {
-        Cell[][] local_env = env.getSubEnv(x, y);
-        GOLProcess task =  new GOLProcess(x, y, local_env);
-
-        if (++y >= ENV_SIZE) {
+        if (y < ENV_SIZE && x < ENV_SIZE) {
+            Cell[][] local_env = env.getSubEnv(x, y);
+            GOLProcess task = new GOLProcess(x, y, local_env);
+            y++;
+            return task;
+        } else {
             y = 0;
-            if (++x >= ENV_SIZE) {
-                this.status = Status.WAIT;
-            }
-        }
 
-        System.out.println(x + " " + y);
-        return task;
+            if (x + 1 < ENV_SIZE) x++;
+            else this.status = Status.WAIT;
+
+            return null;
+        }
     }
 
     public synchronized void sendResult(IGOLProcess t) {
