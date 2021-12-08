@@ -39,6 +39,10 @@ public class Window {
         this.resized = false;
     }
 
+    public long getHandle() {
+        return this.glfwWindow;
+    }
+
     public void init() {
         //retour d'erreur de glfw dans la console.
         GLFWErrorCallback.createPrint(System.err).set();

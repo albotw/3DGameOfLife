@@ -9,12 +9,13 @@ import input.Keyboard;
 import input.Mouse;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.lwjgl.nuklear.NkMouse;
 
 import java.util.ArrayList;
 
 import static CONFIG.CONFIG.*;
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.nuklear.Nuklear.NK_ANTI_ALIASING_ON;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.nuklear.Nuklear.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -59,7 +60,23 @@ public class Renderer extends Thread {
         //translations[99] = new Vector3f(-1.0f, -1.0f, -1.0f);
         while (running && !window.windowShouldClose()) {
             // ! INPUT ---------------------------------------------------------
+
+            nk_input_begin(UI.context);
             glfwPollEvents();
+            NkMouse mouse = UI.context.input().mouse();
+            if (mouse.grab()) {
+                glfwSetInputMode(this.window.getHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+            } else if (mouse.grabbed()) {
+                float prevX = mouse.prev().x();
+                float prevY = mouse.prev().y();
+                glfwSetCursorPos(this.window.getHandle(), prevX, prevY);
+                mouse.pos().x(prevX);
+                mouse.pos().y(prevY);
+            } else if (mouse.ungrab()) {
+                glfwSetInputMode(this.window.getHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            }
+            nk_input_end(UI.context);
+
             if (Mouse.LMBPress && !UI.instance.isMouseOnUI()) {
                 camera.rotate(Mouse.Xoffset, Mouse.Yoffset);
             }

@@ -32,8 +32,8 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class UI {
     public static UI instance;
+    public static NkContext context;
 
-    private NkContext context;
     private NkUserFont default_font;
     private NkBuffer cmds;
     private NkDrawNullTexture null_texture;
@@ -64,7 +64,7 @@ public class UI {
     }
 
     public void init(long window) throws Exception {
-        this.context = NkContext.create();
+        UI.context = NkContext.create();
         this.default_font = NkUserFont.create();
         this.cmds = NkBuffer.create();
         this.null_texture = NkDrawNullTexture.create();
@@ -80,7 +80,7 @@ public class UI {
                 .alloc((handle, old, size) -> nmemAllocChecked(size))
                 .mfree((handle, ptr) -> nmemFree(ptr));
 
-        nk_init(this.context, ALLOCATOR, null);
+        nk_init(UI.context, ALLOCATOR, null);
         nk_buffer_init(this.cmds, ALLOCATOR, 4 * 1024);
 
         this.shader = new Shader();
@@ -232,11 +232,11 @@ public class UI {
                 .texture(it -> it
                         .id(fontTexID));
 
-        nk_style_set_font(context, default_font);
+        nk_style_set_font(UI.context, default_font);
     }
 
     public boolean isMouseOnUI() {
-        return nk_window_is_any_hovered(context);
+        return nk_window_is_any_hovered(UI.context);
     }
 
     public void processScroll(long window, double xoffset, double yoffset) {
@@ -244,16 +244,16 @@ public class UI {
             NkVec2 scroll = NkVec2.malloc(stack)
                     .x((float) xoffset)
                     .y((float) yoffset);
-            nk_input_scroll(context, scroll);
+            nk_input_scroll(UI.context, scroll);
         }
     }
 
     public void processChar(long window, int codepoint) {
-        nk_input_unicode(context, codepoint);
+        nk_input_unicode(UI.context, codepoint);
     }
 
     public void processCursor(long window, double xpos, double ypos) {
-        nk_input_motion(context, (int) xpos, (int) ypos);
+        nk_input_motion(UI.context, (int) xpos, (int) ypos);
     }
 
     public void processMouseButtons(long window, int button, int action, int mods) {
@@ -277,7 +277,7 @@ public class UI {
                 default:
                     nkButton = NK_BUTTON_LEFT;
             }
-            nk_input_button(context, nkButton, x, y, action == GLFW_PRESS);
+            nk_input_button(UI.context, nkButton, x, y, action == GLFW_PRESS);
         }
     }
 
@@ -285,107 +285,107 @@ public class UI {
         boolean press = action == GLFW_PRESS;
         switch (key) {
             case GLFW_KEY_DELETE:
-                nk_input_key(context, NK_KEY_DEL, press);
+                nk_input_key(UI.context, NK_KEY_DEL, press);
                 break;
             case GLFW_KEY_ENTER:
-                nk_input_key(context, NK_KEY_ENTER, press);
+                nk_input_key(UI.context, NK_KEY_ENTER, press);
                 break;
             case GLFW_KEY_TAB:
-                nk_input_key(context, NK_KEY_TAB, press);
+                nk_input_key(UI.context, NK_KEY_TAB, press);
                 break;
             case GLFW_KEY_BACKSPACE:
-                nk_input_key(context, NK_KEY_BACKSPACE, press);
+                nk_input_key(UI.context, NK_KEY_BACKSPACE, press);
                 break;
             case GLFW_KEY_UP:
-                nk_input_key(context, NK_KEY_UP, press);
+                nk_input_key(UI.context, NK_KEY_UP, press);
                 break;
             case GLFW_KEY_DOWN:
-                nk_input_key(context, NK_KEY_DOWN, press);
+                nk_input_key(UI.context, NK_KEY_DOWN, press);
                 break;
             case GLFW_KEY_HOME:
-                nk_input_key(context, NK_KEY_TEXT_START, press);
-                nk_input_key(context, NK_KEY_SCROLL_START, press);
+                nk_input_key(UI.context, NK_KEY_TEXT_START, press);
+                nk_input_key(UI.context, NK_KEY_SCROLL_START, press);
                 break;
             case GLFW_KEY_END:
-                nk_input_key(context, NK_KEY_TEXT_END, press);
-                nk_input_key(context, NK_KEY_SCROLL_END, press);
+                nk_input_key(UI.context, NK_KEY_TEXT_END, press);
+                nk_input_key(UI.context, NK_KEY_SCROLL_END, press);
                 break;
             case GLFW_KEY_PAGE_DOWN:
-                nk_input_key(context, NK_KEY_SCROLL_DOWN, press);
+                nk_input_key(UI.context, NK_KEY_SCROLL_DOWN, press);
                 break;
             case GLFW_KEY_PAGE_UP:
-                nk_input_key(context, NK_KEY_SCROLL_UP, press);
+                nk_input_key(UI.context, NK_KEY_SCROLL_UP, press);
                 break;
             case GLFW_KEY_LEFT_SHIFT:
             case GLFW_KEY_RIGHT_SHIFT:
-                nk_input_key(context, NK_KEY_SHIFT, press);
+                nk_input_key(UI.context, NK_KEY_SHIFT, press);
                 break;
             case GLFW_KEY_LEFT_CONTROL:
             case GLFW_KEY_RIGHT_CONTROL:
                 if (press) {
-                    nk_input_key(context, NK_KEY_COPY, glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_PASTE, glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_CUT, glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_TEXT_UNDO, glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_TEXT_REDO, glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_TEXT_WORD_LEFT, glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_TEXT_WORD_RIGHT, glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_TEXT_LINE_START, glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_TEXT_LINE_END, glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_COPY, glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_PASTE, glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_CUT, glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_TEXT_UNDO, glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_TEXT_REDO, glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_TEXT_WORD_LEFT, glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_TEXT_WORD_RIGHT, glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_TEXT_LINE_START, glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_TEXT_LINE_END, glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS);
                 } else {
-                    nk_input_key(context, NK_KEY_LEFT, glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_RIGHT, glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS);
-                    nk_input_key(context, NK_KEY_COPY, false);
-                    nk_input_key(context, NK_KEY_PASTE, false);
-                    nk_input_key(context, NK_KEY_CUT, false);
-                    nk_input_key(context, NK_KEY_SHIFT, false);
+                    nk_input_key(UI.context, NK_KEY_LEFT, glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_RIGHT, glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS);
+                    nk_input_key(UI.context, NK_KEY_COPY, false);
+                    nk_input_key(UI.context, NK_KEY_PASTE, false);
+                    nk_input_key(UI.context, NK_KEY_CUT, false);
+                    nk_input_key(UI.context, NK_KEY_SHIFT, false);
                 }
                 break;
         }
     }
 
-    void layout(int x, int y) {
+    public void layout(int x, int y) {
         try (MemoryStack stack = stackPush()) {
             NkRect rect = NkRect.malloc(stack);
 
             if (nk_begin(
-                    context,
+                    UI.context,
                     "Demo",
                     nk_rect(x, y, 230, 250, rect),
                     NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_SCALABLE | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE
             )) {
-                nk_layout_row_static(context, 30, 80, 1);
-                if (nk_button_label(context, "button")) {
+                nk_layout_row_static(UI.context, 30, 80, 1);
+                if (nk_button_label(UI.context, "button")) {
                     System.out.println("button pressed");
                 }
 
-                nk_layout_row_dynamic(context, 30, 2);
-                if (nk_option_label(context, "easy", op == EASY)) {
+                nk_layout_row_dynamic(UI.context, 30, 2);
+                if (nk_option_label(UI.context, "easy", op == EASY)) {
                     op = EASY;
                 }
-                if (nk_option_label(context, "hard", op == HARD)) {
+                if (nk_option_label(UI.context, "hard", op == HARD)) {
                     op = HARD;
                 }
 
-                nk_layout_row_dynamic(context, 25, 1);
-                nk_property_int(context, "Compression:", 0, compression, 100, 10, 1);
+                nk_layout_row_dynamic(UI.context, 25, 1);
+                nk_property_int(UI.context, "Compression:", 0, compression, 100, 10, 1);
 
-                nk_layout_row_dynamic(context, 20, 1);
-                nk_label(context, "background:", NK_TEXT_LEFT);
-                nk_layout_row_dynamic(context, 25, 1);
-                if (nk_combo_begin_color(context, nk_rgb_cf(background, NkColor.malloc(stack)), NkVec2.malloc(stack).set(nk_widget_width(context), 400))) {
-                    nk_layout_row_dynamic(context, 120, 1);
-                    nk_color_picker(context, background, NK_RGBA);
-                    nk_layout_row_dynamic(context, 25, 1);
+                nk_layout_row_dynamic(UI.context, 20, 1);
+                nk_label(UI.context, "background:", NK_TEXT_LEFT);
+                nk_layout_row_dynamic(UI.context, 25, 1);
+                if (nk_combo_begin_color(UI.context, nk_rgb_cf(background, NkColor.malloc(stack)), NkVec2.malloc(stack).set(nk_widget_width(context), 400))) {
+                    nk_layout_row_dynamic(UI.context, 120, 1);
+                    nk_color_picker(UI.context, background, NK_RGBA);
+                    nk_layout_row_dynamic(UI.context, 25, 1);
                     background
-                            .r(nk_propertyf(context, "#R:", 0, background.r(), 1.0f, 0.01f, 0.005f))
-                            .g(nk_propertyf(context, "#G:", 0, background.g(), 1.0f, 0.01f, 0.005f))
-                            .b(nk_propertyf(context, "#B:", 0, background.b(), 1.0f, 0.01f, 0.005f))
-                            .a(nk_propertyf(context, "#A:", 0, background.a(), 1.0f, 0.01f, 0.005f));
-                    nk_combo_end(context);
+                            .r(nk_propertyf(UI.context, "#R:", 0, background.r(), 1.0f, 0.01f, 0.005f))
+                            .g(nk_propertyf(UI.context, "#G:", 0, background.g(), 1.0f, 0.01f, 0.005f))
+                            .b(nk_propertyf(UI.context, "#B:", 0, background.b(), 1.0f, 0.01f, 0.005f))
+                            .a(nk_propertyf(UI.context, "#A:", 0, background.a(), 1.0f, 0.01f, 0.005f));
+                    nk_combo_end(UI.context);
                 }
             }
-            nk_end(context);
+            nk_end(UI.context);
         }
     }
 
@@ -449,7 +449,7 @@ public class UI {
 
                 nk_buffer_init_fixed(vbuf, vertices/*, max_vertex_buffer*/);
                 nk_buffer_init_fixed(ebuf, elements/*, max_element_buffer*/);
-                nk_convert(context, cmds, vbuf, ebuf, config);
+                nk_convert(UI.context, cmds, vbuf, ebuf, config);
             }
             glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
             glUnmapBuffer(GL_ARRAY_BUFFER);
@@ -459,7 +459,7 @@ public class UI {
             float fb_scale_y = 1.0f;
 
             long offset = NULL;
-            for (NkDrawCommand cmd = nk__draw_begin(context, cmds); cmd != null; cmd = nk__draw_next(cmd, cmds, context)) {
+            for (NkDrawCommand cmd = nk__draw_begin(UI.context, cmds); cmd != null; cmd = nk__draw_next(cmd, cmds, UI.context)) {
                 if (cmd.elem_count() == 0) {
                     continue;
                 }
@@ -473,7 +473,7 @@ public class UI {
                 glDrawElements(GL_TRIANGLES, cmd.elem_count(), GL_UNSIGNED_SHORT, offset);
                 offset += cmd.elem_count() * 2;
             }
-            nk_clear(context);
+            nk_clear(UI.context);
         }
 
         // default OpenGL state
