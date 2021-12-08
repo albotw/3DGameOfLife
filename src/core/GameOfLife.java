@@ -18,6 +18,13 @@ public class GameOfLife implements IGameOfLife {
         this.status = Status.CONTINUE;
     }
 
+    public void purge() {
+        this.status = Status.WAIT;
+        this.x = 0;
+        this.y = 0;
+        this.env = null;
+    }
+
     public void checkCompletion() {
         if (this.status == Status.WAIT) {
             this.env.nextGeneration();

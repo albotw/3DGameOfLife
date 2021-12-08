@@ -49,7 +49,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
+        System.out.println("init");
         this.init();
     }
 
@@ -58,6 +58,14 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.environment.randomValues(20);
         this.gameOfLife = new GameOfLife(this.environment);
         SpriteManager.instance.setEnv(this.environment);
+        this.renderer.initGrid();
+    }
+
+    public void reset() {
+        this.environment.purge();
+        this.gameOfLife.purge();
+        SpriteManager.instance.purge();
+        this.init();
     }
 
     @Override

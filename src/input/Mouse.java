@@ -1,9 +1,15 @@
 package input;
 
 import graphics.UI.UI;
+import org.lwjgl.nuklear.NkVec2;
+import org.lwjgl.system.MemoryStack;
+
+import java.nio.DoubleBuffer;
 
 import static CONFIG.CONFIG.MOUSE_SENSITIVITY;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.nuklear.Nuklear.*;
+import static org.lwjgl.system.MemoryStack.stackPush;
 
 public class Mouse {
     public static double Xoffset;
@@ -22,11 +28,11 @@ public class Mouse {
 
         glfwSetMouseButtonCallback(window, Mouse::processMouseInput);
 
-        glfwSetScrollCallback(window, UI.instance::processScroll);
+        glfwSetScrollCallback(window, Mouse::processScroll);
     }
 
     public static void processMousePosition(long window, double xpos, double ypos) {
-        UI.instance.processCursor(window, xpos, ypos);
+        nk_input_motion(UI.context, (int) xpos, (int) ypos);
         Mouse.Xoffset = (Mouse.lastX - xpos) * MOUSE_SENSITIVITY;
         Mouse.Yoffset = (Mouse.lastY - ypos) * MOUSE_SENSITIVITY;
 
@@ -35,14 +41,38 @@ public class Mouse {
     }
 
     public static void processMouseInput(long window, int button, int action, int mods) {
-        UI.instance.processMouseButtons(window, button, action, mods);
-        switch (button) {
-            case GLFW_MOUSE_BUTTON_RIGHT:
-                Mouse.RMBPress = (action == GLFW_PRESS);
-                break;
-            case GLFW_MOUSE_BUTTON_LEFT:
-                Mouse.LMBPress = (action == GLFW_PRESS);
-                break;
+        try (MemoryStack stack = stackPush()) {
+            DoubleBuffer cx = stack.mallocDouble(1);
+            DoubleBuffer cy = stack.mallocDouble(1);
+
+            glfwGetCursorPos(window, cx, cy);
+
+            int x = (int) cx.get(0);
+            int y = (int) cy.get(0);
+
+            int nkButton;
+            switch (button) {
+                case GLFW_MOUSE_BUTTON_RIGHT:
+                    nkButton = NK_BUTTON_RIGHT;
+                    Mouse.RMBPress = (action == GLFW_PRESS);
+                    break;
+                case GLFW_MOUSE_BUTTON_MIDDLE:
+                    nkButton = NK_BUTTON_MIDDLE;
+                    break;
+                default:
+                    nkButton = NK_BUTTON_LEFT;
+                    Mouse.LMBPress = (action == GLFW_PRESS);
+            }
+            nk_input_button(UI.context, nkButton, x, y, action == GLFW_PRESS);
+        }
+    }
+
+    public static void processScroll(long window, double xoffset, double yoffset) {
+        try (MemoryStack stack = stackPush()) {
+            NkVec2 scroll = NkVec2.malloc(stack)
+                    .x((float) xoffset)
+                    .y((float) yoffset);
+            nk_input_scroll(UI.context, scroll);
         }
     }
 }

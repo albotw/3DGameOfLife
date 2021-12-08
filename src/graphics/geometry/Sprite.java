@@ -7,7 +7,7 @@ public class Sprite {
     public final Mesh mesh;
     public Vector3f position;
     public float scale;
-    public final Vector3f rotation;
+    public Vector3f rotation;
     public final boolean wireframe;
     public boolean hidden;
 
@@ -32,5 +32,11 @@ public class Sprite {
         this.position.x = x;
         this.position.y = y;
         this.position.z = z;
+    }
+
+    public void purge() {
+        this.position = null;
+        this.rotation = null;
+        this.mesh.purge();
     }
 }

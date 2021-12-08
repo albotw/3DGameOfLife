@@ -14,8 +14,8 @@ y = i / width;
 
 FIXME:
 - rendu cassé lors de traitements multiclients.
-- valeurs de boucle en dur -> passer en configurable.
-- ajouter générateur de config de départ aléatoire
+- RAJOUTER 3D
+- nettoyage propre de la mémoire.
 
 TODO:
 - optimisation rendu: passer en mode instancé avec matrice de modèle calculée dans le shader.

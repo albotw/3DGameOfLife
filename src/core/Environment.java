@@ -45,6 +45,11 @@ public class Environment {
         }
     }
 
+    public void purge() {
+        this.current_env = null;
+        this.future_env = null;
+    }
+
     public Cell[][] getSubEnv(int x, int y) {
         Cell[][] sub_env = new Cell[SUB_ENV_SIZE][SUB_ENV_SIZE];
 

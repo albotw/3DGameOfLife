@@ -44,7 +44,9 @@ public class Renderer extends Thread {
         this.shader.createFragmentShader(Util.loadResource("shaders/fragment.glsl"));
         this.shader.createVertexShader(Util.loadResource("shaders/vertex.glsl"));
         this.shader.link();
+    }
 
+    public void initGrid() {
         this.spriteManager.init();
     }
 

@@ -27,6 +27,14 @@ public class SpriteManager {
         return SpriteManager.instance;
     }
 
+    public void purge() {
+        for (Sprite s : geometry) {
+            s.purge();
+        }
+        this.container.purge();
+        this.env = null;
+    }
+
     private SpriteManager() {
         this.geometry = new ArrayList<>();
     }

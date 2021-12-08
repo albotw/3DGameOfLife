@@ -66,7 +66,7 @@ public class Mesh {
         return this.color;
     }
 
-    public void flush() {
+    public void purge() {
         glDisableVertexAttribArray(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -75,6 +75,7 @@ public class Mesh {
 
         glBindVertexArray(0);
         glDeleteVertexArrays(vaoID);
+        this.color = null;
     }
 
     public static Mesh Cube(Vector3f color) {
