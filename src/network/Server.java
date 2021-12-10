@@ -5,6 +5,8 @@ import core.GameOfLife;
 import core.IGOLProcess;
 import events.EventDispatcher;
 import events.EventQueue;
+import events.Events.InitGridEvent;
+import events.Events.PurgeEvent;
 import events.ThreadID;
 import graphics.SpriteManager;
 import graphics.engine.Renderer;
@@ -42,6 +44,8 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.renderer.start();
         this.eventQueue = new EventQueue(ThreadID.Server);
 
+        this.init();
+
         try {
             System.setProperty("java.rmi.server.hostname", "127.0.0.1");
             Naming.rebind(SERVER_NAME, this);
@@ -49,23 +53,23 @@ public class Server extends UnicastRemoteObject implements IServer {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        System.out.println("init");
-        this.init();
     }
 
     public void init() {
         this.environment = new Environment();
-        this.environment.randomValues(20);
-        this.gameOfLife = new GameOfLife(this.environment);
         SpriteManager.instance.setEnv(this.environment);
-        this.renderer.initGrid();
+        System.out.println("created new env");
+        this.environment.randomValues(50);
+        this.gameOfLife = new GameOfLife(this.environment);
+        this.gameOfLife.start();
+        this.eventQueue.send(new InitGridEvent(), ThreadID.Render);
     }
 
     public void reset() {
         this.environment.purge();
         this.gameOfLife.purge();
-        SpriteManager.instance.purge();
-        this.init();
+        this.eventQueue.send(new PurgeEvent(), ThreadID.Render);
+        System.gc();
     }
 
     @Override

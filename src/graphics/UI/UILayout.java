@@ -15,14 +15,17 @@ public class UILayout {
     public void layout(int x, int y) {
         if (this.panel == null) {
             this.panel = NkRect.create();
-            nk_rect(x, y, 300, 300, this.panel);
+            nk_rect(x, y, 300, 200, this.panel);
             nk_begin(UI.context, "Commandes", this.panel, this.panelOptions);
             nk_end(UI.context);
         } else {
             if (nk_begin(UI.context, "Commandes", this.panel, panelOptions)) {
                 nk_layout_row_dynamic(UI.context, 30, 3);
-                if (nk_button_label(UI.context, "Generate")) {
+                if (nk_button_label(UI.context, "Clear")) {
                     Server.instance.reset();
+                }
+                if (nk_button_label(UI.context, "Generate")) {
+                    Server.instance.init();
                 }
             }
             nk_end(UI.context);

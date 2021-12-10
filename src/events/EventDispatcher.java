@@ -20,11 +20,16 @@ public class EventDispatcher {
         this.channel.put(id, handle);
     }
 
+    public void unsubscribe(ThreadID id) {
+        this.channel.remove(id);
+    }
+
     public void publish(Event e, ThreadID target) {
-        try{
+        try {
             this.channel.get(target).grab(e);
-        }catch(Exception ex) {
+        } catch (Exception ex) {
             System.err.println("Erreur lors de l'envoi du message " + e.toString());
+            ex.printStackTrace();
         }
     }
 

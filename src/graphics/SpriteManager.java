@@ -32,6 +32,9 @@ public class SpriteManager {
             s.purge();
         }
         this.container.purge();
+
+        this.geometry.clear();
+        this.container = null;
         this.env = null;
     }
 
@@ -51,13 +54,13 @@ public class SpriteManager {
         float offset = (0.5f * (ENV_SIZE - 1));
         for (int x = 0; x < ENV_SIZE; x++) {
             for (int y = 0; y < ENV_SIZE; y++) {
-                //for (int k = 0; k < 5; k++) {
-                Sprite s = new Sprite(Mesh.Cube(new Vector3f(0.0f, 1.0f, 0.0f)), false);
-                s.moveTo(x - offset, y - offset, 0.0f);
-                s.scale = 0.8f;
-                s.hidden = true;
-                this.geometry.add(s);
-                //}
+                for (int z = 0; z < ENV_SIZE; z++) {
+                    Sprite s = new Sprite(Mesh.Cube(new Vector3f(0.0f, 1.0f, 0.0f)), false);
+                    s.moveTo(x - offset, y - offset, z - offset);
+                    s.scale = 0.8f;
+                    s.hidden = true;
+                    this.geometry.add(s);
+                }
             }
         }
 
@@ -69,8 +72,10 @@ public class SpriteManager {
     public void displayEnv() {
         for (int x = 0; x < ENV_SIZE; x++) {
             for (int y = 0; y < ENV_SIZE; y++) {
-                int index = (x * ENV_SIZE) + y;
-                this.geometry.get(index).hidden = (env.getCellState(x, y) == Cell.Empty);
+                for (int z = 0; z < ENV_SIZE; z++) {
+                    int index = (z * ENV_SIZE * ENV_SIZE) + (x * ENV_SIZE) + y;
+                    this.geometry.get(index).hidden = (env.getCellState(x, y, z) == Cell.Empty);
+                }
             }
         }
     }

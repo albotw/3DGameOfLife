@@ -1,6 +1,11 @@
 package graphics.engine;
 
+import events.Event;
 import events.EventQueue;
+import events.Events.InitGridEvent;
+import events.Events.PurgeEvent;
+import events.Events.SpriteUpdateDoneEvent;
+import events.Events.UpdateSpritesEvent;
 import events.ThreadID;
 import graphics.SpriteManager;
 import graphics.UI.UI;
@@ -30,11 +35,11 @@ public class Renderer extends Thread {
     private SpriteManager spriteManager;
 
     public Renderer() {
+        this.eventQueue = new EventQueue(ThreadID.Render);
         UI.createUI();
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
         this.spriteManager = SpriteManager.createSpriteManager();
         this.camera = new Camera(new Vector3f(0.0f, 0.0f, ENV_SIZE), ENV_SIZE);
-        this.eventQueue = new EventQueue(ThreadID.Render);
     }
 
     public void init() throws Exception {
@@ -90,6 +95,22 @@ public class Renderer extends Thread {
             }
 
             // ! UPDATE --------------------------------------------------------
+            if (!this.eventQueue.isEmpty()) {
+                Event e = this.eventQueue.get();
+                if (e instanceof InitGridEvent) {
+                    this.spriteManager.init();
+                    System.out.println("done init");
+                }
+                if (e instanceof PurgeEvent) {
+                    this.spriteManager.purge();
+                    System.out.println("done purge");
+                }
+                if (e instanceof UpdateSpritesEvent) {
+                    this.spriteManager.displayEnv();
+                    this.eventQueue.send(new SpriteUpdateDoneEvent(), ThreadID.App);
+                    System.out.println("done update");
+                }
+            }
 
             // ! RENDER --------------------------------------------------------
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -130,6 +151,7 @@ public class Renderer extends Thread {
             UI.instance.render(NK_ANTI_ALIASING_ON, 512 * 1024, 128 * 1024);
             window.update();
         }
+        System.out.println("done rendering");
     }
 
     public void flush() {

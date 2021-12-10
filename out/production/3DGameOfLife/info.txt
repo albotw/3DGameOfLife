@@ -12,6 +12,15 @@ i = x + width * y;
 x = i % width;
 y = i / width;
 
+3D -> 1D
+i = x + (width * y) + (width * width * z)
+
+1D -> 3D
+z = i / (width * width)
+i -= z * width * width
+x = i % width;
+y = i / width;
+
 FIXME:
 - rendu cassé lors de traitements multiclients.
 - RAJOUTER 3D

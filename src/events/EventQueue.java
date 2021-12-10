@@ -12,9 +12,9 @@ public class EventQueue {
         EventDispatcher.instance.subscribe(this.controller, this);
     }
 
-    public void send(Event e, ThreadID target){
+    public void send(Event e, ThreadID target) {
         e.setSender(this.controller);
-        EventDispatcher.instance.publish(e,target);
+        EventDispatcher.instance.publish(e, target);
     }
 
     public void broadcast(Event e) {
@@ -22,11 +22,11 @@ public class EventQueue {
         EventDispatcher.instance.publishToAll(e);
     }
 
-    public void grab(Event e){
+    public void grab(Event e) {
         this.queue.add(e);
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return this.queue.isEmpty();
     }
 
@@ -34,5 +34,11 @@ public class EventQueue {
         return this.queue.poll();
     }
 
-    public int size() {return this.queue.size();}
+    public int size() {
+        return this.queue.size();
+    }
+
+    public void purge() {
+        EventDispatcher.instance.unsubscribe(this.controller);
+    }
 }

@@ -230,7 +230,7 @@ public class UI {
     }
 
     public void render(int AA, int max_vertex_buffer, int max_element_buffer) {
-        layout.layout(50, 50);
+        layout.layout(0, 0);
         try {
             // setup global state
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
