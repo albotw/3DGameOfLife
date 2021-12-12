@@ -1,8 +1,10 @@
 package core.v2;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
-public class Cell {
+public class Cell implements Serializable {
     public final int x;
     public final int y;
     public final int z;
@@ -15,8 +17,6 @@ public class Cell {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Cell)) return false;
         Cell cell = (Cell) o;
         return x == cell.x && y == cell.y && z == cell.z;
     }
@@ -24,5 +24,18 @@ public class Cell {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
+    }
+
+    public ArrayList<Cell> neighbours() {
+        ArrayList<Cell> output = new ArrayList<>(18);
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++){
+                for (int z = -1; z < 2; z++) {
+                    output.add(new Cell(this.x - x, this.y - y, this.z - z));
+                }
+            }
+        }
+
+        return output;
     }
 }

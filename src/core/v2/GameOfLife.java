@@ -1,42 +1,98 @@
 package core.v2;
 
+import events.EventDispatcher;
+import events.Events.CycleDone;
+import events.ThreadID;
+import network.Server;
+import network.Status;
+
 import java.util.HashSet;
-import java.util.Iterator;
 
 import static CONFIG.CONFIG.ENV_SIZE;
 
 public class GameOfLife {
-    private HashSet<Cell> current_env;
-    private Iterator<Cell> current_iterator;
-    private HashSet<Cell> future_env;
-    private HashSet<Cell> toProcess;
+    private HashSet<Cell> currentAliveCells;
+    private HashSet<Cell> nextAliveCells;
+    private Status status;
+    private int x;
+    private int y;
+    private int z;
 
     public GameOfLife() {
-        this.current_env = new HashSet<Cell>(ENV_SIZE * ENV_SIZE * ENV_SIZE);
-        this.current_iterator = current_env.iterator();
-        this.future_env = new HashSet<Cell>(ENV_SIZE * ENV_SIZE * ENV_SIZE);
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.currentAliveCells = new HashSet<Cell>(ENV_SIZE * ENV_SIZE * ENV_SIZE);
+        this.nextAliveCells = new HashSet<Cell>(ENV_SIZE * ENV_SIZE * ENV_SIZE);
     }
 
-    public synchronized Cell getCurrentCell() {
-        if (this.current_iterator.hasNext()) {
-            return this.current_iterator.next();
-        } else return null;
+    public void checkCompletion() {
+        if (this.status == status.WAIT)
+        {
+            this.nextGeneration();
+
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+
+            this.status = Status.CONTINUE;
+            System.out.println();
+            System.out.println("### NEXT GENERATION ###");
+            System.out.println("Alive cells: " + this.currentAliveCells.size());
+        }
     }
 
-    public synchronized void addToProcessCell(Cell c) {
-        this.toProcess.add(c);
+    public void randomValues(int quantity) {
+        int counter = 0;
+        do {
+            int x = (int) (Math.random() * ENV_SIZE);
+            int y = (int) (Math.random() * ENV_SIZE);
+            int z = (int) (Math.random() * ENV_SIZE);
+
+            if (this.currentAliveCells.add(new Cell(x, y ,z))) {
+                System.out.println("added cell at " + x + " " + y + " " + z);
+                counter++;
+            }
+        } while (counter < quantity);
     }
 
-    public synchronized boolean toProcess_contains(Cell c) {
-        return this.toProcess_contains(c);
+    public Status getStatus() {
+        return this.status;
+    }
+    public void setStatus(Status s) {this.status = s;}
+
+    public Cell getNext() {
+        if (x < ENV_SIZE && y < ENV_SIZE && z < ENV_SIZE) {
+             Cell out =  new Cell(this.x, this.y, this.z);
+             x++;
+             return out;
+        }else {
+            x = 0;
+            if (y + 1 < ENV_SIZE) y++;
+            else {
+                y = 0;
+                if (z + 1 < ENV_SIZE) z++;
+                else {
+                    this.status = status.WAIT;
+                    Server.instance.finishCycle();
+                }
+            }
+        }
+
+        return null;
     }
 
-    public synchronized Cell getCell() {
-
+    public void setCell(Cell c) {
+        nextAliveCells.add(c);
     }
 
     public boolean isAlive(Cell c) {
-        return this.current_env.contains(c);
+        return this.currentAliveCells.contains(c);
     }
 
+    public void nextGeneration() {
+        this.currentAliveCells.clear();
+        this.currentAliveCells.addAll(this.nextAliveCells);
+        this.nextAliveCells.clear();
+    }
 }

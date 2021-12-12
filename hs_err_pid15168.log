@@ -34,9 +34,9 @@ C  [lwjgl_nuklear.dll+0xf5eb]
 Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
 j  org.lwjgl.nuklear.Nuklear.nnk_begin(JJJI)Z+0
 j  org.lwjgl.nuklear.Nuklear.nk_begin(Lorg/lwjgl/nuklear/NkContext;Ljava/lang/CharSequence;Lorg/lwjgl/nuklear/NkRect;I)Z+38
-j  graphics.UI.UI.layout(II)V+34
-j  graphics.UI.UI.render(III)V+5
-j  graphics.engine.Renderer.run()V+313
+j  engine.UI.UI.layout(II)V+34
+j  engine.UI.UI.render(III)V+5
+j  engine.GL.Renderer.run()V+313
 v  ~StubRoutines::call_stub
 
 siginfo: EXCEPTION_ACCESS_VIOLATION (0xc0000005), reading address 0x0000000000000008
