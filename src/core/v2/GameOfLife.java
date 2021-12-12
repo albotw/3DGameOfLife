@@ -8,7 +8,7 @@ import network.Status;
 
 import java.util.HashSet;
 
-import static CONFIG.CONFIG.ENV_SIZE;
+import static CONFIG.CONFIG.*;
 
 public class GameOfLife {
     private HashSet<Cell> currentAliveCells;
@@ -50,7 +50,7 @@ public class GameOfLife {
             int z = (int) (Math.random() * ENV_SIZE);
 
             if (this.currentAliveCells.add(new Cell(x, y ,z))) {
-                System.out.println("added cell at " + x + " " + y + " " + z);
+                //System.out.println("added cell at " + x + " " + y + " " + z);
                 counter++;
             }
         } while (counter < quantity);
@@ -94,5 +94,48 @@ public class GameOfLife {
         this.currentAliveCells.clear();
         this.currentAliveCells.addAll(this.nextAliveCells);
         this.nextAliveCells.clear();
+    }
+
+    public static void main(String[] args) {
+        GameOfLife gol = new GameOfLife();
+        gol.randomValues(450000);
+        System.out.println("done rand init");
+
+        while(true) {
+            long before_cycle = System.currentTimeMillis();
+            for (int x = 0; x < ENV_SIZE; x++) {
+                for (int y = 0; y < ENV_SIZE; y++) {
+                    for (int z = 0; z < ENV_SIZE; z++) {
+                        long before_cell = System.currentTimeMillis();
+                        Cell cell = new Cell(x, y, z);
+
+                        int counter = 0;
+                        for (Cell c : cell.neighbours()) {
+                            if (gol.isAlive(c)) counter++;
+                        }
+
+                        //System.out.println(counter + " alive neighbours");
+
+                        if (counter == ALIVE_THRESOLD) {
+                            gol.setCell(cell);
+                            //System.out.println("alive");
+                        }else if (counter == CURRENT_THRESHOLD) {
+                            if (gol.isAlive(cell)) gol.setCell(cell);
+                            //System.out.println("current");
+                        }
+                        //System.out.println("### Cycle done in " + (System.currentTimeMillis() - before_cell) + " ms ###");
+                    }
+                }
+            }
+            System.out.println("Generation processed in " + (System.currentTimeMillis() - before_cycle) + " ms using " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) + " bytes");
+            System.out.println();
+            try {
+                Thread.currentThread().sleep(1000);
+            }catch (Exception e) {e.printStackTrace();}
+
+            gol.setStatus(Status.WAIT);
+            gol.checkCompletion();
+            System.gc();
+        }
     }
 }

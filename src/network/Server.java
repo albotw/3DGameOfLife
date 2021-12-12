@@ -103,9 +103,11 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     @Override
-    public List<Boolean> isAlive(ArrayList<Cell> cells) throws RemoteException {
+    //public List<Boolean> isAlive(ArrayList<Cell> cells) throws RemoteException {
+    public boolean isAlive(Cell c) throws RemoteException {
         this.alivePing++;
-        return cells.stream().map(c -> this.gameOfLife.isAlive(c)).collect(Collectors.toUnmodifiableList());
+        return this.gameOfLife.isAlive(c);
+        //return cells.stream().map(c -> this.gameOfLife.isAlive(c)).collect(Collectors.toUnmodifiableList());
     }
 
     @Override

@@ -12,7 +12,7 @@ public class CONFIG {
     public static float EPSILON = 0.00001f;
 
     //configuration process
-    public static int ENV_SIZE = 10;
+    public static int ENV_SIZE = 100;
     public static int SUB_ENV_SIZE = 3;                        // ! IMPAIR OBLIGATOIRE
     public static String SERVER_NAME = "GOL_SERVER";
     public static int ALIVE_THRESOLD = 3;
