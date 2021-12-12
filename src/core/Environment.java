@@ -38,6 +38,10 @@ public class Environment {
         } while (counter < quantity);
     }
 
+    public int size() {
+        return this.current_env.length;
+    }
+
     private void clean(Cell[][][] env) {
         for (int i = 0; i < ENV_SIZE; i++) {
             for (int j = 0; j < ENV_SIZE; j++) {
@@ -69,14 +73,12 @@ public class Environment {
     }
 
     public synchronized Cell getCellState(int x, int y, int z) {
-        System.out.println("read");
         if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE && z >= 0 && z < ENV_SIZE) {
             return this.current_env[x][y][z];
         } else return Cell.Empty;
     }
 
     public synchronized void setCellState(int x, int y, int z, Cell cell) {
-        System.out.println("write");
         if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE && z >= 0 && z < ENV_SIZE) {
             this.future_env[x][y][z] = cell;
         }
