@@ -1,7 +1,5 @@
 package core;
 
-import network.Status;
-
 public interface IGameOfLife {
     IGOLProcess getNext();
 

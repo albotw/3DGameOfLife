@@ -1,4 +1,4 @@
-package graphics.UI;
+package Engine.UI;
 
 import network.Server;
 import org.lwjgl.nuklear.NkRect;

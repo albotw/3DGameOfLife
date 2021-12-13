@@ -1,6 +1,7 @@
 package network;
 
 import core.IGOLProcess;
+import core.Status;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -8,6 +9,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import static CONFIG.CONFIG.SERVER_NAME;
+import static CONFIG.CONFIG.WAIT_DELAY;
 
 public class Client extends Thread {
     public static void main(String[] args) {
@@ -42,19 +44,11 @@ public class Client extends Thread {
                     this.srv.sendResult(task);
                 } else {
                     System.out.println("Awaiting server");
+                    this.sleep(WAIT_DELAY);
                 }
-            } catch (RemoteException e) {
+            } catch (RemoteException | InterruptedException e) {
                 e.printStackTrace();
             }
-
-            /*
-            try {
-                sleep(RENDER_TICK);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-
-             */
         }
     }
 }

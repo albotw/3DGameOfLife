@@ -1,9 +1,9 @@
-package graphics;
+package Engine;
 
 import core.Cell;
 import core.Environment;
-import graphics.geometry.Mesh;
-import graphics.geometry.Sprite;
+import Engine.geometry.Mesh;
+import Engine.geometry.Sprite;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ public class SpriteManager {
 
     private ArrayList<Sprite> geometry;
     private Sprite container;
+    private Mesh cube;
 
     // le return est important => permet le lien vers le contexte OGL
     public static SpriteManager createSpriteManager() {
@@ -25,6 +26,10 @@ public class SpriteManager {
         }
 
         return SpriteManager.instance;
+    }
+
+    public Mesh getInstancedMesh() {
+        return this.cube;
     }
 
     public void purge() {

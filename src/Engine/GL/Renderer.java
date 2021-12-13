@@ -1,4 +1,4 @@
-package graphics.engine;
+package Engine.GL;
 
 import events.Event;
 import events.EventQueue;
@@ -7,11 +7,11 @@ import events.Events.PurgeEvent;
 import events.Events.SpriteUpdateDoneEvent;
 import events.Events.UpdateSpritesEvent;
 import events.ThreadID;
-import graphics.SpriteManager;
-import graphics.UI.UI;
-import graphics.geometry.Sprite;
-import input.Keyboard;
-import input.Mouse;
+import Engine.SpriteManager;
+import Engine.UI.UI;
+import Engine.geometry.Sprite;
+import Engine.input.Keyboard;
+import Engine.input.Mouse;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.nuklear.NkMouse;
@@ -127,8 +127,6 @@ public class Renderer extends Thread {
                 Sprite sprite = geometry.get(i);
 
                 if (!sprite.hidden) {
-                    glBindVertexArray(sprite.mesh.getVaoID());
-                    glEnableVertexAttribArray(0);
 
                     Matrix4f model = sprite.getModelMatrix();
                     try {
@@ -141,7 +139,9 @@ public class Renderer extends Thread {
                     if (sprite.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-                    glDrawElementsInstanced(GL_TRIANGLES, sprite.mesh.getVertexCount(), GL_UNSIGNED_INT, 0, geometry.size());
+                    glBindVertexArray(sprite.mesh.getVaoID());
+                    glEnableVertexAttribArray(0);
+                    glDrawElements(GL_TRIANGLES, sprite.mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
                     glBindVertexArray(0);
                 }
             }

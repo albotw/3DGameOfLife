@@ -1,6 +1,6 @@
-package input;
+package Engine.input;
 
-import graphics.UI.UI;
+import Engine.UI.UI;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.nuklear.Nuklear.*;

@@ -1,6 +1,7 @@
 package network;
 
 import core.IGOLProcess;
+import core.Status;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

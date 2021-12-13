@@ -1,4 +1,4 @@
-package graphics.geometry;
+package Engine.geometry;
 
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;

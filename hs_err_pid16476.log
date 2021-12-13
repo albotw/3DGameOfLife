@@ -36,8 +36,8 @@ j  org.lwjgl.system.JNI.callI(J)I+0
 j  org.lwjgl.opengl.GL.createCapabilities(ZLjava/util/function/IntFunction;)Lorg/lwjgl/opengl/GLCapabilities;+78
 j  org.lwjgl.opengl.GL.createCapabilities(Ljava/util/function/IntFunction;)Lorg/lwjgl/opengl/GLCapabilities;+2
 j  org.lwjgl.opengl.GL.createCapabilities()Lorg/lwjgl/opengl/GLCapabilities;+1
-j  graphics.geometry.Mesh.<init>([F[F[IZ)V+25
-j  graphics.geometry.Mesh.Cube(Z)Lgraphics/Mesh;+1004
+j  Engine.geometry.Mesh.<init>([F[F[IZ)V+25
+j  Engine.geometry.Mesh.Cube(Z)Lgraphics/Mesh;+1004
 j  App.run()V+36
 v  ~StubRoutines::call_stub
 
@@ -595,10 +595,10 @@ Event: 0.423 Executing VM operation: RevokeBias
 Event: 0.423 Executing VM operation: RevokeBias done
 Event: 0.425 loading class org/joml/Matrix4fc
 Event: 0.425 loading class org/joml/Matrix4fc done
-Event: 0.434 loading class graphics/Sprite
-Event: 0.434 loading class graphics/Sprite done
-Event: 0.434 loading class graphics/Mesh
-Event: 0.434 loading class graphics/Mesh done
+Event: 0.434 loading class Engine/Sprite
+Event: 0.434 loading class Engine/Sprite done
+Event: 0.434 loading class Engine/Mesh
+Event: 0.434 loading class Engine/Mesh done
 
 
 Dynamic libraries:

@@ -1,0 +1,7 @@
+Performances:
+
+Correctes et stables.
+Lentes pour un petit nombre de valeurs par rapport à la méthode hash.
+- déterminer temps de calcul moyen par cycle.
+- déterminer temps de calcul moyen par génération.
+

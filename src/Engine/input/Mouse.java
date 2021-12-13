@@ -1,6 +1,6 @@
-package input;
+package Engine.input;
 
-import graphics.UI.UI;
+import Engine.UI.UI;
 import org.lwjgl.nuklear.NkVec2;
 import org.lwjgl.system.MemoryStack;
 

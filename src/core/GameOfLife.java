@@ -7,7 +7,6 @@ import events.Events.KillEvent;
 import events.Events.SpriteUpdateDoneEvent;
 import events.Events.UpdateSpritesEvent;
 import events.ThreadID;
-import network.Status;
 
 import static CONFIG.CONFIG.ENV_SIZE;
 

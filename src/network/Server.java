@@ -3,19 +3,21 @@ package network;
 import core.Environment;
 import core.GameOfLife;
 import core.IGOLProcess;
+import core.Status;
 import events.EventDispatcher;
 import events.EventQueue;
 import events.Events.InitGridEvent;
 import events.Events.PurgeEvent;
 import events.ThreadID;
-import graphics.SpriteManager;
-import graphics.engine.Renderer;
+import Engine.SpriteManager;
+import Engine.GL.Renderer;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import static CONFIG.CONFIG.RAND_CELLS;
 import static CONFIG.CONFIG.SERVER_NAME;
 
 public class Server extends UnicastRemoteObject implements IServer {
@@ -59,7 +61,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.environment = new Environment();
         SpriteManager.instance.setEnv(this.environment);
         System.out.println("created new env");
-        this.environment.randomValues(50);
+        this.environment.randomValues(RAND_CELLS);
         this.gameOfLife = new GameOfLife(this.environment);
         this.gameOfLife.start();
         this.eventQueue.send(new InitGridEvent(), ThreadID.Render);

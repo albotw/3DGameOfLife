@@ -1,4 +1,4 @@
-package network;
+package core;
 
 public enum Status {
     WAIT,

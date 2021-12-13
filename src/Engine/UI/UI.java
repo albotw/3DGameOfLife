@@ -1,7 +1,7 @@
-package graphics.UI;
+package Engine.UI;
 
-import graphics.engine.Shader;
-import graphics.engine.Util;
+import Engine.GL.Shader;
+import Engine.GL.Util;
 import org.joml.Matrix4f;
 import org.lwjgl.nuklear.*;
 import org.lwjgl.stb.STBTTAlignedQuad;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static CONFIG.CONFIG.WINDOW_HEIGHT;
 import static CONFIG.CONFIG.WINDOW_WIDTH;
-import static graphics.engine.Util.ioResourceToByteBuffer;
+import static Engine.GL.Util.ioResourceToByteBuffer;
 import static org.lwjgl.nuklear.Nuklear.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;

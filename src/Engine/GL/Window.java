@@ -1,8 +1,8 @@
-package graphics.engine;
+package Engine.GL;
 
-import graphics.UI.UI;
-import input.Keyboard;
-import input.Mouse;
+import Engine.UI.UI;
+import Engine.input.Keyboard;
+import Engine.input.Mouse;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
