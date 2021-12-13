@@ -8,9 +8,16 @@ import events.Events.SpriteUpdateDoneEvent;
 import events.Events.UpdateSpritesEvent;
 import events.ThreadID;
 
-import static CONFIG.CONFIG.ENV_SIZE;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class GameOfLife extends Thread implements IGameOfLife {
+import static CONFIG.CONFIG.ENV_SIZE;
+import static CONFIG.CONFIG.SERVER_NAME;
+
+public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     public Environment env;
     private EventQueue eventQueue;
     private int x;
@@ -18,29 +25,25 @@ public class GameOfLife extends Thread implements IGameOfLife {
     private int z;
     public Status status;
 
-    public GameOfLife(Environment env) {
+    public GameOfLife(Environment env) throws RemoteException {
+        super();
         this.eventQueue = new EventQueue(ThreadID.App);
         this.env = env;
         this.x = 0;
         this.y = 0;
         this.z = 0;
-        this.status = Status.CONTINUE;
     }
 
-    public void run() {
-        boolean running = true;
-        while (running) {
-            if (!this.eventQueue.isEmpty()) {
-                Event e = this.eventQueue.get();
-                if (e instanceof SpriteUpdateDoneEvent) {
-                    this.status = Status.CONTINUE;
-                }
-                if (e instanceof KillEvent) {
-                    running = false;
-                }
-            }
+    public void init() {
+        try {
+            System.setProperty("java.rmi.server.hostname", "127.0.0.1");
+            Naming.rebind(SERVER_NAME, this);
+            System.out.println("--- server registered ---");
+        } catch (MalformedURLException | RemoteException e) {
+            e.printStackTrace();
         }
-        this.eventQueue.purge();
+
+        this.status = Status.CONTINUE;
     }
 
     public void purge() {
@@ -56,21 +59,14 @@ public class GameOfLife extends Thread implements IGameOfLife {
             this.env.nextGeneration();
             EventDispatcher.instance.publish(new UpdateSpritesEvent(), ThreadID.Render);
 
-            /*
-            try {
-                Thread.currentThread().sleep(RENDER_TICK);
-            }catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-             */
-
             this.x = 0;
             this.y = 0;
             this.z = 0;
         }
     }
 
-    public synchronized IGOLProcess getNext() {
+    @Override
+    public synchronized IGOLProcess getNext() throws RemoteException {
         if (y < ENV_SIZE && x < ENV_SIZE && z < ENV_SIZE) {
             Cell[][][] local_env = env.getSubEnv(x, y, z);
             GOLProcess task = new GOLProcess(x, y, z, local_env);
@@ -85,6 +81,7 @@ public class GameOfLife extends Thread implements IGameOfLife {
                 else {
                     System.out.println("WAIT");
                     this.status = Status.WAIT;
+                    this.checkCompletion();
                 }
             }
 
@@ -92,14 +89,16 @@ public class GameOfLife extends Thread implements IGameOfLife {
         }
     }
 
-    public synchronized void sendResult(IGOLProcess t) {
+    @Override
+    public synchronized void sendResult(IGOLProcess t) throws RemoteException{
         if (t != null) {
             GOLProcess task = (GOLProcess) t;
             env.setCellState(task.x, task.y, task.z, task.updatedState());
         }
     }
 
-    public Status getStatus() {
+    @Override
+    public Status getStatus() throws RemoteException {
         return this.status;
     }
 

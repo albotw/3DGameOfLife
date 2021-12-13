@@ -1,9 +1,12 @@
 package core;
 
-public interface IGameOfLife {
-    IGOLProcess getNext();
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-    void sendResult(IGOLProcess t);
+public interface IGameOfLife extends Remote {
+    IGOLProcess getNext() throws RemoteException;
 
-    Status getStatus();
+    void sendResult(IGOLProcess t) throws RemoteException;
+
+    Status getStatus() throws RemoteException;
 }

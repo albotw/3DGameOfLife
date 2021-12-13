@@ -1,6 +1,7 @@
 package network;
 
 import core.IGOLProcess;
+import core.IGameOfLife;
 import core.Status;
 
 import java.net.MalformedURLException;
@@ -17,11 +18,11 @@ public class Client extends Thread {
         c.start();
     }
 
-    private IServer srv = null;
+    private IGameOfLife gameOfLife = null;
 
     public Client() {
         try {
-            this.srv = (IServer) Naming.lookup(SERVER_NAME);
+            this.gameOfLife = (IGameOfLife) Naming.lookup(SERVER_NAME);
         } catch (NotBoundException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -34,14 +35,14 @@ public class Client extends Thread {
     public void run() {
         while (true) {
             try {
-                if (this.srv.getStatus() == Status.CONTINUE) {
-                    IGOLProcess task = this.srv.getTask();
+                if (this.gameOfLife.getStatus() == Status.CONTINUE) {
+                    IGOLProcess task = this.gameOfLife.getNext();
                     if (task != null) {
                         task.run();
                     } else {
                         System.out.println("task is null !");
                     }
-                    this.srv.sendResult(task);
+                    this.gameOfLife.sendResult(task);
                 } else {
                     System.out.println("Awaiting server");
                     this.sleep(WAIT_DELAY);
