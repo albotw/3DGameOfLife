@@ -4,11 +4,11 @@
 #  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffae3db7d70, pid=16476, tid=16652
 #
 # JRE version: Java(TM) SE Runtime Environment (13.0.2+8) (build 13.0.2+8)
-# Java VM: Java HotSpot(TM) 64-Bit network.Server VM (13.0.2+8, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
+# Java VM: Java HotSpot(TM) 64-Bit fr.albot.GameOfLife.Server VM (13.0.2+8, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
 # Problematic frame:
 # C  [opengl32.dll+0x27d70]
 #
-# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+# No fr.albot.GameOfLife.core dump will be written. Minidumps are not enabled by default on client versions of Windows
 #
 # If you would like to submit a bug report, please visit:
 #   http://bugreport.java.com/bugreport/crash.jsp
@@ -18,7 +18,7 @@
 
 ---------------  S U M M A R Y ------------
 
-Command Line: -Dvisualvm.id=115628301846700 -javaagent:E:\Program Files (x86)\apps\IDEA-U\ch-0\212.5457.46\lib\idea_rt.jar=52451:E:\Program Files (x86)\apps\IDEA-U\ch-0\212.5457.46\bin -Dfile.encoding=UTF-8 App 2D 1
+Command Line: -Dvisualvm.id=115628301846700 -javaagent:E:\Program Files (x86)\apps\IDEA-U\ch-0\212.5457.46\lib\idea_rt.jar=52451:E:\Program Files (x86)\apps\IDEA-U\ch-0\212.5457.46\bin -Dfile.encoding=UTF-8 fr.albot.GameOfLife.App 2D 1
 
 Host: AMD Ryzen 5 3600 6-Core Processor              , 12 cores, 31G,  Windows 10 , 64 bit Build 19041 (10.0.19041.1348)
 Time: Wed Dec  1 21:57:00 2021 Paris, Madrid elapsed time: 0 seconds (0d 0h 0m 0s)
@@ -36,9 +36,9 @@ j  org.lwjgl.system.JNI.callI(J)I+0
 j  org.lwjgl.opengl.GL.createCapabilities(ZLjava/util/function/IntFunction;)Lorg/lwjgl/opengl/GLCapabilities;+78
 j  org.lwjgl.opengl.GL.createCapabilities(Ljava/util/function/IntFunction;)Lorg/lwjgl/opengl/GLCapabilities;+2
 j  org.lwjgl.opengl.GL.createCapabilities()Lorg/lwjgl/opengl/GLCapabilities;+1
-j  Engine.geometry.Mesh.<init>([F[F[IZ)V+25
-j  Engine.geometry.Mesh.Cube(Z)Lgraphics/Mesh;+1004
-j  App.run()V+36
+j  fr.albot.GameOfLife.Engine.geometry.Mesh.<init>([F[F[IZ)V+25
+j  fr.albot.GameOfLife.Engine.geometry.Mesh.Cube(Z)Lgraphics/Mesh;+1004
+j  fr.albot.GameOfLife.App.run()V+36
 v  ~StubRoutines::call_stub
 
 siginfo: EXCEPTION_ACCESS_VIOLATION (0xc0000005), reading address 0x0000000000000828
@@ -491,7 +491,7 @@ CodeHeap 'non-nmethods': size=5760Kb used=1595Kb max_used=1595Kb free=4164Kb
               stopped_count=0, restarted_count=0
  full_count=0
 
-Compilation events (20 events):
+Compilation fr.albot.GameOfLife.events (20 fr.albot.GameOfLife.events):
 Event: 0.421 Thread 0x000001d4cef0c000  721       3       jdk.internal.jimage.ImageStringsReader::hashCode (8 bytes)
 Event: 0.421 Thread 0x000001d4cef0c000 nmethod 721 0x000001d4a991aa10 code [0x000001d4a991abe0, 0x000001d4a991ae60]
 Event: 0.421 Thread 0x000001d4cef0c000  722       3       jdk.internal.module.SystemModuleFinders$SystemModuleReader::find (54 bytes)
@@ -513,10 +513,10 @@ Event: 0.423 Thread 0x000001d4cef0c000 nmethod 729 0x000001d4a991dc90 code [0x00
 Event: 0.434 Thread 0x000001d4cef0c000  730       3       java.lang.StringBuilder::append (8 bytes)
 Event: 0.434 Thread 0x000001d4cef0c000 nmethod 730 0x000001d4a991e090 code [0x000001d4a991e240, 0x000001d4a991e410]
 
-GC Heap History (0 events):
-No events
+GC Heap History (0 fr.albot.GameOfLife.events):
+No fr.albot.GameOfLife.events
 
-Deoptimization events (20 events):
+Deoptimization fr.albot.GameOfLife.events (20 fr.albot.GameOfLife.events):
 Event: 0.418 Thread 0x000001d4cf3a3800 Uncommon trap: trap_request=0xffffff45 fr.pc=0x000001d4b0d68fc8 relative=0x0000000000000428
 Event: 0.418 Thread 0x000001d4cf3a3800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000001d4b0d68fc8 method=java.lang.AbstractStringBuilder.isLatin1()Z @ 10 c2
 Event: 0.418 Thread 0x000001d4cf3a3800 DEOPT PACKING pc=0x000001d4b0d68fc8 sp=0x000000c4aedff040
@@ -538,13 +538,13 @@ Event: 0.420 Thread 0x000001d4cf3a3800 Uncommon trap: reason=unstable_if action=
 Event: 0.420 Thread 0x000001d4cf3a3800 DEOPT PACKING pc=0x000001d4b0d6eb54 sp=0x000000c4aedff020
 Event: 0.420 Thread 0x000001d4cf3a3800 DEOPT UNPACKING pc=0x000001d4a92a912f sp=0x000000c4aedfef48 mode 2
 
-Classes unloaded (0 events):
-No events
+Classes unloaded (0 fr.albot.GameOfLife.events):
+No fr.albot.GameOfLife.events
 
-Classes redefined (0 events):
-No events
+Classes redefined (0 fr.albot.GameOfLife.events):
+No fr.albot.GameOfLife.events
 
-Internal exceptions (16 events):
+Internal exceptions (16 fr.albot.GameOfLife.events):
 Event: 0.115 Thread 0x000001d4cf3a3800 Exception <a 'java/lang/NoSuchMethodError'{0x0000000620c54bc8}: 'void java.lang.invoke.DelegatingMethodHandle$Holder.delegate(java.lang.Object, java.lang.Object, int, java.lang.Object)'> (0x0000000620c54bc8) 
 thrown [t:/workspace/open/src/hotspot/share/interpreter/linkResolver.cpp, line 767]
 Event: 0.115 Thread 0x000001d4cf3a3800 Exception <a 'java/lang/NoSuchMethodError'{0x0000000620c5b6d0}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(java.lang.Object, java.lang.Object, java.lang.Object)'> (0x0000000620c5b6d0) 
@@ -578,7 +578,7 @@ thrown [t:/workspace/open/src/hotspot/share/prims/jni.cpp, line 598]
 Event: 0.367 Thread 0x000001d4cf3a3800 Exception <a 'sun/nio/fs/WindowsException'{0x0000000620966b28}> (0x0000000620966b28) 
 thrown [t:/workspace/open/src/hotspot/share/prims/jni.cpp, line 598]
 
-Events (20 events):
+Events (20 fr.albot.GameOfLife.events):
 Event: 0.416 loading class java/util/Scanner
 Event: 0.416 loading class java/util/Scanner done
 Event: 0.417 loading class java/util/Scanner$PatternLRUCache
@@ -595,10 +595,10 @@ Event: 0.423 Executing VM operation: RevokeBias
 Event: 0.423 Executing VM operation: RevokeBias done
 Event: 0.425 loading class org/joml/Matrix4fc
 Event: 0.425 loading class org/joml/Matrix4fc done
-Event: 0.434 loading class Engine/Sprite
-Event: 0.434 loading class Engine/Sprite done
-Event: 0.434 loading class Engine/Mesh
-Event: 0.434 loading class Engine/Mesh done
+Event: 0.434 loading class fr.albot.GameOfLife.Engine/Sprite
+Event: 0.434 loading class fr.albot.GameOfLife.Engine/Sprite done
+Event: 0.434 loading class fr.albot.GameOfLife.Engine/Mesh
+Event: 0.434 loading class fr.albot.GameOfLife.Engine/Mesh done
 
 
 Dynamic libraries:
@@ -689,7 +689,7 @@ symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Pr
 
 VM Arguments:
 jvm_args: -Dvisualvm.id=115628301846700 -javaagent:E:\Program Files (x86)\apps\IDEA-U\ch-0\212.5457.46\lib\idea_rt.jar=52451:E:\Program Files (x86)\apps\IDEA-U\ch-0\212.5457.46\bin -Dfile.encoding=UTF-8 
-java_command: App 2D 1
+java_command: fr.albot.GameOfLife.App 2D 1
 java_class_path (initial): E:\Yann\CODE\3DGameOfLife\out\production\3DGameOfLife;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\joml-1.10.2.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-assimp-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-assimp.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-bgfx-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-bgfx.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-glfw-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-glfw.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-nanovg-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-nanovg.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-nuklear-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-nuklear.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-openal-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-openal.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-opengl-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-opengl.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-par-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-par.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-stb-natives-windows.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-stb.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl-vulkan.jar;E:\Yann\CODE\3DGameOfLife\lwjgl-release-3.3.0-custom\lwjgl.jar
 Launcher Type: SUN_STANDARD
 
@@ -722,7 +722,7 @@ Log output configuration:
  #1: stderr all=off uptime,level,tags
 
 Environment Variables:
-PATH=C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;E:\Program Files (x86)\ARM\ADSv1_2\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;E:\Program Files\Microsoft VS Code\bin;E:\Python\3.7\Scripts\;E:\Python\3.7\;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;C:\Users\Yann\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Program Files\Microsoft SQL network.Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk-13.0.2\bin;C:\Users\Yann\AppData\Local\GitHubDesktop\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Yann\.dotnet\tools;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\Users\Yann\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\Yann\AppData\Local\Programs\Python\Python310\;C:\Users\Yann\.cargo\bin;E:\Python\3.7\Scripts\;E:\Python\3.7\;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;E:\Program Files\Microsoft VS Code\bin;C:\Users\Yann\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Program Files\Java\jdk-13.0.2\bin;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;C:\Users\Yann\AppData\Local\GitHubDesktop\bin;C:\Users\Yann\.dotnet\tools;C:\Users\Yann\AppData\Roaming\npm;C:\Program Files\heroku\bin
+PATH=C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;E:\Program Files (x86)\ARM\ADSv1_2\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;E:\Program Files\Microsoft VS Code\bin;E:\Python\3.7\Scripts\;E:\Python\3.7\;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;C:\Users\Yann\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Program Files\Microsoft SQL fr.albot.GameOfLife.Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk-13.0.2\bin;C:\Users\Yann\AppData\Local\GitHubDesktop\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Yann\.dotnet\tools;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\Users\Yann\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\Yann\AppData\Local\Programs\Python\Python310\;C:\Users\Yann\.cargo\bin;E:\Python\3.7\Scripts\;E:\Python\3.7\;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;E:\Program Files\Microsoft VS Code\bin;C:\Users\Yann\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Program Files\Java\jdk-13.0.2\bin;C:\Users\Yann\AppData\Local\Microsoft\WindowsApps;C:\Users\Yann\AppData\Local\GitHubDesktop\bin;C:\Users\Yann\.dotnet\tools;C:\Users\Yann\AppData\Roaming\npm;C:\Program Files\heroku\bin
 USERNAME=Yann
 OS=Windows_NT
 PROCESSOR_IDENTIFIER=AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
@@ -733,13 +733,13 @@ PROCESSOR_IDENTIFIER=AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 
 OS: Windows 10 , 64 bit Build 19041 (10.0.19041.1348)
 
-CPU:total 12 (initial active 12) (12 cores per cpu, 2 threads per core) family 23 model 113 stepping 0, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, mmxext, 3dnowpref, lzcnt, sse4a, ht, tsc, tscinvbit, tscinv, bmi1, bmi2, adx, sha, fma
+CPU:total 12 (initial active 12) (12 cores per cpu, 2 threads per fr.albot.GameOfLife.core) family 23 model 113 stepping 0, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, mmxext, 3dnowpref, lzcnt, sse4a, ht, tsc, tscinvbit, tscinv, bmi1, bmi2, adx, sha, fma
 
 Memory: 4k page, system-wide physical 32683M (25472M free)
 TotalPageFile size 37547M (AvailPageFile size 27154M)
 current process WorkingSet (physical memory assigned to process): 96M, peak: 98M
 current process commit charge ("private bytes"): 709M, peak: 711M
 
-vm_info: Java HotSpot(TM) 64-Bit network.Server VM (13.0.2+8) for windows-amd64 JRE (13.0.2+8), built on Dec 11 2019 09:20:33 by "mach5one" with unknown MS VC++:1916
+vm_info: Java HotSpot(TM) 64-Bit fr.albot.GameOfLife.Server VM (13.0.2+8) for windows-amd64 JRE (13.0.2+8), built on Dec 11 2019 09:20:33 by "mach5one" with unknown MS VC++:1916
 
 END.
