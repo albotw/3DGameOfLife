@@ -92,7 +92,7 @@ public class GameOfLife {
 
     public void nextGeneration() {
         this.currentAliveCells.clear();
-        this.currentAliveCells.addAll(this.nextAliveCells);
+        this.currentAliveCells = (HashSet<Cell>) this.nextAliveCells.clone();
         this.nextAliveCells.clear();
     }
 
@@ -135,7 +135,6 @@ public class GameOfLife {
 
             gol.setStatus(Status.WAIT);
             gol.checkCompletion();
-            System.gc();
         }
     }
 }
