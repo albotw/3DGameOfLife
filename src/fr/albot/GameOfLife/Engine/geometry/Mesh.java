@@ -9,16 +9,20 @@ import java.nio.IntBuffer;
 import static org.lwjgl.opengl.GL30.*;
 
 public class Mesh {
-    private final int vaoID;
-    private final int pos_vboID;
-    private final int idx_vboID;
+    protected final int vaoID;
+    protected final int pos_vboID;
+    protected final int idx_vboID;
 
-    private final int vertexCount;
+    protected final int vertexCount;
 
     private Vector3f color;
 
     public Mesh(float[] positions, Vector3f color, int[] indices) {
+        this(positions, (float[]) null, indices);
         this.color = color;
+    }
+
+    public Mesh(float[] positions, float[] texCoords, int[] indices) {
         FloatBuffer posBuffer = null;
         IntBuffer indicesBuffer = null;
         try {

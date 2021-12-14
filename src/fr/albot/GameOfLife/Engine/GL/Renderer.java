@@ -130,7 +130,7 @@ public class Renderer extends Thread {
                     Matrix4f model = sprite.getModelMatrix();
                     try {
                         this.shader.setUniform("model", model);
-                        this.shader.setUniform("color", sprite.mesh.getColor());
+                        //this.shader.setUniform("color", sprite.mesh.getColor());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -140,6 +140,7 @@ public class Renderer extends Thread {
 
                     glBindVertexArray(sprite.mesh.getVaoID());
                     glEnableVertexAttribArray(0);
+                    glEnableVertexAttribArray(1);
                     glDrawElements(GL_TRIANGLES, sprite.mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
                     glBindVertexArray(0);
                 }
