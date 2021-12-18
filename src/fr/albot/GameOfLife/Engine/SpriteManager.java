@@ -1,5 +1,6 @@
 package fr.albot.GameOfLife.Engine;
 
+import fr.albot.GameOfLife.Engine.geometry.TexturedMesh;
 import fr.albot.GameOfLife.core.Cell;
 import fr.albot.GameOfLife.core.Environment;
 import fr.albot.GameOfLife.Engine.geometry.Mesh;
@@ -17,7 +18,6 @@ public class SpriteManager {
 
     private ArrayList<Sprite> geometry;
     private Sprite container;
-    private Mesh cube;
 
     // le return est important => permet le lien vers le contexte OGL
     public static SpriteManager createSpriteManager() {
@@ -28,9 +28,6 @@ public class SpriteManager {
         return SpriteManager.instance;
     }
 
-    public Mesh getInstancedMesh() {
-        return this.cube;
-    }
 
     public void purge() {
         for (Sprite s : geometry) {
@@ -52,15 +49,15 @@ public class SpriteManager {
     }
 
     public void init() {
-        container = new Sprite(Mesh.Cube(new Vector3f(1.0f, 1.0f, 1.0f)), true);
-        container.scale = ENV_SIZE;
+        //container = new Sprite(Mesh.Cube(new Vector3f(1.0f, 1.0f, 1.0f)), true);
+        //container.scale = ENV_SIZE;
 
         //TODO: revoir création de la grille.
         float offset = (0.5f * (ENV_SIZE - 1));
         for (int x = 0; x < ENV_SIZE; x++) {
             for (int y = 0; y < ENV_SIZE; y++) {
                 for (int z = 0; z < ENV_SIZE; z++) {
-                    Sprite s = new Sprite(Mesh.Cube(new Vector3f(0.0f, 1.0f, 0.0f)), false);
+                    Sprite s = new Sprite(TexturedMesh.cube(), false);
                     s.moveTo(x - offset, y - offset, z - offset);
                     s.scale = 0.8f;
                     s.hidden = true;
@@ -69,7 +66,7 @@ public class SpriteManager {
             }
         }
 
-        this.geometry.add(container);
+        //this.geometry.add(container);
 
         this.displayEnv();
     }

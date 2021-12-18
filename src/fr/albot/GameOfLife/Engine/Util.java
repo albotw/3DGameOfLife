@@ -1,4 +1,4 @@
-package fr.albot.GameOfLife.Engine.GL;
+package fr.albot.GameOfLife.Engine;
 
 
 import org.lwjgl.BufferUtils;

@@ -10,9 +10,13 @@ public class Sprite {
     public Vector3f rotation;
     public final boolean wireframe;
     public boolean hidden;
+    public boolean solid;
 
     public Sprite(Mesh mesh, boolean wireframe) {
         this.mesh = mesh;
+        if (this.mesh instanceof TexturedMesh)
+            this.solid = false;
+
         this.wireframe = wireframe;
         this.position = new Vector3f();
         this.rotation = new Vector3f();

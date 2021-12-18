@@ -122,6 +122,7 @@ public class Window {
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_MULTISAMPLE);
+        glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
         this.projectionMatrix = new Matrix4f();
         this.projectionMatrix.perspective(FOV, this.width / this.height, 0.01f, 50.0f);

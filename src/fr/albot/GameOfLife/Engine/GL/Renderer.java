@@ -2,9 +2,13 @@ package fr.albot.GameOfLife.Engine.GL;
 
 import fr.albot.GameOfLife.Engine.SpriteManager;
 import fr.albot.GameOfLife.Engine.UI.UI;
+import fr.albot.GameOfLife.Engine.Util;
 import fr.albot.GameOfLife.Engine.geometry.Sprite;
+import fr.albot.GameOfLife.Engine.geometry.TexturedMesh;
 import fr.albot.GameOfLife.Engine.input.Keyboard;
 import fr.albot.GameOfLife.Engine.input.Mouse;
+import fr.albot.GameOfLife.Engine.textures.TextureAtlas;
+import fr.albot.GameOfLife.Engine.textures.TextureID;
 import fr.albot.GameOfLife.events.Event;
 import fr.albot.GameOfLife.events.EventQueue;
 import fr.albot.GameOfLife.events.Events.InitGridEvent;
@@ -32,27 +36,26 @@ public class Renderer extends Thread {
     private Shader shader;
     private final Camera camera;
     private SpriteManager spriteManager;
+    private TextureAtlas textureAtlas;
 
     public Renderer() {
         this.eventQueue = new EventQueue(ThreadID.Render);
         UI.createUI();
         this.window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, VSYNC);
+        this.textureAtlas = new TextureAtlas();
         this.spriteManager = SpriteManager.createSpriteManager();
         this.camera = new Camera(new Vector3f(0.0f, 0.0f, ENV_SIZE), ENV_SIZE);
     }
 
     public void init() throws Exception {
         this.window.init();
-
+        this.textureAtlas.load();
         this.shader = new Shader();
-        this.shader.createFragmentShader(Util.loadResource("shaders/fragment.glsl"));
-        this.shader.createVertexShader(Util.loadResource("shaders/vertex.glsl"));
+        this.shader.createFragmentShader(Util.loadResource("ressources/shaders/fragment.glsl"));
+        this.shader.createVertexShader(Util.loadResource("ressources/shaders/vertex.glsl"));
         this.shader.link();
     }
 
-    public void initGrid() {
-        this.spriteManager.init();
-    }
 
     public void run() {
         try {
@@ -126,7 +129,6 @@ public class Renderer extends Thread {
                 Sprite sprite = geometry.get(i);
 
                 if (!sprite.hidden) {
-
                     Matrix4f model = sprite.getModelMatrix();
                     try {
                         this.shader.setUniform("model", model);
@@ -140,7 +142,13 @@ public class Renderer extends Thread {
 
                     glBindVertexArray(sprite.mesh.getVaoID());
                     glEnableVertexAttribArray(0);
-                    glEnableVertexAttribArray(1);
+
+                    if (!sprite.solid) {
+                        glEnableVertexAttribArray(1);
+                        TextureID texture = ((TexturedMesh)sprite.mesh).getTexture();
+                        this.textureAtlas.bind(texture);
+                    }
+
                     glDrawElements(GL_TRIANGLES, sprite.mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
                     glBindVertexArray(0);
                 }

@@ -30,7 +30,6 @@ public class Server extends Thread {
     }
 
     public Server() {
-        super();
         Server.instance = this;
 
         EventDispatcher.createEventDispatcher();

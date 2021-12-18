@@ -1,7 +1,7 @@
 package fr.albot.GameOfLife.Engine.UI;
 
 import fr.albot.GameOfLife.Engine.GL.Shader;
-import fr.albot.GameOfLife.Engine.GL.Util;
+import fr.albot.GameOfLife.Engine.Util;
 import org.joml.Matrix4f;
 import org.lwjgl.nuklear.*;
 import org.lwjgl.stb.STBTTAlignedQuad;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.WINDOW_HEIGHT;
 import static fr.albot.GameOfLife.CONFIG.CONFIG.WINDOW_WIDTH;
-import static fr.albot.GameOfLife.Engine.GL.Util.ioResourceToByteBuffer;
+import static fr.albot.GameOfLife.Engine.Util.ioResourceToByteBuffer;
 import static org.lwjgl.nuklear.Nuklear.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -74,8 +74,8 @@ public class UI {
         nk_buffer_init(this.cmds, ALLOCATOR, 4 * 1024);
 
         this.shader = new Shader();
-        shader.createVertexShader(Util.loadResource("shaders/NKVertex.glsl"));
-        shader.createFragmentShader(Util.loadResource("shaders/NKFragment.glsl"));
+        shader.createVertexShader(Util.loadResource("ressources/shaders/NKVertex.glsl"));
+        shader.createFragmentShader(Util.loadResource("ressources/shaders/NKFragment.glsl"));
         shader.link();
 
         int attrib_pos = glGetAttribLocation(shader.getProgramID(), "Position");
@@ -119,7 +119,7 @@ public class UI {
 
     public void initFont() {
         try {
-            this.ttf = ioResourceToByteBuffer("FiraSans.ttf", 512 * 1024);
+            this.ttf = ioResourceToByteBuffer("ressources/FiraSans.ttf", 512 * 1024);
         } catch (Exception e) {
             e.printStackTrace();
         }

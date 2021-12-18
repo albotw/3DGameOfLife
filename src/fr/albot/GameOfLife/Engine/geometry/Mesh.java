@@ -18,11 +18,7 @@ public class Mesh {
     private Vector3f color;
 
     public Mesh(float[] positions, Vector3f color, int[] indices) {
-        this(positions, (float[]) null, indices);
         this.color = color;
-    }
-
-    public Mesh(float[] positions, float[] texCoords, int[] indices) {
         FloatBuffer posBuffer = null;
         IntBuffer indicesBuffer = null;
         try {
@@ -80,49 +76,5 @@ public class Mesh {
         glBindVertexArray(0);
         glDeleteVertexArrays(vaoID);
         this.color = null;
-    }
-
-    public static Mesh Cube(Vector3f color) {
-        float[] positions = new float[]{
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f, 0.5f, -0.5f,
-                -0.5f, 0.5f, -0.5f,
-
-                -0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
-                -0.5f, 0.5f, 0.5f,
-
-                -0.5f, 0.5f, 0.5f,
-                -0.5f, 0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f, 0.5f,
-
-                0.5f, 0.5f, 0.5f,
-                0.5f, 0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, 0.5f,
-
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, 0.5f,
-                -0.5f, -0.5f, 0.5f,
-
-                -0.5f, 0.5f, -0.5f,
-                0.5f, 0.5f, -0.5f,
-                0.5f, 0.5f, 0.5f,
-                -0.5f, 0.5f, 0.5f,
-        };
-        int[] indices = new int[]{
-                0, 1, 3, 3, 1, 2,
-                4, 5, 7, 7, 5, 6,
-                8, 9, 11, 11, 9, 10,
-                12, 13, 15, 15, 13, 14,
-                16, 17, 19, 19, 17, 18,
-                20, 21, 23, 23, 21, 22
-        };
-
-        return new Mesh(positions, color, indices);
     }
 }
