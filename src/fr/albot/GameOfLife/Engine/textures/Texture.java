@@ -22,9 +22,9 @@ public class Texture {
         ByteBuffer image = null;
         ByteBuffer imageBuffer = null;
 
-        try{
+        try {
             imageBuffer = ioResourceToByteBuffer(path, 8 * 1024);
-        }catch(IOException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
 
@@ -47,6 +47,7 @@ public class Texture {
 
             this.width = w.get(0);
             this.height = h.get(0);
+            System.out.println("width: " + this.width + " height: " + this.height + " comp: " + comp.get(0));
 
             this.handle = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, this.handle);
@@ -69,5 +70,9 @@ public class Texture {
 
     public void bind() {
         glBindTexture(GL_TEXTURE_2D, this.handle);
+    }
+
+    public int getHandle() {
+        return this.handle;
     }
 }

@@ -24,7 +24,8 @@ import java.util.ArrayList;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.nuklear.Nuklear.*;
+import static org.lwjgl.nuklear.Nuklear.nk_input_begin;
+import static org.lwjgl.nuklear.Nuklear.nk_input_end;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -145,7 +146,7 @@ public class Renderer extends Thread {
 
                     if (!sprite.solid) {
                         glEnableVertexAttribArray(1);
-                        TextureID texture = ((TexturedMesh)sprite.mesh).getTexture();
+                        TextureID texture = ((TexturedMesh) sprite.mesh).getTexture();
                         this.textureAtlas.bind(texture);
                     }
 
@@ -156,7 +157,7 @@ public class Renderer extends Thread {
             shader.unbind();
 
             // ! DISPLAY -------------------------------------------------------
-            UI.instance.render(NK_ANTI_ALIASING_ON, 512 * 1024, 128 * 1024);
+            //UI.instance.render(NK_ANTI_ALIASING_ON, 512 * 1024, 128 * 1024);
             window.update();
         }
         System.out.println("done rendering");

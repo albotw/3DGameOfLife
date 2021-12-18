@@ -88,36 +88,36 @@ public class TexturedMesh extends Mesh {
                 20, 21, 23, 23, 21, 22
         };
 
-         float[] texCoors = new float[] {
-                1.0f, 1.0f,
+        float[] texCoors = new float[]{
                 1.0f, 0.0f,
-                0.0f, 0.0f,
                 1.0f, 1.0f,
+                0.0f, 1.0f,
+                0.0f, 0.0f,
 
-                1.0f, 1.0f,
                 1.0f, 0.0f,
-                0.0f, 0.0f,
                 1.0f, 1.0f,
+                0.0f, 1.0f,
+                0.0f, 0.0f,
 
-                1.0f, 1.0f,
                 1.0f, 0.0f,
-                0.0f, 0.0f,
                 1.0f, 1.0f,
+                0.0f, 1.0f,
+                0.0f, 0.0f,
 
-                1.0f, 1.0f,
                 1.0f, 0.0f,
-                0.0f, 0.0f,
                 1.0f, 1.0f,
+                0.0f, 1.0f,
+                0.0f, 0.0f,
 
-                1.0f, 1.0f,
                 1.0f, 0.0f,
-                0.0f, 0.0f,
                 1.0f, 1.0f,
+                0.0f, 1.0f,
+                0.0f, 0.0f,
 
-                1.0f, 1.0f,
                 1.0f, 0.0f,
-                0.0f, 0.0f,
                 1.0f, 1.0f,
+                0.0f, 1.0f,
+                0.0f, 0.0f,
         };
 
         return new TexturedMesh(positions, texCoors, indices, TextureID.CUBE);
