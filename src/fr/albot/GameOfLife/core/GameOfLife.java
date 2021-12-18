@@ -19,6 +19,8 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     private int z;
     public Status status;
 
+    private long before_generation = 0;
+
     public GameOfLife(Environment env) throws RemoteException {
         super();
         this.env = env;
@@ -52,6 +54,9 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
             this.env.nextGeneration();
             EventDispatcher.instance.publish(new UpdateSpritesEvent(), ThreadID.Render);
 
+            System.out.println("--- Generation completed in " + (System.currentTimeMillis() - before_generation) + " ms ---");
+            this.before_generation = 0;
+
             this.x = 0;
             this.y = 0;
             this.z = 0;
@@ -60,6 +65,9 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
 
     @Override
     public synchronized IGOLProcess getNext() throws RemoteException {
+        if (this.before_generation == 0) {
+            this.before_generation = System.currentTimeMillis();
+        }
         if (y < ENV_SIZE && x < ENV_SIZE && z < ENV_SIZE) {
             Cell[][][] local_env = env.getSubEnv(x, y, z);
             GOLProcess task = new GOLProcess(x, y, z, local_env);

@@ -47,7 +47,6 @@ public class Server extends Thread {
                 Event e = this.eventQueue.get();
                 if (e instanceof SpriteUpdateDoneEvent) {
                     this.gameOfLife.setStatus(Status.CONTINUE);
-                    System.out.println("CONTINUE");
                 }
             }
 
@@ -62,7 +61,6 @@ public class Server extends Thread {
     public void init() {
         this.environment = new Environment();
         SpriteManager.instance.setEnv(this.environment);
-        System.out.println("created new env");
         this.environment.randomValues(RAND_CELLS);
 
         try {

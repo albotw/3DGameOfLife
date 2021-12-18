@@ -22,9 +22,6 @@ x = i % width;
 y = i / width;
 
 FIXME:
-- rendu cassé lors de traitements multiclients.
-- RAJOUTER 3D
-- nettoyage propre de la mémoire.
 
 TODO:
 - optimisation rendu: passer en mode instancé avec matrice de modèle calculée dans le shader.

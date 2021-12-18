@@ -19,7 +19,7 @@ public class Environment {
     public void initValues(int[] positions) {
         for (int i = 0; i < positions.length; i += 3) {
             current_env[positions[i]][positions[i + 1]][positions[i + 2]] = Cell.Alive;
-            System.out.println("added cell at " + positions[i] + " " + positions[i + 1] + " " + positions[i + 2]);
+            //System.out.println("added cell at " + positions[i] + " " + positions[i + 1] + " " + positions[i + 2]);
         }
     }
 
@@ -32,7 +32,7 @@ public class Environment {
 
             if (this.current_env[x][y][z] == Cell.Empty) {
                 this.current_env[x][y][z] = Cell.Alive;
-                System.out.println("added cell at " + x + " " + y + " " + z);
+                //System.out.println("added cell at " + x + " " + y + " " + z);
                 counter++;
             }
         } while (counter < quantity);
