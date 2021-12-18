@@ -322,5 +322,7 @@ public class UI {
         glBindVertexArray(0);
         glDisable(GL_BLEND);
         glDisable(GL_SCISSOR_TEST);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_MULTISAMPLE);
     }
 }
