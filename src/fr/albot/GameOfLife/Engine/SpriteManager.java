@@ -1,11 +1,8 @@
 package fr.albot.GameOfLife.Engine;
 
-import fr.albot.GameOfLife.Engine.geometry.TexturedMesh;
-import fr.albot.GameOfLife.core.Cell;
-import fr.albot.GameOfLife.core.Environment;
-import fr.albot.GameOfLife.Engine.geometry.Mesh;
 import fr.albot.GameOfLife.Engine.geometry.Sprite;
-import org.joml.Vector3f;
+import fr.albot.GameOfLife.Engine.geometry.TexturedMesh;
+import fr.albot.GameOfLife.core.Environment;
 
 import java.util.ArrayList;
 
@@ -76,7 +73,7 @@ public class SpriteManager {
             for (int y = 0; y < ENV_SIZE; y++) {
                 for (int z = 0; z < ENV_SIZE; z++) {
                     int index = (z * ENV_SIZE * ENV_SIZE) + (x * ENV_SIZE) + y;
-                    this.geometry.get(index).hidden = (env.getCellState(x, y, z) == Cell.Empty);
+                    this.geometry.get(index).hidden = (env.getCellState(x, y, z));
                 }
             }
         }

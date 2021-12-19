@@ -12,9 +12,10 @@ public class CONFIG {
     public static float EPSILON = 0.00001f;
 
     //configuration process
-    public static boolean RENDER_ACTIVE = true;
+    public static boolean RENDER_ACTIVE = false;
     public static int ENV_SIZE = 10;
-    public static int RAND_CELLS = (ENV_SIZE * ENV_SIZE * ENV_SIZE) / 2;
+    public static int ENV_LENGTH = ENV_SIZE * ENV_SIZE * ENV_SIZE;
+    public static int RAND_CELLS = ENV_LENGTH / 2;
     public static int SUB_ENV_SIZE = 3;                        // ! IMPAIR OBLIGATOIRE
     public static String SERVER_NAME = "GOL_SERVER";
     public static int ALIVE_THRESHOLD = 3;

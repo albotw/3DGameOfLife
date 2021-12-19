@@ -1,10 +1,9 @@
 package fr.albot.GameOfLife;
 
 import fr.albot.GameOfLife.CONFIG.CONFIG;
-import fr.albot.GameOfLife.core.Cell;
 import fr.albot.GameOfLife.core.Environment;
 
-import static fr.albot.GameOfLife.CONFIG.CONFIG.*;
+import static fr.albot.GameOfLife.CONFIG.CONFIG.RAND_CELLS;
 
 public class App {
     public static void main(String[] args) {
@@ -43,7 +42,7 @@ public class App {
 
         while (true) {
             long before_cycle = System.currentTimeMillis();
-
+            /*
             for (int x = 0; x < ENV_SIZE; x++) {
                 for (int y = 0; y < ENV_SIZE; y++) {
                     for (int z = 0; z < ENV_SIZE; z++) {
@@ -71,6 +70,7 @@ public class App {
                     }
                 }
             }
+             */
 
             System.out.println("Generation processed in " + (System.currentTimeMillis() - before_cycle) + " ms using " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) + " bytes");
             System.out.println();

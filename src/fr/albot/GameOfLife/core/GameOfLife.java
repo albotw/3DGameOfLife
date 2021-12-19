@@ -9,15 +9,14 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static fr.albot.GameOfLife.CONFIG.CONFIG.ENV_SIZE;
+import static fr.albot.GameOfLife.CONFIG.CONFIG.ENV_LENGTH;
 import static fr.albot.GameOfLife.CONFIG.CONFIG.SERVER_NAME;
 
 public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     public Environment env;
-    private int x;
-    private int y;
-    private int z;
+    private AtomicInteger pos;
     public Status status;
 
     private long before_generation = 0;
@@ -25,12 +24,11 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     public GameOfLife(Environment env) throws RemoteException {
         super();
         this.env = env;
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
+        this.pos = new AtomicInteger(0);
     }
 
     public void init() {
+        //this.createChunks();
         try {
             System.setProperty("java.rmi.server.hostname", "127.0.0.1");
             Naming.rebind(SERVER_NAME, this);
@@ -44,64 +42,44 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
 
     public void purge() {
         this.status = Status.WAIT;
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
         this.env = null;
     }
 
     public void checkCompletion() {
-        if (this.status == Status.WAIT) {
+        if (this.pos.get() > ENV_LENGTH) {
+            this.status = Status.WAIT;
             this.env.nextGeneration();
             //System.gc();
 
             System.out.println("--- Generation completed in " + (System.currentTimeMillis() - before_generation) + " ms ---");
             this.before_generation = 0;
 
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
 
             if (CONFIG.RENDER_ACTIVE) {
                 EventDispatcher.instance.publish(new UpdateSpritesEvent(), ThreadID.Render);
             } else {
                 this.status = Status.CONTINUE;
             }
+
+            this.pos.set(0);
         }
     }
 
     @Override
-    public synchronized IGOLProcess getNext() throws RemoteException {
+    public IGOLProcess getNext() throws RemoteException {
         if (this.before_generation == 0) {
             this.before_generation = System.currentTimeMillis();
         }
-        if (y < ENV_SIZE && x < ENV_SIZE && z < ENV_SIZE) {
-            Cell[][][] local_env = env.getSubEnv(x, y, z);
-            GOLProcess task = new GOLProcess(x, y, z, local_env);
-            y++;
-            return task;
-        } else {
-            y = 0;
-            if (x + 1 < ENV_SIZE) x++;
-            else {
-                x = 0;
-                if (z + 1 < ENV_SIZE) z++;
-                else {
-                    System.out.println("WAIT");
-                    this.status = Status.WAIT;
-                    this.checkCompletion();
-                }
-            }
-
-            return null;
-        }
+        this.checkCompletion();
+        int currPos = this.pos.getAndIncrement();
+        return new GOLProcess(currPos, this.env.getSubEnv(currPos));
     }
 
     @Override
     public void sendResult(IGOLProcess t) throws RemoteException {
         if (t != null) {
             GOLProcess task = (GOLProcess) t;
-            env.setCellState(task.x, task.y, task.z, task.updatedState());
+            env.setCellState(task.pos, task.updatedState());
         }
     }
 
