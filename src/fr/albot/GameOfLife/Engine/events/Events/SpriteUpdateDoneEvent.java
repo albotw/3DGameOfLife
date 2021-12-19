@@ -1,6 +1,6 @@
-package fr.albot.GameOfLife.events.Events;
+package fr.albot.GameOfLife.Engine.events.Events;
 
-import fr.albot.GameOfLife.events.Event;
+import fr.albot.GameOfLife.Engine.events.Event;
 
 public class SpriteUpdateDoneEvent extends Event {
     public SpriteUpdateDoneEvent() {

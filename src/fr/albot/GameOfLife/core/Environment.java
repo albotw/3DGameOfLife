@@ -72,7 +72,7 @@ public class Environment {
         return sub_env;
     }
 
-    public synchronized Cell getCellState(int x, int y, int z) {
+    public Cell getCellState(int x, int y, int z) {
         if (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE && z >= 0 && z < ENV_SIZE) {
             return this.current_env[x][y][z];
         } else return Cell.Empty;

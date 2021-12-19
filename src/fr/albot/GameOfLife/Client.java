@@ -14,11 +14,15 @@ import static fr.albot.GameOfLife.CONFIG.CONFIG.WAIT_DELAY;
 
 public class Client extends Thread {
     public static void main(String[] args) {
+        if (args.length == 1 && args[0].equals("-verbose")) {
+            DEBUG = true;
+        }
         Client c = new Client();
         c.start();
     }
 
     private IGameOfLife gameOfLife = null;
+    private static boolean DEBUG = false;
 
     public Client() {
         try {
@@ -35,13 +39,15 @@ public class Client extends Thread {
                     IGOLProcess task = this.gameOfLife.getNext();
                     if (task != null) {
                         task.run();
-                    } else {
+                    } else if (DEBUG) {
                         System.out.println("task is null !");
                     }
                     this.gameOfLife.sendResult(task);
                 } else {
-                    System.out.println("Awaiting server");
-                    sleep(WAIT_DELAY);
+                    if (DEBUG) {
+                        System.out.println("Awaiting server");
+                        sleep(WAIT_DELAY);
+                    }
                 }
             } catch (RemoteException | InterruptedException e) {
                 e.printStackTrace();

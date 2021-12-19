@@ -24,8 +24,8 @@ public class GOLProcess implements IGOLProcess, Serializable {
 
     public void run() {
         int aliveNeighbours = getAliveNeighbours();
-        System.out.println(this.x + " " + this.y + " " + this.z + " " + aliveNeighbours);
-        if (aliveNeighbours == ALIVE_THRESOLD) { //naissance
+        //System.out.println(this.x + " " + this.y + " " + this.z + " " + aliveNeighbours);
+        if (aliveNeighbours == ALIVE_THRESHOLD) { //naissance
             this.result = Cell.Alive;
         } else if (aliveNeighbours == CURRENT_THRESHOLD) { //état courant
             this.result = local_env[1][1][1];

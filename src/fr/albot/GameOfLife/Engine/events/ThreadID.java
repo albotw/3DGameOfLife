@@ -1,4 +1,4 @@
-package fr.albot.GameOfLife.events;
+package fr.albot.GameOfLife.Engine.events;
 
 public enum ThreadID {
     Render,

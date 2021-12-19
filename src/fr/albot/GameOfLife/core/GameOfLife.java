@@ -1,8 +1,9 @@
 package fr.albot.GameOfLife.core;
 
-import fr.albot.GameOfLife.events.EventDispatcher;
-import fr.albot.GameOfLife.events.Events.UpdateSpritesEvent;
-import fr.albot.GameOfLife.events.ThreadID;
+import fr.albot.GameOfLife.CONFIG.CONFIG;
+import fr.albot.GameOfLife.Engine.events.EventDispatcher;
+import fr.albot.GameOfLife.Engine.events.Events.UpdateSpritesEvent;
+import fr.albot.GameOfLife.Engine.events.ThreadID;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -52,7 +53,7 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     public void checkCompletion() {
         if (this.status == Status.WAIT) {
             this.env.nextGeneration();
-            EventDispatcher.instance.publish(new UpdateSpritesEvent(), ThreadID.Render);
+            //System.gc();
 
             System.out.println("--- Generation completed in " + (System.currentTimeMillis() - before_generation) + " ms ---");
             this.before_generation = 0;
@@ -60,6 +61,12 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
             this.x = 0;
             this.y = 0;
             this.z = 0;
+
+            if (CONFIG.RENDER_ACTIVE) {
+                EventDispatcher.instance.publish(new UpdateSpritesEvent(), ThreadID.Render);
+            } else {
+                this.status = Status.CONTINUE;
+            }
         }
     }
 
@@ -91,7 +98,7 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     }
 
     @Override
-    public synchronized void sendResult(IGOLProcess t) throws RemoteException {
+    public void sendResult(IGOLProcess t) throws RemoteException {
         if (t != null) {
             GOLProcess task = (GOLProcess) t;
             env.setCellState(task.x, task.y, task.z, task.updatedState());
