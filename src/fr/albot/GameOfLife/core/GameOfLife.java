@@ -27,6 +27,8 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     //v3
     private HashSet<Integer> alive;
     private HashMap<Integer, Integer> neighbours; // position, nombre de voisins.
+    private HashSet<Integer> next_alive;
+    private HashMap<Integer, Integer> next_neighbours;
     private AtomicInteger lastIndex;
 
     private int step; //1: alive, 2: neighbours.
@@ -80,6 +82,41 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
         }
     }
 
+    public void _checkCompletion() {
+        if (this.lastIndex.get() > ENV_LENGTH) {
+            this.status = Status.WAIT;
+            if (step == 1) {
+                this.alive.clear();
+                this.alive = new HashSet<Integer>(this.next_alive);
+                this.next_alive.clear();
+
+                this.neighbours.clear();
+                this.neighbours = new HashMap<Integer, Integer>(this.next_neighbours);
+                this.next_neighbours.clear();
+
+                step = 2;
+                this.lastIndex.set(0);
+                this.status = Status.CONTINUE;
+            }
+            else if(step == 2) {
+                this.alive.clear();
+                this.alive = new HashSet<Integer>(this.next_alive);
+                this.next_alive.clear();
+
+                this.neighbours.clear();
+                this.neighbours = new HashMap<Integer, Integer>(this.next_neighbours);
+                this.next_neighbours.clear();
+
+                System.out.println("--- Generation completed in " + (System.currentTimeMillis() - before_generation) + " ms ---");
+                this.before_generation = 0;
+
+                step = 1;
+                this.lastIndex.set(0);
+                this.status = Status.CONTINUE;
+            }
+        }
+    }
+
     @Override
     public IGOLProcess getNext() throws RemoteException {
         if (this.before_generation == 0) {
@@ -91,7 +128,7 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     }
 
     public IGOLProcess _getNext() throws RemoteException {
-        //this.checkCompletion();
+        this.checkCompletion();
         if (this.step == 1) {
             HashSet<Integer> subset = this.alive.stream()
                     .skip(lastIndex.getAndAdd(CHUNK_SIZE))
@@ -104,8 +141,10 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
                     .skip(lastIndex.getAndAdd(CHUNK_SIZE))
                     .limit(CHUNK_SIZE)
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
+            return new GenerateProcess(this.alive, subset);
         }
+
+        return null;
     }
 
     @Override
@@ -113,6 +152,13 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
         if (t != null) {
             GOLProcess task = (GOLProcess) t;
             env.setCellState(task.pos, task.updatedState());
+        }
+    }
+
+    public void _sendResult(IGOLProcess t) throws RemoteException {
+        if (t != null) {
+            this.next_alive.addAll(t.getNextAlive());
+            this.next_neighbours.entrySet().addAll(t.getNextNeighbours().entrySet());
         }
     }
 

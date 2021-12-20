@@ -6,17 +6,16 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class GenerateProcess implements IGOLProcess, Serializable {
-    private Map<Integer, Integer> precast;
 
     private HashSet<Integer> alive;
-    private HashMap<Integer, Integer> neighbours;
+    private Map<Integer, Integer> neighbours;
 
     private HashSet<Integer> next_alive;
     private HashMap<Integer, Integer> next_neighbours;
 
-    public GenerateProcess(HashSet<Integer> alive, Map<Integer, Integer> precast) {
+    public GenerateProcess(HashSet<Integer> alive, Map<Integer, Integer> neighbours) {
         this.alive = alive;
-        this.precast = precast;
+        this.neighbours = neighbours;
     }
 
     @Override
@@ -39,11 +38,11 @@ public class GenerateProcess implements IGOLProcess, Serializable {
         }
     }
 
-    public HashSet<Integer> getNext_alive() {
+    public HashSet<Integer> getNextAlive() {
         return this.next_alive;
     }
 
-    public HashMap<Integer, Integer> getNext_neighbours() {
+    public HashMap<Integer, Integer> getNextNeighbours() {
         return this.next_neighbours;
     }
 }
