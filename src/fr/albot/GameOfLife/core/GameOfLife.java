@@ -9,10 +9,13 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-import static fr.albot.GameOfLife.CONFIG.CONFIG.ENV_LENGTH;
-import static fr.albot.GameOfLife.CONFIG.CONFIG.SERVER_NAME;
+import static fr.albot.GameOfLife.CONFIG.CONFIG.*;
 
 public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     public Environment env;
@@ -21,10 +24,22 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
 
     private long before_generation = 0;
 
+    //v3
+    private HashSet<Integer> alive;
+    private HashMap<Integer, Integer> neighbours; // position, nombre de voisins.
+    private AtomicInteger lastIndex;
+
+    private int step; //1: alive, 2: neighbours.
+
     public GameOfLife(Environment env) throws RemoteException {
         super();
         this.env = env;
         this.pos = new AtomicInteger(0);
+
+        this.step = 1;
+        this.alive = new HashSet<Integer>(ENV_LENGTH);
+        this.lastIndex = new AtomicInteger(0);
+        this.neighbours = new HashMap<Integer, Integer>();
     }
 
     public void init() {
@@ -73,6 +88,24 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
         this.checkCompletion();
         int currPos = this.pos.getAndIncrement();
         return new GOLProcess(currPos, this.env.getSubEnv(currPos));
+    }
+
+    public IGOLProcess _getNext() throws RemoteException {
+        //this.checkCompletion();
+        if (this.step == 1) {
+            HashSet<Integer> subset = this.alive.stream()
+                    .skip(lastIndex.getAndAdd(CHUNK_SIZE))
+                    .limit(CHUNK_SIZE)
+                    .collect(Collectors.toCollection(HashSet::new));
+
+            return new PurgeProcess(subset, this.neighbours);
+        } else if (this.step == 2) {
+            Map<Integer, Integer> subset = this.neighbours.entrySet().stream()
+                    .skip(lastIndex.getAndAdd(CHUNK_SIZE))
+                    .limit(CHUNK_SIZE)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        }
     }
 
     @Override
