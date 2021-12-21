@@ -22,7 +22,7 @@ public class Client extends Thread {
     }
 
     private IGameOfLife gameOfLife = null;
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
 
     public Client() {
         try {
@@ -39,17 +39,19 @@ public class Client extends Thread {
                     IGOLProcess task = this.gameOfLife.getNext();
                     if (task != null) {
                         task.run();
+                        this.gameOfLife.sendResult(task);
                     } else if (DEBUG) {
                         System.out.println("task is null !");
                     }
-                    this.gameOfLife.sendResult(task);
                 } else {
                     if (DEBUG) {
                         System.out.println("Awaiting server");
-                        sleep(WAIT_DELAY);
+
                     }
                 }
-            } catch (RemoteException | InterruptedException e) {
+                System.out.println("==========");
+                sleep(WAIT_DELAY);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

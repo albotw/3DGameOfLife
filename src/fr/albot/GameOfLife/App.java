@@ -38,7 +38,6 @@ public class App {
             System.exit(1);
         }
         Environment env = new Environment();
-        env.randomValues(RAND_CELLS);
 
         while (true) {
             long before_cycle = System.currentTimeMillis();
@@ -79,8 +78,7 @@ public class App {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            env.nextGeneration();
+            
             System.gc();
         }
     }

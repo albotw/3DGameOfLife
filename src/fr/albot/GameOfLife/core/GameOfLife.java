@@ -1,47 +1,41 @@
 package fr.albot.GameOfLife.core;
 
 import fr.albot.GameOfLife.CONFIG.CONFIG;
-import fr.albot.GameOfLife.Engine.events.EventDispatcher;
-import fr.albot.GameOfLife.Engine.events.Events.UpdateSpritesEvent;
-import fr.albot.GameOfLife.Engine.events.ThreadID;
+import fr.albot.GameOfLife.Engine.SpriteManager;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
-import static fr.albot.GameOfLife.CONFIG.CONFIG.*;
+import static fr.albot.GameOfLife.CONFIG.CONFIG.CHUNK_SIZE;
+import static fr.albot.GameOfLife.CONFIG.CONFIG.SERVER_NAME;
 
 public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
-    public Environment env;
-    private AtomicInteger pos;
-    public Status status;
-
     private long before_generation = 0;
-
-    //v3
-    private HashSet<Integer> alive;
-    private HashMap<Integer, Integer> neighbours; // position, nombre de voisins.
-    private HashSet<Integer> next_alive;
-    private HashMap<Integer, Integer> next_neighbours;
+    private Status status = Status.CONTINUE;
+    private ArrayList<Integer> toDelete;
+    private ArrayList<Integer> toCreate;
     private AtomicInteger lastIndex;
+
+    private Environment env;
 
     private int step; //1: alive, 2: neighbours.
 
     public GameOfLife(Environment env) throws RemoteException {
         super();
-        this.env = env;
-        this.pos = new AtomicInteger(0);
 
         this.step = 1;
-        this.alive = new HashSet<Integer>(ENV_LENGTH);
+
+        this.toDelete = new ArrayList<Integer>();
+        this.toCreate = new ArrayList<Integer>();
+
         this.lastIndex = new AtomicInteger(0);
-        this.neighbours = new HashMap<Integer, Integer>();
+
+        this.env = new Environment();
+        this.env.blinker();
     }
 
     public void init() {
@@ -59,106 +53,61 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
 
     public void purge() {
         this.status = Status.WAIT;
-        this.env = null;
+        //this.env = null;
     }
 
+
     public void checkCompletion() {
-        if (this.pos.get() > ENV_LENGTH) {
+        if (this.lastIndex.get() > this.env.getAliveSize() && step == 1) {
             this.status = Status.WAIT;
-            this.env.nextGeneration();
-            //System.gc();
+            step = 2;
+            this.lastIndex.set(0);
+            this.status = Status.CONTINUE;
+        } else if (this.lastIndex.get() > this.env.getNeighboursSize() && step == 2) {
+            this.status = Status.WAIT;
+
+            this.env.nextGeneration(toDelete, toCreate);
+
+            this.toDelete.clear();
+            this.toCreate.clear();
+
+            if (CONFIG.RENDER_ACTIVE) {
+                SpriteManager.instance.update(this.env.getAlive());
+            }
 
             System.out.println("--- Generation completed in " + (System.currentTimeMillis() - before_generation) + " ms ---");
             this.before_generation = 0;
 
-
-            if (CONFIG.RENDER_ACTIVE) {
-                EventDispatcher.instance.publish(new UpdateSpritesEvent(), ThreadID.Render);
-            } else {
-                this.status = Status.CONTINUE;
-            }
-
-            this.pos.set(0);
+            step = 1;
+            this.lastIndex.set(0);
+            this.status = Status.CONTINUE;
         }
     }
 
-    public void _checkCompletion() {
-        if (this.lastIndex.get() > ENV_LENGTH) {
-            this.status = Status.WAIT;
-            if (step == 1) {
-                this.alive.clear();
-                this.alive = new HashSet<Integer>(this.next_alive);
-                this.next_alive.clear();
-
-                this.neighbours.clear();
-                this.neighbours = new HashMap<Integer, Integer>(this.next_neighbours);
-                this.next_neighbours.clear();
-
-                step = 2;
-                this.lastIndex.set(0);
-                this.status = Status.CONTINUE;
-            }
-            else if(step == 2) {
-                this.alive.clear();
-                this.alive = new HashSet<Integer>(this.next_alive);
-                this.next_alive.clear();
-
-                this.neighbours.clear();
-                this.neighbours = new HashMap<Integer, Integer>(this.next_neighbours);
-                this.next_neighbours.clear();
-
-                System.out.println("--- Generation completed in " + (System.currentTimeMillis() - before_generation) + " ms ---");
-                this.before_generation = 0;
-
-                step = 1;
-                this.lastIndex.set(0);
-                this.status = Status.CONTINUE;
-            }
-        }
-    }
-
-    @Override
     public IGOLProcess getNext() throws RemoteException {
-        if (this.before_generation == 0) {
-            this.before_generation = System.currentTimeMillis();
+        if (before_generation == 0) {
+            before_generation = System.currentTimeMillis();
         }
-        this.checkCompletion();
-        int currPos = this.pos.getAndIncrement();
-        return new GOLProcess(currPos, this.env.getSubEnv(currPos));
-    }
-
-    public IGOLProcess _getNext() throws RemoteException {
         this.checkCompletion();
         if (this.step == 1) {
-            HashSet<Integer> subset = this.alive.stream()
-                    .skip(lastIndex.getAndAdd(CHUNK_SIZE))
-                    .limit(CHUNK_SIZE)
-                    .collect(Collectors.toCollection(HashSet::new));
-
-            return new PurgeProcess(subset, this.neighbours);
+            return new PurgeProcess(this.env.getAliveSubset(lastIndex.getAndAdd(CHUNK_SIZE)), this.env.getNeighbours());
         } else if (this.step == 2) {
-            Map<Integer, Integer> subset = this.neighbours.entrySet().stream()
-                    .skip(lastIndex.getAndAdd(CHUNK_SIZE))
-                    .limit(CHUNK_SIZE)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            return new GenerateProcess(this.alive, subset);
+            return new GenerateProcess(this.env.getAlive(), this.env.getNeighboursSubset(lastIndex.getAndAdd(CHUNK_SIZE)));
+        } else {
+            System.out.println("null task ??");
+            return null;
         }
-
-        return null;
     }
 
-    @Override
     public void sendResult(IGOLProcess t) throws RemoteException {
-        if (t != null) {
-            GOLProcess task = (GOLProcess) t;
-            env.setCellState(task.pos, task.updatedState());
+        if (step == 1) {
+            this.toDelete.addAll(t.getResult());
+            //System.out.println(Arrays.toString(this.toDelete.toArray()));
         }
-    }
-
-    public void _sendResult(IGOLProcess t) throws RemoteException {
-        if (t != null) {
-            this.next_alive.addAll(t.getNextAlive());
-            this.next_neighbours.entrySet().addAll(t.getNextNeighbours().entrySet());
+        if (step == 2) {
+            this.toCreate.addAll(t.getResult());
+            //System.out.println(Arrays.toString(this.toCreate.toArray()));
+            // t.getNextNeighbours().forEach((key, value) -> this.next_neighbours.merge(key, value, (v1, v2) -> Objects.equals(v1, v2) ? v1 : v1 + v2));
         }
     }
 

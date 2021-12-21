@@ -2,16 +2,14 @@ package fr.albot.GameOfLife.Engine;
 
 import fr.albot.GameOfLife.Engine.geometry.Sprite;
 import fr.albot.GameOfLife.Engine.geometry.TexturedMesh;
-import fr.albot.GameOfLife.core.Environment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.ENV_SIZE;
 
 public class SpriteManager {
     public static SpriteManager instance;
-
-    private Environment env;
 
     private ArrayList<Sprite> geometry;
     private Sprite container;
@@ -34,15 +32,10 @@ public class SpriteManager {
 
         this.geometry.clear();
         this.container = null;
-        this.env = null;
     }
 
     private SpriteManager() {
         this.geometry = new ArrayList<>();
-    }
-
-    public void setEnv(Environment env) {
-        this.env = env;
     }
 
     public void init() {
@@ -64,18 +57,13 @@ public class SpriteManager {
         }
 
         //this.geometry.add(container);
-
-        this.displayEnv();
     }
 
-    public void displayEnv() {
-        for (int x = 0; x < ENV_SIZE; x++) {
-            for (int y = 0; y < ENV_SIZE; y++) {
-                for (int z = 0; z < ENV_SIZE; z++) {
-                    int index = (z * ENV_SIZE * ENV_SIZE) + (x * ENV_SIZE) + y;
-                    this.geometry.get(index).hidden = (env.getCellState(x, y, z));
-                }
-            }
+    public void update(HashSet<Integer> alive) {
+        for (Sprite s : this.geometry) {
+            if (alive.contains(this.geometry.indexOf(s))) {
+                s.hidden = false;
+            } else s.hidden = true;
         }
     }
 

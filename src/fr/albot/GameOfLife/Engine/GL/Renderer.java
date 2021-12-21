@@ -54,6 +54,8 @@ public class Renderer extends Thread {
         this.shader.createFragmentShader(Util.loadResource("ressources/shaders/fragment.glsl"));
         this.shader.createVertexShader(Util.loadResource("ressources/shaders/vertex.glsl"));
         this.shader.link();
+
+        this.spriteManager.init();
     }
 
 
@@ -108,7 +110,7 @@ public class Renderer extends Thread {
                     System.out.println("done purge");
                 }
                 if (e instanceof UpdateSpritesEvent) {
-                    this.spriteManager.displayEnv();
+                    //this.spriteManager.displayEnv();
                     this.eventQueue.send(new SpriteUpdateDoneEvent(), ThreadID.Server);
                     System.out.println("done update");
                 }

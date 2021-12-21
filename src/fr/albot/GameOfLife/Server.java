@@ -2,11 +2,9 @@ package fr.albot.GameOfLife;
 
 import fr.albot.GameOfLife.CONFIG.CONFIG;
 import fr.albot.GameOfLife.Engine.GL.Renderer;
-import fr.albot.GameOfLife.Engine.SpriteManager;
 import fr.albot.GameOfLife.Engine.events.Event;
 import fr.albot.GameOfLife.Engine.events.EventDispatcher;
 import fr.albot.GameOfLife.Engine.events.EventQueue;
-import fr.albot.GameOfLife.Engine.events.Events.InitGridEvent;
 import fr.albot.GameOfLife.Engine.events.Events.PurgeEvent;
 import fr.albot.GameOfLife.Engine.events.Events.SpriteUpdateDoneEvent;
 import fr.albot.GameOfLife.Engine.events.ThreadID;
@@ -14,6 +12,7 @@ import fr.albot.GameOfLife.core.Environment;
 import fr.albot.GameOfLife.core.GameOfLife;
 import fr.albot.GameOfLife.core.Status;
 
+import static fr.albot.GameOfLife.CONFIG.CONFIG.ENV_LENGTH;
 import static fr.albot.GameOfLife.CONFIG.CONFIG.RAND_CELLS;
 
 public class Server extends Thread {
@@ -39,6 +38,10 @@ public class Server extends Thread {
                         RAND_CELLS = (CONFIG.ENV_SIZE * CONFIG.ENV_SIZE * CONFIG.ENV_SIZE) / 2;
                         System.out.println("Set env_size to " + CONFIG.ENV_SIZE);
                         break;
+                    case "-chunksize":
+                        CONFIG.CHUNK_SIZE = Integer.parseInt(args[i + 1]);
+                        System.out.println("Set chunk_size to " + CONFIG.CHUNK_SIZE);
+                        break;
                     case "-cells":
                         RAND_CELLS = Integer.parseInt(args[i + 1]);
                         System.out.println("Will generate " + RAND_CELLS + " cells at random positions");
@@ -58,7 +61,8 @@ public class Server extends Thread {
             System.exit(1);
         }
         Server srv = new Server();
-        System.out.println(RAND_CELLS);
+        System.out.println("rand: " + RAND_CELLS);
+        System.out.println("length: " + ENV_LENGTH);
         if (CONFIG.RENDER_ACTIVE) {
             srv.start();
         }
@@ -96,28 +100,16 @@ public class Server extends Thread {
     }
 
     public void init() {
-        this.environment = new Environment();
-
-        if (CONFIG.RENDER_ACTIVE) {
-            SpriteManager.instance.setEnv(this.environment);
-        }
-
-        this.environment.randomValues(RAND_CELLS);
-
         try {
             this.gameOfLife = new GameOfLife(this.environment);
+            //this.gameOfLife.randomValues();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        if (CONFIG.RENDER_ACTIVE) {
-            this.eventQueue.send(new InitGridEvent(), ThreadID.Render);
-        } else {
-            this.gameOfLife.init();
-        }
+        this.gameOfLife.init();
     }
 
     public void reset() {
-        this.environment.purge();
         this.gameOfLife.purge();
         if (CONFIG.RENDER_ACTIVE) {
             this.eventQueue.send(new PurgeEvent(), ThreadID.Render);
