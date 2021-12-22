@@ -25,7 +25,7 @@ public class GenerateProcess implements IGOLProcess, Serializable {
 
         for (Integer cell : neighbours.keySet()) {
             Integer aliveNeighbours = neighbours.get(cell);
-            if (aliveNeighbours == ALIVE_THRESHOLD || aliveNeighbours == CURRENT_THRESHOLD && !alive.contains(cell)) {
+            if ((aliveNeighbours == ALIVE_THRESHOLD || aliveNeighbours == CURRENT_THRESHOLD) && !alive.contains(cell)) {
                 toCreate.add(cell);
             }
         }

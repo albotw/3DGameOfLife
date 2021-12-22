@@ -21,5 +21,5 @@ public class CONFIG {
     public static String SERVER_NAME = "GOL_SERVER";
     public static int ALIVE_THRESHOLD = 5;
     public static int CURRENT_THRESHOLD = 4;
-    public static int WAIT_DELAY = 1000;
+    public static int WAIT_DELAY = 200;
 }
