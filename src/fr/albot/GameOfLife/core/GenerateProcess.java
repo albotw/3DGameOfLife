@@ -1,7 +1,9 @@
 package fr.albot.GameOfLife.core;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.ALIVE_THRESHOLD;
 import static fr.albot.GameOfLife.CONFIG.CONFIG.CURRENT_THRESHOLD;
@@ -9,18 +11,20 @@ import static fr.albot.GameOfLife.CONFIG.CONFIG.CURRENT_THRESHOLD;
 public class GenerateProcess implements IGOLProcess, Serializable {
 
     private HashSet<Integer> alive;
-    private Map<Integer, Integer> neighbours;
+    private ConcurrentHashMap<Integer, Integer> neighbours;
     private ArrayList<Integer> toCreate;
 
 
-    public GenerateProcess(HashSet<Integer> alive, Map<Integer, Integer> neighbours) {
+    public GenerateProcess(HashSet<Integer> alive, ConcurrentHashMap<Integer, Integer> neighbours) {
         this.alive = alive;
         this.neighbours = neighbours;
     }
 
     @Override
     public void run() {
-        System.out.println(Arrays.toString(neighbours.values().toArray()));
+        long before = System.currentTimeMillis();
+        System.out.println("Starting generate subprocess");
+        //System.out.println(Arrays.toString(neighbours.values().toArray()));
         toCreate = new ArrayList<>();
 
         for (Integer cell : neighbours.keySet()) {
@@ -31,14 +35,15 @@ public class GenerateProcess implements IGOLProcess, Serializable {
         }
 
         System.out.println("Cells to create: " + toCreate.size());
+        System.out.println("## Process duration: " + (System.currentTimeMillis() - before) + " ms");
     }
 
     public HashSet<Integer> getNextAlive() {
         return this.alive;
     }
 
-    public HashMap<Integer, Integer> getNextNeighbours() {
-        return (HashMap<Integer, Integer>) this.neighbours;
+    public ConcurrentHashMap<Integer, Integer> getNextNeighbours() {
+        return (ConcurrentHashMap<Integer, Integer>) this.neighbours;
     }
 
     @Override

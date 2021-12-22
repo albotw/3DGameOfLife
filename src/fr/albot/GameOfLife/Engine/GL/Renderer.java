@@ -5,10 +5,8 @@ import fr.albot.GameOfLife.Engine.UI.UI;
 import fr.albot.GameOfLife.Engine.Util;
 import fr.albot.GameOfLife.Engine.events.Event;
 import fr.albot.GameOfLife.Engine.events.EventQueue;
-import fr.albot.GameOfLife.Engine.events.Events.InitGridEvent;
 import fr.albot.GameOfLife.Engine.events.Events.PurgeEvent;
-import fr.albot.GameOfLife.Engine.events.Events.SpriteUpdateDoneEvent;
-import fr.albot.GameOfLife.Engine.events.Events.UpdateSpritesEvent;
+import fr.albot.GameOfLife.Engine.events.Events.SetBaseEnv;
 import fr.albot.GameOfLife.Engine.events.ThreadID;
 import fr.albot.GameOfLife.Engine.geometry.Sprite;
 import fr.albot.GameOfLife.Engine.geometry.TexturedMesh;
@@ -101,18 +99,10 @@ public class Renderer extends Thread {
             // ! UPDATE --------------------------------------------------------
             if (!this.eventQueue.isEmpty()) {
                 Event e = this.eventQueue.get();
-                if (e instanceof InitGridEvent) {
-                    this.spriteManager.init();
-                    System.out.println("done init");
-                }
                 if (e instanceof PurgeEvent) {
                     this.spriteManager.purge();
-                    System.out.println("done purge");
-                }
-                if (e instanceof UpdateSpritesEvent) {
-                    //this.spriteManager.displayEnv();
-                    this.eventQueue.send(new SpriteUpdateDoneEvent(), ThreadID.Server);
-                    System.out.println("done update");
+                } else if (e instanceof SetBaseEnv) {
+                    this.spriteManager.update(((SetBaseEnv) e).alive);
                 }
             }
 

@@ -2,27 +2,20 @@ package fr.albot.GameOfLife;
 
 import fr.albot.GameOfLife.CONFIG.CONFIG;
 import fr.albot.GameOfLife.Engine.GL.Renderer;
-import fr.albot.GameOfLife.Engine.events.Event;
 import fr.albot.GameOfLife.Engine.events.EventDispatcher;
 import fr.albot.GameOfLife.Engine.events.EventQueue;
 import fr.albot.GameOfLife.Engine.events.Events.PurgeEvent;
-import fr.albot.GameOfLife.Engine.events.Events.SpriteUpdateDoneEvent;
 import fr.albot.GameOfLife.Engine.events.ThreadID;
-import fr.albot.GameOfLife.core.Environment;
 import fr.albot.GameOfLife.core.GameOfLife;
-import fr.albot.GameOfLife.core.Status;
 
-import static fr.albot.GameOfLife.CONFIG.CONFIG.ENV_LENGTH;
 import static fr.albot.GameOfLife.CONFIG.CONFIG.RAND_CELLS;
 
 public class Server extends Thread {
     private GameOfLife gameOfLife;
     private Renderer renderer;
     private EventQueue eventQueue;
-    private Environment environment;
 
     public static Server instance;
-    private boolean running = true;
 
     public static void main(String[] args) {
         try {
@@ -33,6 +26,7 @@ public class Server extends Thread {
                         CONFIG.RENDER_ACTIVE = false;
                         System.out.println("Disabled rendering");
                         break;
+
                     case "-envsize":
                         CONFIG.ENV_SIZE = Integer.parseInt(args[i + 1]);
                         RAND_CELLS = (CONFIG.ENV_SIZE * CONFIG.ENV_SIZE * CONFIG.ENV_SIZE) / 2;
@@ -61,11 +55,7 @@ public class Server extends Thread {
             System.exit(1);
         }
         Server srv = new Server();
-        System.out.println("rand: " + RAND_CELLS);
-        System.out.println("length: " + ENV_LENGTH);
-        if (CONFIG.RENDER_ACTIVE) {
-            srv.start();
-        }
+        srv.init();
     }
 
     public Server() {
@@ -78,35 +68,15 @@ public class Server extends Thread {
             this.renderer = new Renderer();
             this.renderer.start();
         }
-
-        this.init();
-    }
-
-    public void run() {
-        while (running) {
-            if (!this.eventQueue.isEmpty()) {
-                Event e = this.eventQueue.get();
-                if (e instanceof SpriteUpdateDoneEvent) {
-                    this.gameOfLife.setStatus(Status.CONTINUE);
-                }
-            }
-
-            try {
-                sleep(10);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 
     public void init() {
         try {
-            this.gameOfLife = new GameOfLife(this.environment);
-            //this.gameOfLife.randomValues();
+            this.gameOfLife = new GameOfLife();
+            this.gameOfLife.init();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        this.gameOfLife.init();
     }
 
     public void reset() {
@@ -115,6 +85,8 @@ public class Server extends Thread {
             this.eventQueue.send(new PurgeEvent(), ThreadID.Render);
         }
         System.gc();
+
+        this.init();
     }
 
     public void activate() {

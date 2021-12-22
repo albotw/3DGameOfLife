@@ -1,5 +1,7 @@
 package fr.albot.GameOfLife.CONFIG;
 
+import fr.albot.GameOfLife.core.Pattern;
+
 public class CONFIG {
     //configuration rendu
     public static boolean INSTANCED_RENDER = true;
@@ -13,13 +15,13 @@ public class CONFIG {
 
     //configuration process
     public static boolean RENDER_ACTIVE = true;
+    public static Pattern PATTERN = Pattern.RAND;
     public static int ENV_SIZE = 10;
     public static int ENV_LENGTH = ENV_SIZE * ENV_SIZE * ENV_SIZE;
     public static int CHUNK_SIZE = 10;
     public static int RAND_CELLS = ENV_LENGTH / 2;
-    public static int SUB_ENV_SIZE = 3;                        // ! IMPAIR OBLIGATOIRE
     public static String SERVER_NAME = "GOL_SERVER";
     public static int ALIVE_THRESHOLD = 5;
     public static int CURRENT_THRESHOLD = 4;
-    public static int WAIT_DELAY = 200;
+    public static int WAIT_DELAY = 10;
 }

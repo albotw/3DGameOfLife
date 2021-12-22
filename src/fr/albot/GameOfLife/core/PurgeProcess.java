@@ -2,27 +2,28 @@ package fr.albot.GameOfLife.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.ALIVE_THRESHOLD;
 import static fr.albot.GameOfLife.CONFIG.CONFIG.CURRENT_THRESHOLD;
 
 public class PurgeProcess implements IGOLProcess, Serializable {
     private HashSet<Integer> alive; // sous ensemble de cellules en vies
-    private HashMap<Integer, Integer> neighbours; //ensemble complet du voisinage
+    private ConcurrentHashMap<Integer, Integer> neighbours; //ensemble complet du voisinage
     private ArrayList<Integer> toDelete;
 
 
-    public PurgeProcess(HashSet<Integer> alive, HashMap<Integer, Integer> neighbours) {
+    public PurgeProcess(HashSet<Integer> alive, ConcurrentHashMap<Integer, Integer> neighbours) {
         this.alive = alive;
         this.neighbours = neighbours;
     }
 
     @Override
     public void run() {
-        System.out.println(Arrays.toString(neighbours.values().toArray()));
+        long before = System.currentTimeMillis();
+        System.out.println("Starting purge subprocess");
+        //System.out.println(Arrays.toString(neighbours.values().toArray()));
         this.toDelete = new ArrayList<>();
         for (int cell : alive) {
             Integer n = neighbours.get(cell);
@@ -31,6 +32,7 @@ public class PurgeProcess implements IGOLProcess, Serializable {
             }
         }
         System.out.println("Cells to delete: " + toDelete.size());
+        System.out.println("## Process duration: " + (System.currentTimeMillis() - before) + " ms");
     }
 
     @Override
@@ -39,7 +41,7 @@ public class PurgeProcess implements IGOLProcess, Serializable {
     }
 
     @Override
-    public HashMap<Integer, Integer> getNextNeighbours() {
+    public ConcurrentHashMap<Integer, Integer> getNextNeighbours() {
         return this.neighbours;
     }
 

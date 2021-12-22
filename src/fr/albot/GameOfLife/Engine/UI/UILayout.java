@@ -24,11 +24,8 @@ public class UILayout {
                 if (nk_button_label(UI.context, "Start")) {
                     Server.instance.activate();
                 }
-                if (nk_button_label(UI.context, "Clear")) {
+                if (nk_button_label(UI.context, "Reset")) {
                     Server.instance.reset();
-                }
-                if (nk_button_label(UI.context, "Generate")) {
-                    Server.instance.init();
                 }
             }
             nk_end(UI.context);

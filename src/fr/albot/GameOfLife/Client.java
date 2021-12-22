@@ -10,11 +10,11 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.SERVER_NAME;
-import static fr.albot.GameOfLife.CONFIG.CONFIG.WAIT_DELAY;
 
 public class Client extends Thread {
     public static void main(String[] args) {
         if (args.length == 1 && args[0].equals("-verbose")) {
+            System.out.println("Debug mode active");
             DEBUG = true;
         }
         Client c = new Client();
@@ -44,13 +44,10 @@ public class Client extends Thread {
                         System.out.println("task is null !");
                     }
                 } else {
-                    if (DEBUG) {
-                        System.out.println("Awaiting server");
-
-                    }
+                    System.out.println("Awaiting server");
+                    sleep(10);
                 }
                 System.out.println("==========");
-                sleep(WAIT_DELAY);
             } catch (Exception e) {
                 e.printStackTrace();
             }

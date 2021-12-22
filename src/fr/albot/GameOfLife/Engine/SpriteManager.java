@@ -12,7 +12,6 @@ public class SpriteManager {
     public static SpriteManager instance;
 
     private ArrayList<Sprite> geometry;
-    private Sprite container;
 
     // le return est important => permet le lien vers le contexte OGL
     public static SpriteManager createSpriteManager() {
@@ -28,10 +27,8 @@ public class SpriteManager {
         for (Sprite s : geometry) {
             s.purge();
         }
-        this.container.purge();
 
         this.geometry.clear();
-        this.container = null;
     }
 
     private SpriteManager() {
@@ -39,8 +36,6 @@ public class SpriteManager {
     }
 
     public void init() {
-        //container = new Sprite(Mesh.Cube(new Vector3f(1.0f, 1.0f, 1.0f)), true);
-        //container.scale = ENV_SIZE;
 
         //TODO: revoir création de la grille.
         float offset = (0.5f * (ENV_SIZE - 1));

@@ -2,6 +2,9 @@ package fr.albot.GameOfLife.core;
 
 import fr.albot.GameOfLife.CONFIG.CONFIG;
 import fr.albot.GameOfLife.Engine.SpriteManager;
+import fr.albot.GameOfLife.Engine.events.EventDispatcher;
+import fr.albot.GameOfLife.Engine.events.Events.SetBaseEnv;
+import fr.albot.GameOfLife.Engine.events.ThreadID;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -24,7 +27,7 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
 
     private int step; //1: alive, 2: neighbours.
 
-    public GameOfLife(Environment env) throws RemoteException {
+    public GameOfLife() throws RemoteException {
         super();
 
         this.step = 1;
@@ -35,11 +38,15 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
         this.lastIndex = new AtomicInteger(0);
 
         this.env = new Environment();
-        this.env.blinker();
     }
 
     public void init() {
-        //this.createChunks();
+        if (CONFIG.PATTERN == Pattern.BLINKER) {
+            this.env.blinker();
+        } else if (CONFIG.PATTERN == Pattern.RAND) {
+            this.env.randomValues();
+        }
+
         try {
             System.setProperty("java.rmi.server.hostname", "127.0.0.1");
             Naming.rebind(SERVER_NAME, this);
@@ -48,22 +55,29 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
             e.printStackTrace();
         }
 
+        if (CONFIG.RENDER_ACTIVE) {
+            EventDispatcher.instance.publish(new SetBaseEnv(this.env.getAlive()), ThreadID.Render);
+        }
+
         this.status = Status.CONTINUE;
     }
 
     public void purge() {
         this.status = Status.WAIT;
-        //this.env = null;
+        this.before_generation = 0;
+        this.toCreate.clear();
+        this.toDelete.clear();
+        this.env.purge();
     }
 
 
     public void checkCompletion() {
-        if (this.lastIndex.get() > this.env.getAliveSize() && step == 1) {
+        if (this.lastIndex.get() >= this.env.getAliveSize() && step == 1) {
             this.status = Status.WAIT;
             step = 2;
             this.lastIndex.set(0);
             this.status = Status.CONTINUE;
-        } else if (this.lastIndex.get() > this.env.getNeighboursSize() && step == 2) {
+        } else if (this.lastIndex.get() >= this.env.getNeighboursSize() && step == 2) {
             this.status = Status.WAIT;
 
             this.env.nextGeneration(toDelete, toCreate);
@@ -84,7 +98,7 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
         }
     }
 
-    public IGOLProcess getNext() throws RemoteException {
+    public synchronized IGOLProcess getNext() throws RemoteException {
         if (before_generation == 0) {
             before_generation = System.currentTimeMillis();
         }
@@ -99,24 +113,17 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
         }
     }
 
-    public void sendResult(IGOLProcess t) throws RemoteException {
+    public synchronized void sendResult(IGOLProcess t) throws RemoteException {
         if (step == 1) {
             this.toDelete.addAll(t.getResult());
-            //System.out.println(Arrays.toString(this.toDelete.toArray()));
         }
         if (step == 2) {
             this.toCreate.addAll(t.getResult());
-            //System.out.println(Arrays.toString(this.toCreate.toArray()));
-            // t.getNextNeighbours().forEach((key, value) -> this.next_neighbours.merge(key, value, (v1, v2) -> Objects.equals(v1, v2) ? v1 : v1 + v2));
         }
     }
 
     @Override
     public Status getStatus() throws RemoteException {
         return this.status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 }

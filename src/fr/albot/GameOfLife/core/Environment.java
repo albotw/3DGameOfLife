@@ -1,19 +1,21 @@
 package fr.albot.GameOfLife.core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.*;
 
 public class Environment {
     private HashSet<Integer> alive;
-    private HashMap<Integer, Integer> neighbours; // position, nombre de voisins.
+    private ConcurrentHashMap<Integer, Integer> neighbours; // position, nombre de voisins.
+    private Iterator<Map.Entry<Integer, Integer>> neighboursIterator;
 
     public Environment() {
-        this.alive = new HashSet<Integer>(ENV_LENGTH);
-        this.neighbours = new HashMap<Integer, Integer>();
+        init();
     }
 
     public static int to1d(int x, int y, int z) {
@@ -33,6 +35,18 @@ public class Environment {
         return (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE && z >= 0 && z < ENV_SIZE);
     }
 
+    public void init() {
+        this.alive = new HashSet<Integer>(ENV_LENGTH);
+        this.neighbours = new ConcurrentHashMap<Integer, Integer>();
+    }
+
+    public void purge() {
+        this.alive.clear();
+        this.neighbours.clear();
+        this.alive = null;
+        this.neighbours = null;
+    }
+
     public void blinker() {
         int[] positions = {
                 5, 5, 5,
@@ -50,22 +64,7 @@ public class Environment {
             int k = positions[cell + 2];
             int hash = Environment.to1d(i, j, k);
             this.alive.add(hash);
-
-            for (int x = i - 1; x <= i + 1; x++) {
-                for (int y = j - 1; y <= j + 1; y++) {
-                    for (int z = k - 1; z <= k + 1; z++) {
-
-                        if (!(x == i && y == j && z == k) && inBounds(x, y, z)) {
-                            int neighbour = Environment.to1d(x, y, z);
-                            if (this.neighbours.containsKey(neighbour)) {
-                                this.neighbours.put(neighbour, this.neighbours.get(neighbour) + 1);
-                            } else {
-                                this.neighbours.put(neighbour, 1);
-                            }
-                        }
-                    }
-                }
-            }
+            this.generateNeighbours(i, j, k);
         }
 
         System.out.println("Generated blinker pattern");
@@ -84,21 +83,7 @@ public class Environment {
             if (!this.alive.contains(cell)) {
                 this.alive.add(cell);
 
-                for (int x = i - 1; x <= i + 1; x++) {
-                    for (int y = j - 1; y <= j + 1; y++) {
-                        for (int z = k - 1; z <= k + 1; z++) {
-
-                            if (!(x == i && y == j && z == k) && inBounds(x, y, z)) {
-                                int neighbour = Environment.to1d(x, y, z);
-                                if (this.neighbours.containsKey(neighbour)) {
-                                    this.neighbours.put(neighbour, this.neighbours.get(neighbour) + 1);
-                                } else {
-                                    this.neighbours.put(neighbour, 1);
-                                }
-                            }
-                        }
-                    }
-                }
+                generateNeighbours(i, j, k);
 
                 counter++;
             }
@@ -106,6 +91,26 @@ public class Environment {
 
         System.out.println("generated " + this.alive.size() + " alive cells");
         System.out.println("generated " + this.neighbours.size() + " neighbours");
+    }
+
+    public void generateNeighbours(int i, int j, int k) {
+        for (int x = i - 1; x <= i + 1; x++) {
+            for (int y = j - 1; y <= j + 1; y++) {
+                for (int z = k - 1; z <= k + 1; z++) {
+
+                    if (!(x == i && y == j && z == k) && inBounds(x, y, z)) {
+                        int neighbour = Environment.to1d(x, y, z);
+                        if (this.neighbours.containsKey(neighbour)) {
+                            this.neighbours.put(neighbour, this.neighbours.get(neighbour) + 1);
+                        } else {
+                            this.neighbours.put(neighbour, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        this.neighboursIterator = this.neighbours.entrySet().iterator();
     }
 
     public void nextGeneration(ArrayList<Integer> toDelete, ArrayList<Integer> toCreate) {
@@ -161,6 +166,8 @@ public class Environment {
             }
         }
 
+        this.neighboursIterator = this.neighbours.entrySet().iterator();
+
         System.out.println("alive: " + this.alive.size());
         System.out.println("neighbours: " + this.neighbours.size());
     }
@@ -177,7 +184,7 @@ public class Environment {
         return this.alive;
     }
 
-    public HashMap<Integer, Integer> getNeighbours() {
+    public ConcurrentHashMap<Integer, Integer> getNeighbours() {
         return this.neighbours;
     }
 
@@ -188,18 +195,16 @@ public class Environment {
                 .collect(Collectors.toCollection(HashSet::new));
     }
 
-    public HashMap<Integer, Integer> getNeighboursSubset(int lastIndex) {
-        HashMap<Integer, Integer> subset = new HashMap<Integer, Integer>();
+    public ConcurrentHashMap<Integer, Integer> getNeighboursSubset(int lastIndex) {
+        ConcurrentHashMap<Integer, Integer> subset = new ConcurrentHashMap<Integer, Integer>();
         int begin = lastIndex;
-        for (int i = begin; i < begin + CHUNK_SIZE; i++) {
-            if (i < this.neighbours.size()) {
-                Integer key = (Integer) this.neighbours.keySet().toArray()[i];
-                subset.put(key, this.neighbours.get(key));
-            } else {
-                i = begin + CHUNK_SIZE + 1;
+        int end = begin + CHUNK_SIZE;
+        for (int i = begin; i < end; i++) {
+            if (this.neighboursIterator.hasNext()) {
+                Map.Entry<Integer, Integer> pair = this.neighboursIterator.next();
+                subset.put(pair.getKey(), pair.getValue());
             }
         }
-
         return subset;
     }
 }
