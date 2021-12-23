@@ -41,8 +41,8 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     }
 
     public void init() {
-        if (CONFIG.PATTERN == Pattern.BLINKER) {
-            this.env.blinker();
+        if (CONFIG.PATTERN == Pattern.CUSTOM) {
+            this.env.loadFromFile(CONFIG.PATTERN_FILE);
         } else if (CONFIG.PATTERN == Pattern.RAND) {
             this.env.randomValues();
         }

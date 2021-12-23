@@ -7,6 +7,7 @@ import fr.albot.GameOfLife.Engine.events.EventQueue;
 import fr.albot.GameOfLife.Engine.events.Events.PurgeEvent;
 import fr.albot.GameOfLife.Engine.events.ThreadID;
 import fr.albot.GameOfLife.core.GameOfLife;
+import fr.albot.GameOfLife.core.Pattern;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.RAND_CELLS;
 
@@ -26,7 +27,11 @@ public class Server extends Thread {
                         CONFIG.RENDER_ACTIVE = false;
                         System.out.println("Disabled rendering");
                         break;
-
+                    case "-file":
+                        CONFIG.PATTERN = Pattern.CUSTOM;
+                        CONFIG.PATTERN_FILE = args[i + 1];
+                        System.out.println("Will load env from " + CONFIG.PATTERN_FILE);
+                        break;
                     case "-envsize":
                         CONFIG.ENV_SIZE = Integer.parseInt(args[i + 1]);
                         RAND_CELLS = (CONFIG.ENV_SIZE * CONFIG.ENV_SIZE * CONFIG.ENV_SIZE) / 2;

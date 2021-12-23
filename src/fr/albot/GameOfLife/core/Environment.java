@@ -1,5 +1,9 @@
 package fr.albot.GameOfLife.core;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -47,31 +51,6 @@ public class Environment {
         this.neighbours = null;
     }
 
-    public void blinker() {
-        int[] positions = {
-                5, 5, 5,
-                4, 5, 5,
-                6, 5, 5,
-                5, 4, 5,
-                5, 6, 5,
-                5, 5, 4,
-                5, 5, 6
-        };
-
-        for (int cell = 0; cell < positions.length; cell += 3) {
-            int i = positions[cell];
-            int j = positions[cell + 1];
-            int k = positions[cell + 2];
-            int hash = Environment.to1d(i, j, k);
-            this.alive.add(hash);
-            this.generateNeighbours(i, j, k);
-        }
-
-        System.out.println("Generated blinker pattern");
-        System.out.println("generated " + this.alive.size() + " alive cells");
-        System.out.println("generated " + this.neighbours.size() + " neighbours");
-    }
-
     public void randomValues() {
         int counter = 0;
         do {
@@ -91,6 +70,34 @@ public class Environment {
 
         System.out.println("generated " + this.alive.size() + " alive cells");
         System.out.println("generated " + this.neighbours.size() + " neighbours");
+    }
+
+    public void loadFromFile(String path) {
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(path));
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] pos = line.split(" ");
+                int i = Integer.parseInt(pos[0]);
+                int j = Integer.parseInt(pos[1]);
+                int k = Integer.parseInt(pos[2]);
+
+                int cell = Environment.to1d(i, j, k);
+                if (!this.alive.contains(cell)) {
+                    this.alive.add(cell);
+                    generateNeighbours(i, j, k);
+                }
+                line = br.readLine();
+            }
+
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void generateNeighbours(int i, int j, int k) {

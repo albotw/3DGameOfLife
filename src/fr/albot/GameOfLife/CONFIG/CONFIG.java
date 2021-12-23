@@ -16,6 +16,7 @@ public class CONFIG {
     //configuration process
     public static boolean RENDER_ACTIVE = true;
     public static Pattern PATTERN = Pattern.RAND;
+    public static String PATTERN_FILE = "";
     public static int ENV_SIZE = 10;
     public static int ENV_LENGTH = ENV_SIZE * ENV_SIZE * ENV_SIZE;
     public static int CHUNK_SIZE = 10;
