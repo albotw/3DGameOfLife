@@ -1,13 +1,11 @@
 {
   "build": "release",
   "mode": "zip",
-  "selectedAddons": [
-    "joml"
-  ],
+  "selectedAddons": [],
   "platform": [
-    "windows"
+    "linux"
   ],
-  "descriptions": true,
+  "descriptions": false,
   "compact": false,
   "hardcoded": false,
   "javadoc": true,
