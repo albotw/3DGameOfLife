@@ -123,7 +123,7 @@ public class GameOfLife extends UnicastRemoteObject implements IGameOfLife {
     }
 
     @Override
-    public Status getStatus() throws RemoteException {
+    public synchronized Status getStatus() throws RemoteException {
         return this.status;
     }
 }
