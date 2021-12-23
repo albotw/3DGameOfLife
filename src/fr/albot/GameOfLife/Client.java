@@ -33,23 +33,25 @@ public class Client extends Thread {
     }
 
     public void run() {
-        while (true) {
-            try {
-                if (this.gameOfLife.getStatus() == Status.CONTINUE) {
-                    IGOLProcess task = this.gameOfLife.getNext();
-                    if (task != null) {
-                        task.run();
-                        this.gameOfLife.sendResult(task);
-                    } else if (DEBUG) {
-                        System.out.println("task is null !");
+        if (this.gameOfLife != null){
+            while (true) {
+                try {
+                    if (this.gameOfLife.getStatus() == Status.CONTINUE) {
+                        IGOLProcess task = this.gameOfLife.getNext();
+                        if (task != null) {
+                            task.run();
+                            this.gameOfLife.sendResult(task);
+                        } else if (DEBUG) {
+                            System.out.println("task is null !");
+                        }
+                    } else {
+                        System.out.println("Awaiting server");
+                        sleep(10);
                     }
-                } else {
-                    System.out.println("Awaiting server");
-                    sleep(10);
+                    System.out.println("==========");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                System.out.println("==========");
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
