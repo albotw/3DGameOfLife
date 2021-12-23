@@ -22,9 +22,11 @@ x = i % width;
 y = i / width;
 
 FIXME:
+- Check fonctionnement linux (surtout LWJGL)
+- manque paramétrage de l'adresse du serveur
+- manque chargeur de configuration par fichier txt
 
 TODO:
 - optimisation rendu: passer en mode instancé avec matrice de modèle calculée dans le shader.
 - panneau de controle pour reset / regénérer un envirronement
-- ajouter chargeur de configurations
 - afficher plus d'informations: statut des clients, tâches restantes, etc..
