@@ -2,8 +2,8 @@ package fr.albot.GameOfLife;
 
 import fr.albot.GameOfLife.CONFIG.CONFIG;
 import fr.albot.GameOfLife.core.Environment;
-import fr.albot.GameOfLife.core.GameOfLife;
 import fr.albot.GameOfLife.core.Pattern;
+import fr.albot.GameOfLife.core.distributed.DistributedGameOfLife;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import static fr.albot.GameOfLife.CONFIG.CONFIG.*;
 
 public class SingleHash {
 
-    private static GameOfLife gol;
+    private static DistributedGameOfLife gol;
 
     public static void main(String[] args) throws RemoteException {
         try {
@@ -84,7 +84,6 @@ public class SingleHash {
 
             env.nextGeneration(toDelete, toCreate);
             System.out.println("--- Generation completed in " + (System.currentTimeMillis() - before) + " ms ---");
-            before = 0;
 
         }
     }

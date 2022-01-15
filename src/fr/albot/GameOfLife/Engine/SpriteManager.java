@@ -12,6 +12,7 @@ public class SpriteManager {
     public static SpriteManager instance;
 
     private ArrayList<Sprite> geometry;
+    private int envsize;
 
     // le return est important => permet le lien vers le contexte OGL
     public static SpriteManager createSpriteManager() {
@@ -36,12 +37,12 @@ public class SpriteManager {
     }
 
     public void init() {
-
+        this.envsize = ENV_SIZE;
         //TODO: revoir création de la grille.
-        float offset = (0.5f * (ENV_SIZE - 1));
-        for (int x = 0; x < ENV_SIZE; x++) {
-            for (int y = 0; y < ENV_SIZE; y++) {
-                for (int z = 0; z < ENV_SIZE; z++) {
+        float offset = (0.5f * (this.envsize - 1));
+        for (int x = 0; x < this.envsize; x++) {
+            for (int y = 0; y < this.envsize; y++) {
+                for (int z = 0; z < this.envsize; z++) {
                     Sprite s = new Sprite(TexturedMesh.cube(), false);
                     s.moveTo(x - offset, y - offset, z - offset);
                     s.scale = 0.8f;
