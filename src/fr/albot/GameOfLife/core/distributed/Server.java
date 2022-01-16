@@ -1,4 +1,4 @@
-package fr.albot.GameOfLife;
+package fr.albot.GameOfLife.core.distributed;
 
 import fr.albot.GameOfLife.CONFIG.CONFIG;
 import fr.albot.GameOfLife.Engine.GL.Renderer;
@@ -6,13 +6,12 @@ import fr.albot.GameOfLife.Engine.events.EventDispatcher;
 import fr.albot.GameOfLife.Engine.events.EventQueue;
 import fr.albot.GameOfLife.Engine.events.Events.PurgeEvent;
 import fr.albot.GameOfLife.Engine.events.ThreadID;
-import fr.albot.GameOfLife.core.GameOfLife;
 import fr.albot.GameOfLife.core.Pattern;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.RAND_CELLS;
 
 public class Server extends Thread {
-    private GameOfLife gameOfLife;
+    private DistributedGameOfLife gameOfLife;
     private Renderer renderer;
     private EventQueue eventQueue;
 
@@ -77,7 +76,7 @@ public class Server extends Thread {
 
     public void init() {
         try {
-            this.gameOfLife = new GameOfLife();
+            this.gameOfLife = new DistributedGameOfLife();
             this.gameOfLife.init();
         } catch (Exception ex) {
             ex.printStackTrace();

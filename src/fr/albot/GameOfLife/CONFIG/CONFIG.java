@@ -24,5 +24,17 @@ public class CONFIG {
     public static String SERVER_NAME = "GOL_SERVER";
     public static int ALIVE_THRESHOLD = 5;
     public static int CURRENT_THRESHOLD = 4;
-    public static int WAIT_DELAY = 10;
+    public static int WAIT_DELAY = 500;
+
+    public static void setEnvSize(int value) {
+        CONFIG.ENV_SIZE = value;
+        CONFIG.ENV_LENGTH = ENV_SIZE * ENV_SIZE * ENV_SIZE;
+        CONFIG.RAND_CELLS = ENV_LENGTH / 2;
+    }
+
+    public static void setRandCells(int value) {
+        if (value < ENV_LENGTH && value >= 0) {
+            CONFIG.RAND_CELLS = value;
+        }
+    }
 }

@@ -4,5 +4,6 @@ public enum ThreadID {
     Render,
     App,
     Server,
-    Client
+    Client,
+    GOL
 }

@@ -1,4 +1,4 @@
-package fr.albot.GameOfLife.core;
+package fr.albot.GameOfLife.core.distributed;
 
 import java.io.Serializable;
 import java.util.ArrayList;

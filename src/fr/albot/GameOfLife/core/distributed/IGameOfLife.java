@@ -1,4 +1,4 @@
-package fr.albot.GameOfLife.core;
+package fr.albot.GameOfLife.core.distributed;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -18,29 +18,34 @@ public class Environment {
     private ConcurrentHashMap<Integer, Integer> neighbours; // position, nombre de voisins.
     private Iterator<Map.Entry<Integer, Integer>> neighboursIterator;
 
+    private static int envSize;
+    private static int envLength;
+
     public Environment() {
         init();
     }
 
     public static int to1d(int x, int y, int z) {
-        return (x + (y * ENV_SIZE) + z * (ENV_SIZE * ENV_SIZE));
+        return (x + (y * envSize) + z * (envSize * envSize));
     }
 
     public static int[] to3d(int index) {
-        int z = index / (ENV_SIZE * ENV_SIZE);
-        index -= z * ENV_SIZE * ENV_SIZE;
-        int x = index % ENV_SIZE;
-        int y = index / ENV_SIZE;
+        int z = index / (envSize * envSize);
+        index -= z * envSize * envSize;
+        int x = index % envSize;
+        int y = index / envSize;
 
         return new int[]{x, y, z};
     }
 
     public static boolean inBounds(int x, int y, int z) {
-        return (x >= 0 && x < ENV_SIZE && y >= 0 && y < ENV_SIZE && z >= 0 && z < ENV_SIZE);
+        return (x >= 0 && x < envSize && y >= 0 && y < envSize && z >= 0 && z < envSize);
     }
 
     public void init() {
-        this.alive = new HashSet<Integer>(ENV_LENGTH);
+        Environment.envSize = ENV_SIZE;
+        Environment.envLength = ENV_LENGTH;
+        this.alive = new HashSet<Integer>(envLength);
         this.neighbours = new ConcurrentHashMap<Integer, Integer>();
     }
 
@@ -54,9 +59,9 @@ public class Environment {
     public void randomValues() {
         int counter = 0;
         do {
-            int i = (int) (Math.random() * ENV_SIZE);
-            int j = (int) (Math.random() * ENV_SIZE);
-            int k = (int) (Math.random() * ENV_SIZE);
+            int i = (int) (Math.random() * envSize);
+            int j = (int) (Math.random() * envSize);
+            int k = (int) (Math.random() * envSize);
             int cell = Environment.to1d(i, j, k);
 
             if (!this.alive.contains(cell)) {

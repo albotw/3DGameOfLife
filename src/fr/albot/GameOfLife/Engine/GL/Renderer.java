@@ -22,8 +22,7 @@ import java.util.ArrayList;
 
 import static fr.albot.GameOfLife.CONFIG.CONFIG.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.nuklear.Nuklear.nk_input_begin;
-import static org.lwjgl.nuklear.Nuklear.nk_input_end;
+import static org.lwjgl.nuklear.Nuklear.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -53,8 +52,6 @@ public class Renderer extends Thread {
         this.shader.createFragmentShader(Util.loadResource("ressources/shaders/fragment.glsl"));
         this.shader.createVertexShader(Util.loadResource("ressources/shaders/vertex.glsl"));
         this.shader.link();
-
-        this.spriteManager.init();
     }
 
 
@@ -103,6 +100,8 @@ public class Renderer extends Thread {
                 if (e instanceof PurgeEvent) {
                     this.spriteManager.purge();
                 } else if (e instanceof SetBaseEnv) {
+                    System.out.println("catched event");
+                    this.spriteManager.init();
                     this.spriteManager.update(((SetBaseEnv) e).alive);
                 }
             }
@@ -149,16 +148,9 @@ public class Renderer extends Thread {
             shader.unbind();
 
             // ! DISPLAY -------------------------------------------------------
-            //UI.instance.render(NK_ANTI_ALIASING_ON, 512 * 1024, 128 * 1024);
+            UI.instance.render(NK_ANTI_ALIASING_ON, 512 * 1024, 128 * 1024);
             window.update();
         }
         System.out.println("done rendering");
-    }
-
-    public void flush() {
-        if (this.shader != null) {
-            shader.flush();
-        }
-        //TODO: purger chaque mesh.
     }
 }

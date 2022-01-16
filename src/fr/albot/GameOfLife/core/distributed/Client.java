@@ -1,8 +1,4 @@
-package fr.albot.GameOfLife;
-
-import fr.albot.GameOfLife.core.IGOLProcess;
-import fr.albot.GameOfLife.core.IGameOfLife;
-import fr.albot.GameOfLife.core.Status;
+package fr.albot.GameOfLife.core.distributed;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -33,7 +29,7 @@ public class Client extends Thread {
     }
 
     public void run() {
-        if (this.gameOfLife != null){
+        if (this.gameOfLife != null) {
             while (true) {
                 try {
                     if (this.gameOfLife.getStatus() == Status.CONTINUE) {

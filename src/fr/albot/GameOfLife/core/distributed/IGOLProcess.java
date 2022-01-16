@@ -1,4 +1,4 @@
-package fr.albot.GameOfLife.core;
+package fr.albot.GameOfLife.core.distributed;
 
 import java.util.ArrayList;
 import java.util.HashSet;
